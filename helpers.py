@@ -24,7 +24,7 @@ def open_spacecrafts_csv(file):
         split = line.split(';')
         var0 = split[0]
         var1 = int(split[1])
-        var2 = split[2]
+        var2 = float(split[2])
         open_list.append(spacecraft(var0, var1, var2))
     return open_list
     
