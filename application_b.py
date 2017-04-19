@@ -14,13 +14,14 @@ cargo1_sorted = sorted(cargo1_list, key=operator.attrgetter('m3'), reverse=True)
 
 spacecraft_list = open_spacecrafts_csv('Spacecrafts.csv')
 
+spacecraft_list_sorted = sorted(spacecraft_list, key=operator.attrgetter('kg'), reverse=True)
 # create lists to put cargo-classes in
 spacecrafts = [[], [], [], []]
 
 # put cargo-items in list of spacecraft, when spacecraft is full, go to next
 for j in range(0, 4):
 	# define available mass in spacecraft
-	m3_av = spacecraft_list[j].m3
+	m3_av = spacecraft_list_sorted[j].m3
 	for i in range(0, len(cargo1_sorted)):
 		# check if cargo-item is already placed
 		if (cargo1_sorted[i].m3 == 'nan'):

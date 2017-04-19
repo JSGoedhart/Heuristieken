@@ -10,8 +10,6 @@ cargo1_list = open_cargo_csv('CargoList1.csv')
 cargo1_sorted = sorted(cargo1_list, key=operator.attrgetter('kg'), reverse=True)
 
 # create a list with the four spacecrafts put into classes in it
-#spacecraft_list = [spacecraft('cygnus', 2000, 18.9), spacecraft('verne', 2300, 13.1), spacecraft('progress', 2400, 7.6), spacecraft('kounotori', 5200, 14)]
-
 spacecraft_list = open_spacecrafts_csv('Spacecrafts.csv')
 
 print spacecraft_list[0].m3
