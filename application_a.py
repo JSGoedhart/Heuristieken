@@ -6,6 +6,8 @@ from helpers import *
 # create list to put cargo1 classes in
 cargo1_list = open_cargo_csv('CargoList1.csv')
 
+print cargo1_list[0].valm3
+
 # sort cargo1_list's kg from high to low and create new sorted list
 cargo1_sorted = sorted(cargo1_list, key=operator.attrgetter('kg'), reverse=True)
 

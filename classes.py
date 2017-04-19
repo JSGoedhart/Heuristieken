@@ -4,6 +4,8 @@ class cargo1:
 		self.number = number
 		self.kg = int(kg)
 		self.m3 = float(m3)
+		self.valkg = float(kg/11895)*100
+		self.valm3 = float(m3/72.05)*100
 
 # define class for spacecrafts
 class spacecraft:
