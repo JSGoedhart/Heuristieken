@@ -1,12 +1,15 @@
 import csv
 import operator
+from classes import *
+# from helpers import *
 
-# define class for cargo's
-class cargo1:
-	def __init__(self, number, kg, m3):
-		self.number = number
-		self.kg = int(kg)
-		self.m3 = float(m3)
+
+# # define class for cargo's
+# class cargo1:
+# 	def __init__(self, number, kg, m3):
+# 		self.number = number
+# 		self.kg = int(kg)
+# 		self.m3 = float(m3)
 
 # create list to put cargo1 classes in
 cargo1_list = []
@@ -23,15 +26,15 @@ for line in csvfile:
 # sort cargo1_list's kg from high to low and create new sorted list
 cargo1_sorted = sorted(cargo1_list, key=operator.attrgetter('kg'), reverse=True)
 
-# define class for spacecrafts
-class spacecraft:
-	def __init__(self, name, kg, m3):
-		self.name = name
-		self.kg = kg
-		self.m3 = m3
+# # define class for spacecrafts
+# class spacecraft:
+# 	def __init__(self, name, kg, m3):
+# 		self.name = name
+# 		self.kg = kg
+# 		self.m3 = m3
 
 # create a list with the four spacecrafts put into classes in it
-spacecraft_list = [spacecraft('cygnus', 2000, 18.9), spacecraft('verne', 2300, 13.1), spacecraft('progress', 2400, 7.6), spacecraft('kounotori', 5200, 14)] 
+spacecraft_list = [spacecraft('cygnus', 2000, 18.9), spacecraft('verne', 2300, 13.1), spacecraft('progress', 2400, 7.6), spacecraft('kounotori', 5200, 14)]
 
 # create lists to put cargo-classes in
 spacecrafts = [[], [], [], []]
@@ -70,4 +73,4 @@ for j in range(0, 4):
 		sum_kg += spacecrafts[j][i].kg
 		sum_m3 += spacecrafts[j][i].m3
 	print sum_kg
-	print sum_m3 
+	print sum_m3
