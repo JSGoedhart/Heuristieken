@@ -14,6 +14,8 @@ cargo1_sorted = sorted(cargo1_list, key=operator.attrgetter('kg'), reverse=True)
 
 spacecraft_list = open_spacecrafts_csv('Spacecrafts.csv')
 
+print spacecraft_list[0].m3
+
 # create lists to put cargo-classes in
 spacecrafts = [[], [], [], []]
 
