@@ -54,3 +54,5 @@ for j in range(0, 4):
 		sum_m3 += spacecrafts[j][i].m3
 	print sum_kg
 	print sum_m3
+
+spacecrafts[0][0].attrgetter('kg')

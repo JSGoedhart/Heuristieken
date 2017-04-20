@@ -51,33 +51,19 @@ for i in range(0, len(leftover)):
 	print leftover[i].m3
 
 # define function to calculate #kg in spacecrafts
-def sum_kg(lijst, number):
-	som = sum(c.kg for c in lijst[number])
-	return som
+def sum_kg(lijst):
+	kg_sum = []
+	for i in range(0,4):
+		kg_sum.append(sum(c.kg for c in lijst[i]))
+	return kg_sum
 
-# define function to calculate #m3 in spacecrafts
-def sum_m3(lijst, number):
-	som = sum(c.m3 for c in lijst[number])
-	return som
+def sum_m3(lijst):
+	m3_sum = []
+	for i in range(0,4):
+		m3_sum.append(sum(c.m3 for c in lijst[i]))
+	return m3_sum
 
-# create list that containt summed up kg's of each spacecrafts
-kg_sum = []
-for i in range (0, len(spacecrafts)):
-	kg_sum.append(sum_kg(spacecrafts, i))
-
-# create list that containt summed up m3's of each spacecrafts
-m3_sum = []
-for i in range (0, len(spacecrafts)):
-	m3_sum.append(sum_m3(spacecrafts, i))
-
-print kg_sum
-print m3_sum
-
-
-# calculate total value of leftover list
 val_leftover = sum(c.valtot for c in leftover)
-print val_leftover
-
 
 # list with all cargo sorted in spacecrafts and leftover
 spacecrafts.append(leftover)
