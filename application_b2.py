@@ -18,19 +18,24 @@ spacecraft_list_sorted = sorted(spacecraft_list, key=operator.attrgetter('kg'), 
 # create lists to put cargo-classes in
 spacecrafts = [[], [], [], []]
 
+for i in range(0,4):
+	print spacecraft_list_sorted[i].name
+
 # put cargo-items in list of spacecraft, when spacecraft is full, go to next
 for j in range(0, 4):
 	# define available mass in spacecraft
 	m3_av = spacecraft_list_sorted[j].m3
+	kg_av = spacecraft_list_sorted[j].kg
 	for i in range(0, len(cargo1_sorted)):
 		# check if cargo-item is already placed
 		if (cargo1_sorted[i].m3 == 'nan'):
 			next
 		else:
 			# put cargo-item in spacecraft if there is enough space
-			if (cargo1_sorted[i].m3 <= m3_av):
+			if (cargo1_sorted[i].m3 <= m3_av and cargo1_sorted[i].kg <= kg_av):
 				spacecrafts[j].append(cargo1(cargo1_sorted[i].number, cargo1_sorted[i].kg, cargo1_sorted[i].m3))
 				m3_av = m3_av - cargo1_sorted[i].m3
+				kg_av = kg_av - cargo1_sorted[i].kg
 				cargo1_sorted[i].m3 = 'nan'
 			# when item doesn't fit, try next
 			else:
@@ -67,3 +72,8 @@ for i in range (0, len(spacecrafts)):
 
 print kg_sum
 print m3_sum
+
+
+# calculate total value of leftover list
+val_leftover = sum(c.valtot for c in leftover)
+print val_leftover

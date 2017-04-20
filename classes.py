@@ -6,6 +6,7 @@ class cargo1:
 		self.m3 = float(m3)
 		self.valkg = float(kg/11895)*100
 		self.valm3 = float(m3/72.05)*100
+		self.valtot = self.valkg + self.valm3
 
 # define class for spacecrafts
 class spacecraft:
