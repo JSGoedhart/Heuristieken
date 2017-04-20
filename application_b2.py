@@ -77,3 +77,7 @@ print m3_sum
 # calculate total value of leftover list
 val_leftover = sum(c.valtot for c in leftover)
 print val_leftover
+
+
+# list with all cargo sorted in spacecrafts and leftover
+spacecrafts.append(leftover)
