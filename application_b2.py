@@ -54,20 +54,23 @@ for i in range(0, len(leftover)):
 # define function to calculate #kg in spacecrafts
 def sum_kg(lijst):
 	kg_sum = []
-	for i in range(0,4):
+	for i in range(0,len(lijst)):
 		kg_sum.append(sum(c.kg for c in lijst[i]))
 	return kg_sum
 
 def sum_m3(lijst):
 	m3_sum = []
-	for i in range(0,4):
+	for i in range(0,len(lijst)):
 		m3_sum.append(sum(c.m3 for c in lijst[i]))
 	return m3_sum
+
 
 def swap(a, b):
   return b, a
 
-val_leftover = sum(c.valtot for c in leftover)
+def val_leftover(lijst):
+	sum_valtot = sum(c.valtot for c in lijst)
+	return sum_valtot
 
 # list with all cargo sorted in spacecrafts and leftover
 spacecrafts.append(leftover)
@@ -94,8 +97,54 @@ print spacecrafts[rand_2][rand_cargo_2]
 
 # for i in range(0, len(spacecrafts[rand_1])):
 # 	print spacecrafts[rand_1][i].kg
+print 'cap voor'
+sum_kg1 = sum_kg(spacecrafts[0:len(spacecrafts)])
+print sum_kg1
+sum_m31 = sum_m3(spacecrafts[0:len(spacecrafts)])
+print sum_m31
+sum_valtot = val_leftover(spacecrafts[4])
+print sum_valtot
 
+# swap random items from list
 spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2] = swap(spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2])
+
+# create arrays with capacities
+cap_kg = []
+cap_m3 = []
+for i in range(0, len(spacecraft_list_sorted)):
+	cap_kg.append(spacecraft_list_sorted[i].kg)
+	cap_m3.append(spacecraft_list_sorted[i].m3)
+	
+print cap_kg
+print cap_m3
+
+print 'cap na'
+sum_kg1 = sum_kg(spacecrafts[0:len(spacecrafts)])
+print sum_kg1
+sum_m31 = sum_m3(spacecrafts[0:len(spacecrafts)])
+print sum_m31
+sum_valtot = val_leftover(spacecrafts[4])
+print sum_valtot
+
+# # check for restrictions
+# if (rand_1 < 4):
+# 	if (sum_kg[rand_1] > cap_kg[rand_1]):
+# 		print 'too much kg'
+# 	elif (sum_m3[rand_1] > cap_m3[rand_1]):
+# 		print 'too much m3'
+# 	else:
+# 		'ok for rand_1'
+
+
+
+
+
+
+
+
+
+
+
 
 # temp = spacecrafts[rand_1][rand_cargo_1]
 # spacecrafts[rand_1][rand_cargo_1] = spacecrafts[rand_2][rand_cargo_2]
