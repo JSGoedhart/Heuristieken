@@ -90,11 +90,11 @@ for i in range(0, len(spacecraft_list_sorted)):
 	cap_m3.append(spacecraft_list_sorted[i].m3)
 
 # start of loop
-
+count = 0
 program_starts = time.time()
-t_end = time.time() + 10
+t_end = time.time() + 60
 while time.time() < t_end:
-
+	count = count + 1
 	# now = time.time()
 	# print("It has been {0} seconds since the loop started".format(now - program_starts))
 	number_list = range(0,len(spacecrafts))
@@ -144,21 +144,16 @@ while time.time() < t_end:
 
 	# check for restrictions
 	rand_num = [rand_1, rand_2]
-	check_swap = False
+	check_swap = 0
 	for i in rand_num:
 		if (i < 4):
-			print i
-			print sum_kg1[i]
-			print cap_kg[i]
-			print sum_m31[i]
-			print cap_m3[i]
 			if (sum_kg1[i] > cap_kg[i]):
 				print 'too much kg'
-				check_swap = True
+				check_swap = 1
 				break
 			elif (sum_m31[i] > cap_m3[i]):
 				print 'too much m3'
-				check_swap = True
+				check_swap = 1
 				break
 			else:
 				print 'ok'
@@ -170,11 +165,13 @@ while time.time() < t_end:
 		print 'ok valtot'
 	else:
 		print 'niet ok valtot'
-		check_swap = True
+		check_swap = 1
+	print check_swap 
 
-# Swap elements back if necessary
-if (check_swap == True):
-	spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2] = swap(spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2])
+	# Swap elements back if necessary
+	if (check_swap == 1):
+		print 'SWAPPING'
+		spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2] = swap(spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2])
 
 print 'cap na'
 sum_kg1 = sum_kg(spacecrafts[0:len(spacecrafts)])
@@ -188,14 +185,6 @@ print sum_kg1_original
 print sum_m31_original 
 print sum_valtot_original
 
+print len(leftover)
 
-# program_starts = time.time()
-# t_end = time.time() + 10
-# while time.time() < t_end:
-#     now = time.time()
-#     print("It has been {0} seconds since the loop started".format(now - program_starts))
-
-
-
-
-
+print count
