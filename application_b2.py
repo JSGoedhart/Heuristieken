@@ -144,6 +144,7 @@ while time.time() < t_end:
 
 	# check for restrictions
 	rand_num = [rand_1, rand_2]
+	check_swap = False
 	for i in rand_num:
 		if (i < 4):
 			print i
@@ -153,13 +154,11 @@ while time.time() < t_end:
 			print cap_m3[i]
 			if (sum_kg1[i] > cap_kg[i]):
 				print 'too much kg'
-				spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2] = swap(spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2])
-				print 'orginele waarde'
-				print spacecrafts[rand_1][rand_cargo_1].kg
+				check_swap = True
 				break
 			elif (sum_m31[i] > cap_m3[i]):
 				print 'too much m3'
-				spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2] = swap(spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2])
+				check_swap = True
 				break
 			else:
 				print 'ok'
@@ -167,11 +166,15 @@ while time.time() < t_end:
 			print 'leftover'
 
 
-	# if (sum_valtot_new <= sum_valtot_old):
-	# 	print 'ok valtot'
-	# else:
-	# 	print 'niet ok valtot'
-	# 	spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2] = swap(spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2])
+	if (sum_valtot_new <= sum_valtot_old):
+		print 'ok valtot'
+	else:
+		print 'niet ok valtot'
+		check_swap = True
+
+# Swap elements back if necessary
+if (check_swap == True):
+	spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2] = swap(spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2])
 
 print 'cap na'
 sum_kg1 = sum_kg(spacecrafts[0:len(spacecrafts)])
