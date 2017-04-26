@@ -1,5 +1,6 @@
 import csv
 import operator
+import random
 from classes import *
 from helpers import *
 
@@ -67,3 +68,15 @@ val_leftover = sum(c.valtot for c in leftover)
 
 # list with all cargo sorted in spacecrafts and leftover
 spacecrafts.append(leftover)
+
+number_list = range(0,len(spacecrafts))
+random_number = random.choice(number_list)
+number_list.remove(random_number)
+print number_list
+
+random_cargo = random.choice(spacecrafts[random_number])
+print(random_cargo)
+
+
+a = random.choice(spacecrafts[0])
+print a.kg
