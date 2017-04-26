@@ -65,7 +65,7 @@ def sum_m3(lijst):
 	return m3_sum
 
 def swap(a, b):
-  a, b = b, a
+  return b, a
 
 val_leftover = sum(c.valtot for c in leftover)
 
@@ -81,24 +81,36 @@ rand_2 = random.choice(number_list)
 print rand_1
 print rand_2
 
-rand_cargo_1 = random.choice(spacecrafts[rand_1])
-print(rand_cargo_1)
+list_cargo_1 = range(0,len(spacecrafts[rand_1]))
+rand_cargo_1 = random.choice(list_cargo_1)
 
-rand_cargo_2 = random.choice(spacecrafts[rand_2])
-print(rand_cargo_2)
+list_cargo_2 = range(0,len(spacecrafts[rand_2]))
+rand_cargo_2 = random.choice(list_cargo_2)
 
-print rand_cargo_1.kg
-print rand_cargo_2.kg
+print spacecrafts[rand_1][rand_cargo_1].kg
+print spacecrafts[rand_2][rand_cargo_2]
 
-print 'ervoor'
+# print 'ervoor'
 
-for i in range(0, len(spacecrafts[rand_1])):
-	print spacecrafts[rand_1][i].kg
+# for i in range(0, len(spacecrafts[rand_1])):
+# 	print spacecrafts[rand_1][i].kg
+
+spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2] = swap(spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2])
+
+# temp = spacecrafts[rand_1][rand_cargo_1]
+# spacecrafts[rand_1][rand_cargo_1] = spacecrafts[rand_2][rand_cargo_2]
+# spacecrafts[rand_2][rand_cargo_2] = temp
+
+
 
 # print random_cargo_1.kg
-swap(rand_cargo_1, rand_cargo_2)
-# print random_cargo_1.kg
 
-print 'erna'
-for i in range(0, len(spacecrafts[rand_1])):
-	print spacecrafts[rand_1][i].kg
+# print 'erna'
+# for i in range(0, len(spacecrafts[rand_1])):
+# 	print spacecrafts[rand_1][i].kg
+
+# print 'los'
+# print spacecrafts[rand_1][rand_cargo_1].kg
+# print spacecrafts[rand_2][rand_cargo_2]
+
+
