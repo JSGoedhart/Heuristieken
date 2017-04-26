@@ -1,6 +1,7 @@
 import csv
 import operator
 import random
+import time
 from classes import *
 from helpers import *
 
@@ -76,53 +77,10 @@ def val_leftover(lijst):
 spacecrafts.append(leftover)
 
 # print original values from greedy algorithm
-print 'values greedy'
-sum_kg1 = sum_kg(spacecrafts[0:len(spacecrafts)])
-print sum_kg1
-sum_m31 = sum_m3(spacecrafts[0:len(spacecrafts)])
-print sum_m31
-sum_valtot_old = val_leftover(spacecrafts[4])
-print sum_valtot_old
-
-# start of loop
-
-number_list = range(0,len(spacecrafts))
-rand_1 = random.choice(number_list)
-number_list.remove(rand_1)
-print number_list
-rand_2 = random.choice(number_list)
-
-print rand_1
-print rand_2
-
-list_cargo_1 = range(0,len(spacecrafts[rand_1]))
-rand_cargo_1 = random.choice(list_cargo_1)
-
-list_cargo_2 = range(0,len(spacecrafts[rand_2]))
-rand_cargo_2 = random.choice(list_cargo_2)
-
-print 'originele waarde'
-print spacecrafts[rand_1][rand_cargo_1].kg
-# print spacecrafts[rand_2][rand_cargo_2]
-
-# print 'ervoor'
-
-# for i in range(0, len(spacecrafts[rand_1])):
-# 	print spacecrafts[rand_1][i].kg
-print 'cap voor'
-sum_kg1 = sum_kg(spacecrafts[0:len(spacecrafts)])
-print sum_kg1
-sum_m31 = sum_m3(spacecrafts[0:len(spacecrafts)])
-print sum_m31
-sum_valtot_old = val_leftover(spacecrafts[4])
-print sum_valtot_old
-
-# swap random items from list
-spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2] = swap(spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2])
-
-print 'geswapte waarde'
-print spacecrafts[rand_1][rand_cargo_1].kg
-
+print 'old values greedy'
+sum_kg1_original = sum_kg(spacecrafts[0:len(spacecrafts)])
+sum_m31_original = sum_m3(spacecrafts[0:len(spacecrafts)])
+sum_valtot_original = val_leftover(spacecrafts[4])
 
 # create arrays with capacities
 cap_kg = []
@@ -130,9 +88,90 @@ cap_m3 = []
 for i in range(0, len(spacecraft_list_sorted)):
 	cap_kg.append(spacecraft_list_sorted[i].kg)
 	cap_m3.append(spacecraft_list_sorted[i].m3)
-	
-print cap_kg
-print cap_m3
+
+# start of loop
+
+program_starts = time.time()
+t_end = time.time() + 10
+while time.time() < t_end:
+
+	# now = time.time()
+	# print("It has been {0} seconds since the loop started".format(now - program_starts))
+	number_list = range(0,len(spacecrafts))
+	rand_1 = random.choice(number_list)
+	number_list.remove(rand_1)
+	print number_list
+	rand_2 = random.choice(number_list)
+
+	print rand_1
+	print rand_2
+
+	list_cargo_1 = range(0,len(spacecrafts[rand_1]))
+	rand_cargo_1 = random.choice(list_cargo_1)
+
+	list_cargo_2 = range(0,len(spacecrafts[rand_2]))
+	rand_cargo_2 = random.choice(list_cargo_2)
+
+	print 'originele waarde'
+	print spacecrafts[rand_1][rand_cargo_1].kg
+	# print spacecrafts[rand_2][rand_cargo_2]
+
+	# print 'ervoor'
+
+	# for i in range(0, len(spacecrafts[rand_1])):
+	# 	print spacecrafts[rand_1][i].kg
+	print 'cap voor'
+	sum_kg1 = sum_kg(spacecrafts[0:len(spacecrafts)])
+	print sum_kg1
+	sum_m31 = sum_m3(spacecrafts[0:len(spacecrafts)])
+	print sum_m31
+	sum_valtot_old = val_leftover(spacecrafts[4])
+	print sum_valtot_old
+
+	# swap random items from list
+	spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2] = swap(spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2])
+
+	print 'geswapte waarde'
+	print spacecrafts[rand_1][rand_cargo_1].kg
+
+	print 'cap na'
+	sum_kg1 = sum_kg(spacecrafts[0:len(spacecrafts)])
+	print sum_kg1
+	sum_m31 = sum_m3(spacecrafts[0:len(spacecrafts)])
+	print sum_m31
+	sum_valtot_new = val_leftover(spacecrafts[4])
+	print sum_valtot_new
+
+	# check for restrictions
+	rand_num = [rand_1, rand_2]
+	for i in rand_num:
+		if (i < 4):
+			print i
+			print sum_kg1[i]
+			print cap_kg[i]
+			print sum_m31[i]
+			print cap_m3[i]
+			if (sum_kg1[i] > cap_kg[i]):
+				print 'too much kg'
+				spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2] = swap(spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2])
+				print 'orginele waarde'
+				print spacecrafts[rand_1][rand_cargo_1].kg
+				break
+			elif (sum_m31[i] > cap_m3[i]):
+				print 'too much m3'
+				spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2] = swap(spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2])
+				break
+			else:
+				print 'ok'
+		else:
+			print 'leftover'
+
+
+	# if (sum_valtot_new <= sum_valtot_old):
+	# 	print 'ok valtot'
+	# else:
+	# 	print 'niet ok valtot'
+	# 	spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2] = swap(spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2])
 
 print 'cap na'
 sum_kg1 = sum_kg(spacecrafts[0:len(spacecrafts)])
@@ -142,37 +181,16 @@ print sum_m31
 sum_valtot_new = val_leftover(spacecrafts[4])
 print sum_valtot_new
 
-# check for restrictions
-rand_num = [rand_1, rand_2]
-for i in rand_num:
-	if (i < 4):
-		print i
-		print sum_kg1[i]
-		print cap_kg[i]
-		print sum_m31[i]
-		print cap_m3[i]
-		if (sum_kg1[i] > cap_kg[i]):
-			print 'too much kg'
-			spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2] = swap(spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2])
-			print 'orginele waarde'
-			print spacecrafts[rand_1][rand_cargo_1].kg
-			break
-		elif (sum_m31[i] > cap_m3[i]):
-			print 'too much m3'
-			spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2] = swap(spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2])
-			break
-		else:
-			print 'ok'
-	else:
-		print 'leftover'
+print sum_kg1_original
+print sum_m31_original 
+print sum_valtot_original
 
 
-if (sum_valtot_new <= sum_valtot_old):
-	print 'ok valtot'
-else:
-	print 'niet ok valtot'
-	spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2] = swap(spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2])
-
+# program_starts = time.time()
+# t_end = time.time() + 10
+# while time.time() < t_end:
+#     now = time.time()
+#     print("It has been {0} seconds since the loop started".format(now - program_starts))
 
 
 
