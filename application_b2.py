@@ -64,19 +64,41 @@ def sum_m3(lijst):
 		m3_sum.append(sum(c.m3 for c in lijst[i]))
 	return m3_sum
 
+def swap(a, b):
+  a, b = b, a
+
 val_leftover = sum(c.valtot for c in leftover)
 
 # list with all cargo sorted in spacecrafts and leftover
 spacecrafts.append(leftover)
 
 number_list = range(0,len(spacecrafts))
-random_number = random.choice(number_list)
-number_list.remove(random_number)
+random_number_1 = random.choice(number_list)
+number_list.remove(random_number_1)
 print number_list
+random_number_2 = random.choice(number_list)
 
-random_cargo = random.choice(spacecrafts[random_number])
-print(random_cargo)
+print random_number_1
+print random_number_2
 
+random_cargo_1 = random.choice(spacecrafts[random_number_1])
+print(random_cargo_1)
 
-a = random.choice(spacecrafts[0])
-print a.kg
+random_cargo_2 = random.choice(spacecrafts[random_number_2])
+print(random_cargo_2)
+
+print random_cargo_1.kg
+print random_cargo_2.kg
+
+print 'ervoor'
+
+for i in range(0, len(spacecrafts[random_number_1])):
+	print spacecrafts[random_number_1][i].kg
+
+# print random_cargo_1.kg
+swap(random_cargo_1, random_cargo_2)
+# print random_cargo_1.kg
+
+print 'erna'
+for i in range(0, len(spacecrafts[random_number_1])):
+	print spacecrafts[random_number_1][i].kg
