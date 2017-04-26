@@ -75,6 +75,17 @@ def val_leftover(lijst):
 # list with all cargo sorted in spacecrafts and leftover
 spacecrafts.append(leftover)
 
+# print original values from greedy algorithm
+print 'values greedy'
+sum_kg1 = sum_kg(spacecrafts[0:len(spacecrafts)])
+print sum_kg1
+sum_m31 = sum_m3(spacecrafts[0:len(spacecrafts)])
+print sum_m31
+sum_valtot_old = val_leftover(spacecrafts[4])
+print sum_valtot_old
+
+# start of loop
+
 number_list = range(0,len(spacecrafts))
 rand_1 = random.choice(number_list)
 number_list.remove(rand_1)
@@ -90,8 +101,9 @@ rand_cargo_1 = random.choice(list_cargo_1)
 list_cargo_2 = range(0,len(spacecrafts[rand_2]))
 rand_cargo_2 = random.choice(list_cargo_2)
 
+print 'originele waarde'
 print spacecrafts[rand_1][rand_cargo_1].kg
-print spacecrafts[rand_2][rand_cargo_2]
+# print spacecrafts[rand_2][rand_cargo_2]
 
 # print 'ervoor'
 
@@ -102,11 +114,15 @@ sum_kg1 = sum_kg(spacecrafts[0:len(spacecrafts)])
 print sum_kg1
 sum_m31 = sum_m3(spacecrafts[0:len(spacecrafts)])
 print sum_m31
-sum_valtot = val_leftover(spacecrafts[4])
-print sum_valtot
+sum_valtot_old = val_leftover(spacecrafts[4])
+print sum_valtot_old
 
 # swap random items from list
 spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2] = swap(spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2])
+
+print 'geswapte waarde'
+print spacecrafts[rand_1][rand_cargo_1].kg
+
 
 # create arrays with capacities
 cap_kg = []
@@ -123,43 +139,42 @@ sum_kg1 = sum_kg(spacecrafts[0:len(spacecrafts)])
 print sum_kg1
 sum_m31 = sum_m3(spacecrafts[0:len(spacecrafts)])
 print sum_m31
-sum_valtot = val_leftover(spacecrafts[4])
-print sum_valtot
+sum_valtot_new = val_leftover(spacecrafts[4])
+print sum_valtot_new
 
-# # check for restrictions
-# if (rand_1 < 4):
-# 	if (sum_kg[rand_1] > cap_kg[rand_1]):
-# 		print 'too much kg'
-# 	elif (sum_m3[rand_1] > cap_m3[rand_1]):
-# 		print 'too much m3'
-# 	else:
-# 		'ok for rand_1'
+# check for restrictions
+rand_num = [rand_1, rand_2]
+for i in rand_num:
+	if (i < 4):
+		print i
+		print sum_kg1[i]
+		print cap_kg[i]
+		print sum_m31[i]
+		print cap_m3[i]
+		if (sum_kg1[i] > cap_kg[i]):
+			print 'too much kg'
+			spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2] = swap(spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2])
+			print 'orginele waarde'
+			print spacecrafts[rand_1][rand_cargo_1].kg
+			break
+		elif (sum_m31[i] > cap_m3[i]):
+			print 'too much m3'
+			spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2] = swap(spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2])
+			break
+		else:
+			print 'ok'
+	else:
+		print 'leftover'
+
+
+if (sum_valtot_new <= sum_valtot_old):
+	print 'ok valtot'
+else:
+	print 'niet ok valtot'
+	spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2] = swap(spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2])
 
 
 
 
-
-
-
-
-
-
-
-
-# temp = spacecrafts[rand_1][rand_cargo_1]
-# spacecrafts[rand_1][rand_cargo_1] = spacecrafts[rand_2][rand_cargo_2]
-# spacecrafts[rand_2][rand_cargo_2] = temp
-
-
-
-# print random_cargo_1.kg
-
-# print 'erna'
-# for i in range(0, len(spacecrafts[rand_1])):
-# 	print spacecrafts[rand_1][i].kg
-
-# print 'los'
-# print spacecrafts[rand_1][rand_cargo_1].kg
-# print spacecrafts[rand_2][rand_cargo_2]
 
 
