@@ -90,83 +90,88 @@ for i in range(0, len(spacecraft_list_sorted)):
 	cap_kg.append(spacecraft_list_sorted[i].kg)
 	cap_m3.append(spacecraft_list_sorted[i].m3)
 
-# Selecteer twee random nummers uit de leftover lijst
-list_1 = range(0,len(leftover))
-print list_1
-rand_1 = random.choice(list_1)
-print rand_1
-list_1.remove(rand_1)
-print list_1
-rand_2 = random.choice(list_1)
-print rand_2
+program_starts = time.time()
+t_end = time.time() + 10
+while time.time() < t_end:
 
-# select random items uit leftover lijst
-item_1 = leftover[rand_1]
-item_2 = leftover[rand_2]
+	print time.time()
+	# Selecteer twee random nummers uit de leftover lijst
+	list_1 = range(0,len(leftover))
+	print list_1
+	rand_1 = random.choice(list_1)
+	print rand_1
+	list_1.remove(rand_1)
+	print list_1
+	rand_2 = random.choice(list_1)
+	print rand_2
 
-# bereken sommaties van deze items
-srand_kg = item_1.kg + item_2.kg
-srand_m3 = item_1.m3 + item_2.m3
-srand_valtot = item_1.valtot + item_2.valtot
+	# select random items uit leftover lijst
+	item_1 = leftover[rand_1]
+	item_2 = leftover[rand_2]
 
-print srand_kg
-print srand_m3
-print srand_valtot
+	# bereken sommaties van deze items
+	srand_kg = item_1.kg + item_2.kg
+	srand_m3 = item_1.m3 + item_2.m3
+	srand_valtot = item_1.valtot + item_2.valtot
 
-# sums for each spacecrafts
-sum_kg_orig = sum_kg(spacecrafts[0:len(spacecrafts)])
-sum_m3_orig = sum_m3(spacecrafts[0:len(spacecrafts)])
-sum_valtot_orig = val_leftover(spacecrafts[4])
+	print srand_kg
+	print srand_m3
+	print srand_valtot
 
-# create arrays with capacities
-cap_kg = []
-cap_m3 = []
-for i in range(0, len(spacecraft_list_sorted)):
-	cap_kg.append(spacecraft_list_sorted[i].kg)
-	cap_m3.append(spacecraft_list_sorted[i].m3)
+	# sums for each spacecrafts
+	sum_kg_orig = sum_kg(spacecrafts[0:len(spacecrafts)])
+	sum_m3_orig = sum_m3(spacecrafts[0:len(spacecrafts)])
+	sum_valtot_orig = val_leftover(spacecrafts[4])
 
-# overige capaciteit, kg en m3 per spacecraft:
-kg_over = []
-m3_over = []
-for i in range(0, len(cap_kg)):
-	kg_over.append(cap_kg[i]- sum_kg_orig[i])
-	m3_over.append(cap_m3[i]- sum_m3_orig[i])
+	# create arrays with capacities
+	cap_kg = []
+	cap_m3 = []
+	for i in range(0, len(spacecraft_list_sorted)):
+		cap_kg.append(spacecraft_list_sorted[i].kg)
+		cap_m3.append(spacecraft_list_sorted[i].m3)
 
-print kg_over
-print m3_over
+	# overige capaciteit, kg en m3 per spacecraft:
+	kg_over = []
+	m3_over = []
+	for i in range(0, len(cap_kg)):
+		kg_over.append(cap_kg[i]- sum_kg_orig[i])
+		m3_over.append(cap_m3[i]- sum_m3_orig[i])
 
-print 'valtot before:'
-print val_leftover(leftover)
+	print kg_over
+	print m3_over
 
-get_item = False
-control = 1
-# pak onderste element, check if value lager is dan value random leftover, als dit zo is ga je restricties checken, anders ga je door naar het volgende element
-for j in range(0, 4):
-	if control != 0:
-		for i in reversed(range(0, len(spacecrafts[j]))):
-			if (spacecrafts[j][i].valtot < srand_valtot):
-				if (kg_over[j] + spacecrafts[j][i].kg >= srand_kg and m3_over[j] + spacecrafts[j][i].m3 >= srand_m3):
-					get_item = True
-					num = j
-					item = i
-					control = 0
-					break
-			else:
-				next
+	print 'valtot before:'
+	print val_leftover(leftover)
 
-# swap elements from lestover with selected item from spacecrafts if possible
-if get_item == True:
-	print num
-	print item
-	print spacecrafts[num][item].kg
-	# swap elements
-	spacecrafts.extend((item_1, item_2))
-	leftover.append(spacecrafts[num][item])
-	spacecrafts[num].remove(spacecrafts[num][item])
-	leftover.remove(item_1)
-	leftover.remove(item_2)
-else:
-	print 'non found'
+	get_item = False
+	control = 1
+	# pak onderste element, check if value lager is dan value random leftover, als dit zo is ga je restricties checken, anders ga je door naar het volgende element
+	for j in range(0, 4):
+		if control != 0:
+			for i in reversed(range(0, len(spacecrafts[j]))):
+				if (spacecrafts[j][i].valtot < srand_valtot):
+					if (kg_over[j] + spacecrafts[j][i].kg >= srand_kg and m3_over[j] + spacecrafts[j][i].m3 >= srand_m3):
+						get_item = True
+						num = j
+						item = i
+						control = 0
+						break
+				else:
+					next
 
-print 'valtot after:'
-print val_leftover(leftover)
+	# swap elements from lestover with selected item from spacecrafts if possible
+	if get_item == True:
+		print num
+		print item
+		print spacecrafts[num][item].kg
+		# swap elements
+		spacecrafts.extend((item_1, item_2))
+		leftover.append(spacecrafts[num][item])
+		spacecrafts[num].remove(spacecrafts[num][item])
+		leftover.remove(item_1)
+		leftover.remove(item_2)
+	else:
+		print 'non found'
+
+	print 'valtot after:'
+	print val_leftover(leftover)
