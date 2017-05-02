@@ -95,9 +95,10 @@ list_1 = range(0,len(leftover))
 print list_1
 rand_1 = random.choice(list_1)
 print rand_1
-list_1 = list_1.remove(rand_1)
+list_1.remove(rand_1)
 print list_1
 rand_2 = random.choice(list_1)
+print rand_2
 
 # select random items uit leftover lijst
 item_1 = leftover[rand_1]
@@ -111,3 +112,61 @@ srand_valtot = item_1.valtot + item_2.valtot
 print srand_kg
 print srand_m3
 print srand_valtot
+
+# sums for each spacecrafts
+sum_kg_orig = sum_kg(spacecrafts[0:len(spacecrafts)])
+sum_m3_orig = sum_m3(spacecrafts[0:len(spacecrafts)])
+sum_valtot_orig = val_leftover(spacecrafts[4])
+
+# create arrays with capacities
+cap_kg = []
+cap_m3 = []
+for i in range(0, len(spacecraft_list_sorted)):
+	cap_kg.append(spacecraft_list_sorted[i].kg)
+	cap_m3.append(spacecraft_list_sorted[i].m3)
+
+# overige capaciteit, kg en m3 per spacecraft:
+kg_over = []
+m3_over = []
+for i in range(0, len(cap_kg)):
+	kg_over.append(cap_kg[i]- sum_kg_orig[i])
+	m3_over.append(cap_m3[i]- sum_m3_orig[i])
+
+print kg_over
+print m3_over
+
+print 'valtot before:'
+print val_leftover(leftover)
+
+get_item = False
+control = 1
+# pak onderste element, check if value lager is dan value random leftover, als dit zo is ga je restricties checken, anders ga je door naar het volgende element
+for j in range(0, 4):
+	if control != 0:
+		for i in reversed(range(0, len(spacecrafts[j]))):
+			if (spacecrafts[j][i].valtot < srand_valtot):
+				if (kg_over[j] + spacecrafts[j][i].kg >= srand_kg and m3_over[j] + spacecrafts[j][i].m3 >= srand_m3):
+					get_item = True
+					num = j
+					item = i
+					control = 0
+					break
+			else:
+				next
+
+# swap elements from lestover with selected item from spacecrafts if possible
+if get_item == True:
+	print num
+	print item
+	print spacecrafts[num][item].kg
+	# swap elements
+	spacecrafts.extend((item_1, item_2))
+	leftover.append(spacecrafts[num][item])
+	spacecrafts[num].remove(spacecrafts[num][item])
+	leftover.remove(item_1)
+	leftover.remove(item_2)
+else:
+	print 'non found'
+
+print 'valtot after:'
+print val_leftover(leftover)
