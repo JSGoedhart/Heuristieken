@@ -19,10 +19,10 @@ spacecraft_list_sorted = sorted(spacecraft_list, key=operator.attrgetter('kg'), 
 spacecrafts = [[], [], [], []]
 
 # put cargo-items in list of spacecraft, when spacecraft is full, go to next
-for j in range(0, 4):
+for j in range(4):
 	# define available mass in spacecraft
 	m3_av = spacecraft_list_sorted[j].m3
-	for i in range(0, len(cargo1_sorted)):
+	for i in range(len(cargo1_sorted)):
 		# check if cargo-item is already placed
 		if (cargo1_sorted[i].m3 == 'nan'):
 			next
@@ -38,17 +38,17 @@ for j in range(0, 4):
 	# print mass_av
 
 # print kg's per spacecraft
-for j in range(0, 4):
+for j in range(4):
 	print spacecraft_list[j].name
-	for i in range(0, len(spacecrafts[j])):
+	for i in range(len(spacecrafts[j])):
 		print spacecrafts[j][i].m3
 
 # hoeveel gewicht en ruimte blijft er over per spacecraft?
-for j in range(0, 4):
+for j in range(4):
 	print spacecraft_list[j].name
 	sum_kg = 0
 	sum_m3 = 0
-	for i in range(0, len(spacecrafts[j])):
+	for i in range(len(spacecrafts[j])):
 		sum_kg += spacecrafts[j][i].kg
 		sum_m3 += spacecrafts[j][i].m3
 	print sum_kg

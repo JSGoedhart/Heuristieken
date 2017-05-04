@@ -20,15 +20,15 @@ spacecraft_list_sorted = sorted(spacecraft_list, key=operator.attrgetter('kg'), 
 # create lists to put cargo-classes in
 spacecrafts = [[], [], [], []]
 
-for i in range(0,4):
+for i in range(4):
 	print spacecraft_list_sorted[i].name
 
 # put cargo-items in list of spacecraft, when spacecraft is full, go to next
-for j in range(0, 4):
+for j in range(4):
 	# define available mass in spacecraft
 	m3_av = spacecraft_list_sorted[j].m3
 	kg_av = spacecraft_list_sorted[j].kg
-	for i in range(0, len(cargo1_sorted)):
+	for i in range(len(cargo1_sorted)):
 		# check if cargo-item is already placed
 		if (cargo1_sorted[i].m3 == 'nan'):
 			next
@@ -45,24 +45,24 @@ for j in range(0, 4):
 
 leftover = []
 # create leftover list from cargo1_sorted without nan
-for i in range(0, len(cargo1_sorted)):
+for i in range(len(cargo1_sorted)):
 	if cargo1_sorted[i].m3 != 'nan':
 		leftover.append(cargo1_sorted[i])
 
 print 'leftover:'
-for i in range(0, len(leftover)):
+for i in range(len(leftover)):
 	print leftover[i].m3
 
 # define function to calculate #kg in spacecrafts
 def sum_kg(lijst):
 	kg_sum = []
-	for i in range(0,len(lijst)):
+	for i in range(len(lijst)):
 		kg_sum.append(sum(c.kg for c in lijst[i]))
 	return kg_sum
 
 def sum_m3(lijst):
 	m3_sum = []
-	for i in range(0,len(lijst)):
+	for i in range(len(lijst)):
 		m3_sum.append(sum(c.m3 for c in lijst[i]))
 	return m3_sum
 
@@ -86,7 +86,7 @@ sum_valtot_original = val_leftover(spacecrafts[4])
 # create arrays with capacities
 cap_kg = []
 cap_m3 = []
-for i in range(0, len(spacecraft_list_sorted)):
+for i in range(len(spacecraft_list_sorted)):
 	cap_kg.append(spacecraft_list_sorted[i].kg)
 	cap_m3.append(spacecraft_list_sorted[i].m3)
 
@@ -96,7 +96,7 @@ while time.time() < t_end:
 
 	print time.time()
 	# Selecteer twee random nummers uit de leftover lijst
-	list_1 = range(0,len(leftover))
+	list_1 = range(len(leftover))
 	print list_1
 	rand_1 = random.choice(list_1)
 	print rand_1
@@ -126,14 +126,14 @@ while time.time() < t_end:
 	# create arrays with capacities
 	cap_kg = []
 	cap_m3 = []
-	for i in range(0, len(spacecraft_list_sorted)):
+	for i in range(len(spacecraft_list_sorted)):
 		cap_kg.append(spacecraft_list_sorted[i].kg)
 		cap_m3.append(spacecraft_list_sorted[i].m3)
 
 	# overige capaciteit, kg en m3 per spacecraft:
 	kg_over = []
 	m3_over = []
-	for i in range(0, len(cap_kg)):
+	for i in range(len(cap_kg)):
 		kg_over.append(cap_kg[i]- sum_kg_orig[i])
 		m3_over.append(cap_m3[i]- sum_m3_orig[i])
 
@@ -146,7 +146,7 @@ while time.time() < t_end:
 	get_item = False
 	control = 1
 	# pak onderste element, check if value lager is dan value random leftover, als dit zo is ga je restricties checken, anders ga je door naar het volgende element
-	for j in range(0, 4):
+	for j in range(4):
 		if control != 0:
 			for i in reversed(range(0, len(spacecrafts[j]))):
 				if (spacecrafts[j][i].valtot < srand_valtot):

@@ -20,15 +20,15 @@ spacecraft_list_sorted = sorted(spacecraft_list, key=operator.attrgetter('kg'), 
 # create lists to put cargo-classes in
 spacecrafts = [[], [], [], []]
 
-for i in range(0,4):
+for i in range(4):
 	print spacecraft_list_sorted[i].name
 
 # put cargo-items in list of spacecraft, when spacecraft is full, go to next
-for j in range(0, 4):
+for j in range(4):
 	# define available mass in spacecraft
 	m3_av = spacecraft_list_sorted[j].m3
 	kg_av = spacecraft_list_sorted[j].kg
-	for i in range(0, len(cargo1_sorted)):
+	for i in range(len(cargo1_sorted)):
 		# check if cargo-item is already placed
 		if (cargo1_sorted[i].m3 == 'nan'):
 			next
@@ -45,23 +45,23 @@ for j in range(0, 4):
 
 leftover = []
 # create leftover list from cargo1_sorted without nan
-for i in range(0, len(cargo1_sorted)):
+for i in range(len(cargo1_sorted)):
 	if cargo1_sorted[i].m3 != 'nan':
 		leftover.append(cargo1_sorted[i])
 
-for i in range(0, len(leftover)):
+for i in range(len(leftover)):
 	print leftover[i].m3
 
 # define function to calculate #kg in spacecrafts
 def sum_kg(lijst):
 	kg_sum = []
-	for i in range(0,len(lijst)):
+	for i in range(len(lijst)):
 		kg_sum.append(sum(c.kg for c in lijst[i]))
 	return kg_sum
 
 def sum_m3(lijst):
 	m3_sum = []
-	for i in range(0,len(lijst)):
+	for i in range(len(lijst)):
 		m3_sum.append(sum(c.m3 for c in lijst[i]))
 	return m3_sum
 
@@ -85,7 +85,7 @@ sum_valtot_original = val_leftover(spacecrafts[4])
 # create arrays with capacities
 cap_kg = []
 cap_m3 = []
-for i in range(0, len(spacecraft_list_sorted)):
+for i in range(len(spacecraft_list_sorted)):
 	cap_kg.append(spacecraft_list_sorted[i].kg)
 	cap_m3.append(spacecraft_list_sorted[i].m3)
 
@@ -97,7 +97,7 @@ while time.time() < t_end:
 	count = count + 1
 	# now = time.time()
 	# print("It has been {0} seconds since the loop started".format(now - program_starts))
-	number_list = range(0,len(spacecrafts))
+	number_list = range(len(spacecrafts))
 	rand_1 = random.choice(number_list)
 	number_list.remove(rand_1)
 	print number_list
@@ -106,10 +106,10 @@ while time.time() < t_end:
 	print rand_1
 	print rand_2
 
-	list_cargo_1 = range(0,len(spacecrafts[rand_1]))
+	list_cargo_1 = range(len(spacecrafts[rand_1]))
 	rand_cargo_1 = random.choice(list_cargo_1)
 
-	list_cargo_2 = range(0,len(spacecrafts[rand_2]))
+	list_cargo_2 = range(len(spacecrafts[rand_2]))
 	rand_cargo_2 = random.choice(list_cargo_2)
 
 	print 'originele waarde'
@@ -166,7 +166,7 @@ while time.time() < t_end:
 	else:
 		print 'niet ok valtot'
 		check_swap = 1
-	print check_swap 
+	print check_swap
 
 	# Swap elements back if necessary
 	if (check_swap == 1):
@@ -182,7 +182,7 @@ sum_valtot_new = val_leftover(spacecrafts[4])
 print sum_valtot_new
 
 print sum_kg1_original
-print sum_m31_original 
+print sum_m31_original
 print sum_valtot_original
 
 print len(leftover)
