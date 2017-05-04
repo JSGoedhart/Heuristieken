@@ -48,6 +48,13 @@ def print_kg(list1, list2):
     	for i in range(len(list2[j])):
     		print list2[j][i].kg
 
+def print_m3(list1, list2):
+    # print kg's per spacecraft
+    for j in range(4):
+    	print spacecraft_list[j].name
+    	for i in range(len(spacecrafts[j])):
+    		print spacecrafts[j][i].m3
+
 # def availability(list1, list2):
 #     for j in range(4):
 #     	print list1[j].name

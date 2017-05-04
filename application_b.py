@@ -24,20 +24,16 @@ for j in range(4):
 	m3_av = spacecraft_list_sorted[j].m3
 	for i in range(len(cargo1_sorted)):
 		# check if cargo-item is already placed
-		if (cargo1_sorted[i].m3 == 'nan'):
-			next
-		else:
+		if (cargo1_sorted[i].m3 != 'nan'):
 			# put cargo-item in spacecraft if there is enough space
 			if (cargo1_sorted[i].m3 <= m3_av):
 				spacecrafts[j].append(cargo1(cargo1_sorted[i].number, cargo1_sorted[i].kg, cargo1_sorted[i].m3))
 				m3_av = m3_av - cargo1_sorted[i].m3
 				cargo1_sorted[i].m3 = 'nan'
-			# when item doesn't fit, try next
-			else:
-				next
-	# print mass_av
 
-# print kg's per spacecraft
+
+
+# print m3's per spacecraft
 for j in range(4):
 	print spacecraft_list[j].name
 	for i in range(len(spacecrafts[j])):
