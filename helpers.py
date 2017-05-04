@@ -28,18 +28,18 @@ def open_spacecrafts_csv(file):
         open_list.append(spacecraft(var0, var1, var2))
     return open_list
 
-def greedy_fill(list1, list2, list3):
-
+def greedy_fill(list1, list2, list3, item):
+    ''' fill list3 with items of list2, based on item, untill full. When full go to next'''
     for j in range(4):
     	# define available mass in spacecraft
-    	mass_av = list1[j].kg
+    	mass_av = getattr(list1[j], item)
     	for i in range(len(list2)):
     		# check if cargo-item is already placed
-    		if (list2[i].kg != 'nan'):
-    			if (list2[i].kg <= mass_av):
+    		if (getattr(list2[i], item) != 'nan'):
+    			if (getattr(list2[i], item) <= mass_av):
     				list3[j].append(cargo1(list2[i].number, list2[i].kg, list2[i].m3))
-    				mass_av -= list2[i].kg
-    				list2[i].kg = 'nan'
+    				mass_av -= getattr(list2[i], item)
+    				getattr(list2[i], item) = 'nan'
 
 def print_kg(list1, list2):
     # print kg's per spacecraft

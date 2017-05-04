@@ -19,7 +19,8 @@ print spacecraft_list[0].m3
 # create lists to put cargo-classes in
 spacecrafts = [[], [], [], []]
 
-greedy_fill(spacecraft_list, cargo1_sorted, spacecrafts)
+# run greedy fill, to fill spacecrafts on basis of kg
+greedy_fill(spacecraft_list, cargo1_sorted, spacecrafts, 'kg')
 
 # print kg's per spacecraft
 print_kg(spacecraft_list, spacecrafts)
@@ -35,4 +36,3 @@ for j in range(4):
 	print sum_kg
 	print sum_m3
 
-spacecrafts[0][0].attrgetter('kg')
