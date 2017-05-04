@@ -1,4 +1,4 @@
-from classes import *
+import classes
 
 def open_cargo_csv(file):
     # create list to put cargo1 classes in
@@ -11,7 +11,7 @@ def open_cargo_csv(file):
     	var0 = split[0]
     	var1 = int(split[1])
     	var2 = float(split[2][:-1])
-    	split_list.append(cargo1(var0, var1, var2))
+    	split_list.append(classes.cargo1(var0, var1, var2))
     return split_list
 
 def open_spacecrafts_csv(file):
@@ -25,7 +25,7 @@ def open_spacecrafts_csv(file):
         var0 = split[0]
         var1 = int(split[1])
         var2 = float(split[2])
-        open_list.append(spacecraft(var0, var1, var2))
+        open_list.append(classes.spacecraft(var0, var1, var2))
     return open_list
 
 def greedy_fill(list1, list2, list3, item):
@@ -37,9 +37,34 @@ def greedy_fill(list1, list2, list3, item):
     		# check if cargo-item is already placed
     		if (getattr(list2[i], item) != 'nan'):
     			if (getattr(list2[i], item) <= mass_av):
-    				list3[j].append(cargo1(list2[i].number, list2[i].kg, list2[i].m3))
+    				list3[j].append(classes.cargo1(list2[i].number, list2[i].kg, list2[i].m3))
     				mass_av -= getattr(list2[i], item)
-    				getattr(list2[i], item) = 'nan'
+    				list2[i].kg = 'nan'
+
+def print_names(lijst):
+    name_arr = []
+    for i in range(len(lijst)):
+        name_arr.append(lijst[i].name)
+    return name_arr
+
+def sum_kg(lijst):
+    ''' function to calculate total kg's per spacecrafts '''
+    kg_sum = []
+    for i in range(len(lijst)):
+        kg_sum.append(sum(c.kg for c in lijst[i]))
+    return kg_sum
+
+def sum_m3(lijst):
+    ''' function to calculate total kg's per spacecrafts '''   
+    m3_sum = []
+    for i in range(len(lijst)):
+        m3_sum.append(sum(c.m3 for c in lijst[i]))
+    return m3_sum
+
+def val_leftover(lijst):
+    ''' score functie'''
+    sum_valtot = sum(c.valtot for c in lijst)
+    return sum_valtot
 
 def print_kg(list1, list2):
     # print kg's per spacecraft
