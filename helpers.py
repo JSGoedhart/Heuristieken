@@ -29,22 +29,28 @@ def open_spacecrafts_csv(file):
     return open_list
 
 def greedy_fill(list1, list2, list3, item):
-    ''' fill list3 with items of list2, based on item, untill full. When full go to next'''
-    for j in range(4):
-    	# define available mass in spacecraft
-    	mass_av = getattr(list1[j], item)
-    	for i in range(len(list2)):
-    		# check if cargo-item is already placed
-    		if (getattr(list2[i], item) != 'nan'):
-    			if (getattr(list2[i], item) <= mass_av):
-    				list3[j].append(classes.cargo1(list2[i].number, list2[i].kg, list2[i].m3))
-    				mass_av -= getattr(list2[i], item)
-    				list2[i].kg = 'nan'
+    ''' fill list3 with items of list2, based on variable item. When full go to next'''
+    for j in range(len(list3)-1):
+        # define available mass in spacecraft
+        mass_av = getattr(list1[j], item)
+        for i in range(len(list2)):
+            # check if cargo-item is already placed
+            if (getattr(list2[i], item) != 'nan'):
+                if (getattr(list2[i], item) <= mass_av):
+                    list3[j].append(classes.cargo1(list2[i].number, list2[i].kg, list2[i].m3))
+                    mass_av -= getattr(list2[i], item)
+                    list2[i].m3 = 'nan'
+    # create leftover list and put in spacecraft list without nan
+    for k in range(len(list2)):
+        if getattr(list2[k], item) != 'nan':
+            list3[len(list3)-1].append(list2[k])
+    return list3
 
 def print_names(lijst):
     name_arr = []
     for i in range(len(lijst)):
         name_arr.append(lijst[i].name)
+    name_arr.append('leftover')
     return name_arr
 
 def sum_kg(lijst):
