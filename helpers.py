@@ -39,10 +39,10 @@ def greedy_fill(list1, list2, list3, item):
                 if (getattr(list2[i], item) <= mass_av):
                     list3[j].append(classes.cargo1(list2[i].number, list2[i].kg, list2[i].m3))
                     mass_av -= getattr(list2[i], item)
-                    list2[i].m3 = 'nan'
+                    setattr(list2[i], item, 'nan')
     # create leftover list and put in spacecraft list without nan
     for k in range(len(list2)):
-        if getattr(list2[k], item) != 'nan':
+        if (getattr(list2[k], item) != 'nan'):
             list3[len(list3)-1].append(list2[k])
     return list3
 
