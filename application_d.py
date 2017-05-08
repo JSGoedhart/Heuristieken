@@ -19,7 +19,9 @@ spacecraft_list_sorted = sorted(spacecraft_list, key=operator.attrgetter('kg'), 
 spacecrafts_kg = [[], [], [], [], [], [], []]
 
 # run greedy fill, to fill spacecrafts on basis of kg
-greedy_fill(spacecraft_list, cargo3_sorted_kg, spacecrafts_kg, 'kg')
+greedy_fill(spacecraft_list, cargo3_sorted_kg, spacecrafts_kg, 'kg', 'm3')
+print sum_kg(spacecrafts_kg)
+print sum_m3(spacecrafts_kg)
 
 # create lists to put cargo-classes in
 spacecrafts_m3 = []
@@ -30,7 +32,7 @@ while len(leftover_list) != 0:
 	count += 1 
 	temp_spacecrafts = [[], [], [], [], [], [], []]
 	temp_cargo = leftover_list
-	greedy_fill(spacecraft_list, temp_cargo, temp_spacecrafts, 'm3')
+	greedy_fill(spacecraft_list, temp_cargo, temp_spacecrafts, 'm3', 'kg')
 	leftover_list = temp_spacecrafts[6]
 
 	# print the leftoverlist
@@ -48,12 +50,12 @@ while len(leftover_list) != 0:
 
 
 # prints all cargo stored in spacecrafts
-for k in range(len(spacecrafts_m3)):
-	print 'spacecrafts:', k
-	for j in range(6):
-		print spacecraft_list[j].name
-		for i in range(len(spacecrafts_m3[k][j])):
-			print spacecrafts_m3[k][j][i].m3
+# for k in range(len(spacecrafts_m3)):
+# 	print 'spacecrafts:', k
+# 	for j in range(6):
+# 		print spacecraft_list[j].name
+# 		for i in range(len(spacecrafts_m3[k][j])):
+# 			print spacecrafts_m3[k][j][i].m3
 
 
 # prints leftover with all NaN

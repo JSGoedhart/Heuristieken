@@ -71,10 +71,13 @@ spacecrafts2 = [[], [], [], [], []]
 # run greedy fill, to fill spacecrafts on basis of m3
 greedy_fill(spacecraft_list, cargo1_sorted_2, spacecrafts2, 'kg', 'm3')
 
+print random2(spacecrafts2, [2,3,4])
+
 program_starts = time.time()
 t_end = time.time() + 1
 while time.time() < t_end:
 	rand_ar2 = random2(spacecrafts2, [2,3,4])
+	print rand_ar2
 	swap_random(spacecrafts2, rand_ar2, cap_kg, cap_m3)
 
 print 'Values for HILLCLIMBING 2:'
