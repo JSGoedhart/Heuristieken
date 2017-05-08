@@ -184,7 +184,8 @@ def swap_random(list1, array1, cap_kg, cap_m3):
     random_arr = []
     for i in range(len_ar):
         random_arr.append(list1[len_lst-1][array1[i]])
-    
+    random_arr
+
     # calculate sums and score of items from specified list
     sum_kg_rand = sum(c.kg for c in random_arr)
     sum_m3_rand = sum(c.m3 for c in random_arr)
@@ -224,6 +225,7 @@ def swap_random(list1, array1, cap_kg, cap_m3):
         list1[len_lst-1].append(list1[num][item])
         list1[num].remove(list1[num][item])
         for i in range(len_ar):
-            list1[len_lst -1 ].remove(random_arr[i])
+            print i
+            list1[len_lst -1 ].remove(list1[len_lst-1][random_arr[i]])
 
 
