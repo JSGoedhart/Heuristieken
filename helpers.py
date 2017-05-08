@@ -176,6 +176,7 @@ def random2(array1, array2):
     return retour
 
 def swap_random(list1, array1, cap_kg, cap_m3):
+    numb_swaps = 0
     ''' swaps a randomly selected amount of items of a specified list, with an item of another list, if possible '''
     len_ar = len(array1)
     len_lst = len(list1)
@@ -219,6 +220,7 @@ def swap_random(list1, array1, cap_kg, cap_m3):
                         break
     # swap if possible
     if (get_item == True):
+        numb_swaps += 1
         # add random elements to list and remove from leftover list
         list1[num].extend(random_arr)
         list1[len_lst-1].append(list1[num][item])
@@ -232,3 +234,4 @@ def swap_random(list1, array1, cap_kg, cap_m3):
 >>>>>>> Stashed changes
 
 
+    return numb_swaps

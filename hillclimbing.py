@@ -74,14 +74,18 @@ greedy_fill(spacecraft_list, cargo1_sorted_2, spacecrafts2, 'kg', 'm3')
 print random2(spacecrafts2, [2,3,4])
 
 program_starts = time.time()
-t_end = time.time() + 1
+t_end = time.time() + 60
 while time.time() < t_end:
+	numb_swaps2 = 0
 	rand_ar2 = random2(spacecrafts2, [2,3,4])
 	print rand_ar2
 	swap_random(spacecrafts2, rand_ar2, cap_kg, cap_m3)
+	if swap_two != 1:
+		numb_swaps2 += 1
 
 print 'Values for HILLCLIMBING 2:'
 print 'spacecrafts:',  print_names(spacecraft_list)
 print 'total kg in spacecrafts before:', sum_kg(spacecrafts2)
 print 'total m3 in spacecrafts before:', sum_m3(spacecrafts2)
 print 'score after:', val_leftover(spacecrafts2[LEN-1])
+print 'number of swaps: ', numb_swaps2
