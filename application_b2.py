@@ -92,8 +92,9 @@ for i in range(len(spacecraft_list_sorted)):
 # start of loop
 count = 0
 program_starts = time.time()
-t_end = time.time() + 60
+t_end = time.time() + 10
 while time.time() < t_end:
+	numb_swaps = 0
 	count = count + 1
 	# now = time.time()
 	# print("It has been {0} seconds since the loop started".format(now - program_starts))
@@ -172,6 +173,8 @@ while time.time() < t_end:
 	if (check_swap == 1):
 		print 'SWAPPING'
 		spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2] = swap(spacecrafts[rand_1][rand_cargo_1], spacecrafts[rand_2][rand_cargo_2])
+	else:
+		numb_swaps += 1
 
 print 'cap na'
 sum_kg1 = sum_kg(spacecrafts[0:len(spacecrafts)])
@@ -179,7 +182,6 @@ print sum_kg1
 sum_m31 = sum_m3(spacecrafts[0:len(spacecrafts)])
 print sum_m31
 sum_valtot_new = val_leftover(spacecrafts[4])
-print sum_valtot_new
 
 print sum_kg1_original
 print sum_m31_original
@@ -188,3 +190,6 @@ print sum_valtot_original
 print len(leftover)
 
 print count
+
+print 'new score: ', sum_valtot_new
+print 'number of swaps: ', numb_swaps

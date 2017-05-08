@@ -29,7 +29,7 @@ print 'Spacecrafts:   ',  print_names(spacecraft_list)
 print 'Total kg in spacecrafts:', sum_kg(spacecrafts_kg)
 print 'Total m3 in spacecrafts:', sum_m3(spacecrafts_kg)
 print 'Score:', val_leftover(spacecrafts_kg[LEN-1])
-print '\n'
+print ''
 
 # create lists of spacescrafts to put cargo-classes in
 spacecrafts_m3 = [[], [], [], [], []]
@@ -43,4 +43,4 @@ print 'spacecrafts:',  print_names(spacecraft_list)
 print 'total kg in spacecrafts:', sum_kg(spacecrafts_m3)
 print 'total m3 in spacecrafts:', sum_m3(spacecrafts_m3)
 print 'score:', val_leftover(spacecrafts_m3[LEN-1])
-print '\n'
+print ''

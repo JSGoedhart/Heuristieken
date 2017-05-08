@@ -70,9 +70,9 @@ def swap(a, b):
     ''' function that swaps to elements '''
     return b, a
 
-
 def swap_two(list1, rand_arr, cap_kg, cap_m3):
     ''' swap items from list1 and check if this is possible with cap1 and cap2 '''
+    numb_swaps = 0
     length = len(list1)
     # calculate scorefunction before swapping
     score_old = val_leftover(list1[length-1])
@@ -82,31 +82,30 @@ def swap_two(list1, rand_arr, cap_kg, cap_m3):
     sum_kg1 = sum_kg(list1[0:length])
     sum_m31 = sum_m3(list1[0:length])
     score_new = val_leftover(list1[length-1])
-    print rand_arr
-    print 'scores oud en nieuw', score_old, score_new
-    if (rand_arr[0] < 4):
-        print 'lijst1, capaciteit en som kg', cap_kg[rand_arr[0]], sum_kg1[rand_arr[0]]
-        print 'lijst1, capaciteit en som m3', cap_m3[rand_arr[0]], sum_m31[rand_arr[0]]
-    if (rand_arr[1] < 4):
-        print 'lijst2, capaciteit en som kg', cap_kg[rand_arr[1]], sum_kg1[rand_arr[1]]
-        print 'lijst2, capaciteit en som m3', cap_m3[rand_arr[1]], sum_m31[rand_arr[1]]
+    # print rand_arr
+    # print 'scores oud en nieuw', score_old, score_new
+    # if (rand_arr[0] < 4):
+    #     print 'lijst1, capaciteit en som kg', cap_kg[rand_arr[0]], sum_kg1[rand_arr[0]]
+    #     print 'lijst1, capaciteit en som m3', cap_m3[rand_arr[0]], sum_m31[rand_arr[0]]
+    # if (rand_arr[1] < 4):
+    #     print 'lijst2, capaciteit en som kg', cap_kg[rand_arr[1]], sum_kg1[rand_arr[1]]
+    #     print 'lijst2, capaciteit en som m3', cap_m3[rand_arr[1]], sum_m31[rand_arr[1]]
 
     # check for swaprestrictions for the two selected lists
     check_swap = 0
     for i in rand_arr[0:2]:
         # check if list selected list is leftover list
         if (i < (length-1) and (sum_kg1[i] > cap_kg[i] or sum_m31[i] > cap_m3[i])):
-            print 'not ok'
+            # print 'not ok'
             check_swap = 1
         # only swap when score gets better (smaller)
         if (score_new > score_old):
             check_swap = 1
     # swap back when restrictions aren't hold on to
     if (check_swap == 1):
-        print 'SWAPPING BACK'
+        # print 'SWAPPING BACK'
         list1[rand_arr[0]][rand_arr[2]], list1[rand_arr[1]][rand_arr[3]] = swap(list1[rand_arr[0]][rand_arr[2]], list1[rand_arr[1]][rand_arr[3]])
-
-
+    return check_swap
 
 
 def print_names(lijst):
@@ -163,15 +162,68 @@ def random1(array):
     retour.append(random.choice(range(len(array[retour[1]]))))
     return retour
 
+def random2(array1, array2):
+    ''' returns an random amount of randomly selected items from one list and a random item from another random selected list '''
+    # array to return randomly selected indices
+    retour = []
+    # create array to randomly select a list and select two items that cannot be equal
+    amount = random.choice(array2)
+    # print 'amount: ', amount
+    for i in range(amount):
+        rand_range = range(len(array1[len(array1) - 1]))
+        rand_item = random.choice(rand_range)
+        retour.append(rand_item)
+        rand_range.remove(rand_item)
+    return retour
+
+def swap_random(list1, array1, cap_kg, cap_m3):
+    ''' swaps a randomly selected amount of items of a specified list, with an item of another list, if possible '''
+    len_ar = len(array1)
+    len_lst = len(list1)
+    # create array with randomly selected items from specified list
+    random_arr = []
+    for i in range(len_ar):
+        random_arr.append(list1[len_lst-1][array1[i]])
+    
+    # calculate sums and score of items from specified list
+    sum_kg_rand = sum(c.kg for c in random_arr)
+    sum_m3_rand = sum(c.m3 for c in random_arr)
+    score_rand = sum(c.valtot for c in random_arr)
+
+    # calculate free m3 and kg per list of list1
+    sum_kg1 = sum_kg(list1[0:len_lst])
+    sum_m31 = sum_m3(list1[0:len_lst])
+    score_old = val_leftover(list1[len_lst-1])
+
+    # overige capaciteit, kg en m3 per spacecraft:
+    kg_over = []
+    m3_over = []
+    for i in range(len(cap_kg)):
+        kg_over.append(cap_kg[i]- sum_kg1[i])
+        m3_over.append(cap_m3[i]- sum_m31[i])
+
+    # loop through lists to check if there exists an element the random elements can be swapped with
+    get_item = False
+    control = 0
+    for i in range(len_lst-1):
+        if control != 1:
+            for j in range(len(list1[i])):
+                # check if score random elements is better than selected
+                if (list1[i][j].valtot < score_old):
+                    # check if swapping would not break the restrictions, if not save values and break
+                    if (kg_over[i] + list1[i][j].kg >= sum_kg_rand and m3_over[i] + list1[i][j].m3 >= sum_m3_rand):
+                        get_item = True
+                        num = i
+                        item = j
+                        control = 1
+                        break
+    # swap if possible
+    if (get_item == True):
+        # add random elements to list and remove from leftover list
+        list1[num].extend(random_arr)
+        list1[len_lst-1].append(list1[num][item])
+        list1[num].remove(list1[num][item])
+        for i in range(len_ar):
+            list1[len_lst -1 ].remove(random_arr[i])
 
 
-# def availability(list1, list2):
-#     for j in range(4):
-#     	print list1[j].name
-#     	sum_kg = 0
-#     	sum_m3 = 0
-#     	for i in range(len(list2[j])):
-#     		sum_kg += list2[j][i].kg
-#     		sum_m3 += list2[j][i].m3
-#     	print sum_kg
-#     	print sum_m3
