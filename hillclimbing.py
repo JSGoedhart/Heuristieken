@@ -78,7 +78,6 @@ t_end = time.time() + 60
 while time.time() < t_end:
 	numb_swaps2 = 0
 	rand_ar2 = random2(spacecrafts2, [2,3,4])
-	print rand_ar2
 	swap_random(spacecrafts2, rand_ar2, cap_kg, cap_m3)
 	if swap_two != 1:
 		numb_swaps2 += 1
