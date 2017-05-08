@@ -50,8 +50,8 @@ def greedy_fill(list1, list2, list3, item, item2):
     else:
         for j in range(len(list3)-1):
             # define availability in spacecraft
-            mass_av = getattr(list1[j], item)
-            av_1 = getattr(list1[j], item2)
+            mass_av = 0.5 * getattr(list1[j], item)
+            av_1 = 0.5 * getattr(list1[j], item2)
             for i in range(len(list2)):
                 # check if cargo-item is already placed
                 if (getattr(list2[i], item) != 'nan'):
