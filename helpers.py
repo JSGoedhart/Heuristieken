@@ -168,9 +168,8 @@ def random2(array1, array2):
     retour = []
     # create array to randomly select a list and select two items that cannot be equal
     amount = random.choice(array2)
-    # print 'amount: ', amount
+    rand_range = range(len(array1[len(array1) - 1]))
     for i in range(amount):
-        rand_range = range(len(array1[len(array1) - 1]))
         rand_item = random.choice(rand_range)
         retour.append(rand_item)
         rand_range.remove(rand_item)
@@ -225,7 +224,6 @@ def swap_random(list1, array1, cap_kg, cap_m3):
         list1[len_lst-1].append(list1[num][item])
         list1[num].remove(list1[num][item])
         for i in range(len_ar):
-            print i
-            list1[len_lst -1 ].remove(list1[len_lst-1][random_arr[i]])
+            list1[len_lst -1].remove(random_arr[i])
 
 
