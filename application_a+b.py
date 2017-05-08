@@ -17,11 +17,11 @@ spacecraft_list = open_spacecrafts_csv('Spacecrafts.csv')
 # create lists of spacecrafts to put cargo-classes in
 spacecrafts_kg = [[], [], [], [], []]
 
-# global
+# define global
 LEN = len(spacecrafts_kg)
 
 # run greedy fill, to fill spacecrafts on basis of kg
-greedy_fill(spacecraft_list, cargo1_sorted_kg, spacecrafts_kg, 'kg')
+greedy_fill(spacecraft_list, cargo1_sorted_kg, spacecrafts_kg, 'kg', False)
 
 # print output
 print 'Question a: output on basis of kg:'
@@ -35,7 +35,7 @@ print '\n'
 spacecrafts_m3 = [[], [], [], [], []]
 
 # run greedy fill, to fill spacecrafts on basis of m3
-greedy_fill(spacecraft_list, cargo1_sorted_m3, spacecrafts_m3, 'm3')
+greedy_fill(spacecraft_list, cargo1_sorted_m3, spacecrafts_m3, 'm3', False)
 
 # print output
 print 'Question b: output on basis of m3:'
@@ -44,4 +44,3 @@ print 'total kg in spacecrafts:', sum_kg(spacecrafts_m3)
 print 'total m3 in spacecrafts:', sum_m3(spacecrafts_m3)
 print 'score:', val_leftover(spacecrafts_m3[LEN-1])
 print '\n'
-
