@@ -77,7 +77,7 @@ def swap_two(list1, rand_arr, cap_kg, cap_m3):
     # calculate scorefunction before swapping
     score_old = val_leftover(list1[length-1])
     # swap
-    list1[rand_arr[0]][rand_arr[2]], list1[rand_arr[1]][rand_arr[3]] = swap(list1[rand_arr[0]][rand_arr[2]], list1[rand_arr[1]][rand_arr[3]]) 
+    list1[rand_arr[0]][rand_arr[2]], list1[rand_arr[1]][rand_arr[3]] = swap(list1[rand_arr[0]][rand_arr[2]], list1[rand_arr[1]][rand_arr[3]])
     # calculate new values of kg, m3 and valtot (score)
     sum_kg1 = sum_kg(list1[0:length])
     sum_m31 = sum_m3(list1[0:length])
@@ -101,7 +101,7 @@ def swap_two(list1, rand_arr, cap_kg, cap_m3):
         # only swap when score gets better (smaller)
         if (score_new > score_old):
             check_swap = 1
-    # swap back when restrictions aren't hold on to
+    # swap back when restrictions aren't satisfied
     if (check_swap == 1):
         # print 'SWAPPING BACK'
         list1[rand_arr[0]][rand_arr[2]], list1[rand_arr[1]][rand_arr[3]] = swap(list1[rand_arr[0]][rand_arr[2]], list1[rand_arr[1]][rand_arr[3]])
@@ -123,7 +123,7 @@ def sum_kg(lijst):
     return kg_sum
 
 def sum_m3(lijst):
-    ''' function to calculate total kg's per spacecrafts '''   
+    ''' function to calculate total kg's per spacecrafts '''
     m3_sum = []
     for i in range(len(lijst)):
         m3_sum.append(sum(c.m3 for c in lijst[i]))
