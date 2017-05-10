@@ -1,11 +1,11 @@
+from __future__ import division
 import csv
 import operator
 import random
 import time
 import classes
+import math
 from helpers import *
-
-print random.uniform(0,1)
 
 # create list to put cargo1 classes in
 cargo1_list = open_cargo_csv('CargoList1.csv')
@@ -39,19 +39,38 @@ print 'score before:', val_leftover(spacecrafts1[LEN-1])
 print ''
 
 # run simulated annealing algorithm 1 for selected time
+iterations = 0
 program_starts = time.time()
-t_end = time.time() + 1
+t_end = time.time() + 10
 while time.time() < t_end:
     #store the score before swapping items
     old_score = val_leftover(spacecrafts1[LEN-1])
 
+    # increment iterations
+    iterations = iterations + 1
+
+    # temperature
+    temperature = 1 / iterations
+
+
+    # random number between 0 and 1 for Boltzmann criterion
+    random_num = random.uniform(0,1)
+
 	# randomly select two indices of lists and two items to swap between, put in array
-	rand_arr = random1(spacecrafts1)
+    rand_arr = random1(spacecrafts1)
 	# run hillclimbing algorithm with rand_arr
-	swap_two(spacecrafts1, rand_arr, cap_kg, cap_m3)
+    swap_two(spacecrafts1, rand_arr, cap_kg, cap_m3)
 
     #store new score after swapping items
     new_score = val_leftover(spacecrafts1[LEN-1])
+
+    # change in score
+    change = new_score - old_score
+
+    # Boltzmann criterion
+    if random_num > math.exp(-change / temperature):
+        # swap items back if condition holds
+        swap_two(spacecrafts1, rand_arr, cap_kg, cap_m3)
 
 
 print 'Values for SA 1:'
@@ -61,4 +80,5 @@ print 'total m3 in spacecrafts before:', sum_m3(spacecrafts1)
 print 'score after:', val_leftover(spacecrafts1[LEN-1])
 
 
+print '\n'
 print '\n'
