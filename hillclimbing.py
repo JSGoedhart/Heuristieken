@@ -81,4 +81,3 @@ print 'spacecrafts:',  print_names(spacecraft_list_sorted)
 print 'total kg in spacecrafts before:', sum_kg(spacecrafts2)
 print 'total m3 in spacecrafts before:', sum_m3(spacecrafts2)
 print 'score after:', val_leftover(spacecrafts2[LEN-1])
-
