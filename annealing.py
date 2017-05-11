@@ -47,11 +47,10 @@ while time.time() < t_end:
     old_score = val_leftover(spacecrafts1[LEN-1])
 
     # increment iterations
-    iterations = iterations + 1
+    iterations = iterations + 0.1
 
     # temperature
     temperature = 1 / iterations
-
 
     # random number between 0 and 1 for Boltzmann criterion
     random_num = random.uniform(0,1)
@@ -59,7 +58,7 @@ while time.time() < t_end:
 	# randomly select two indices of lists and two items to swap between, put in array
     rand_arr = random1(spacecrafts1)
 	# run hillclimbing algorithm with rand_arr
-    swap_two(spacecrafts1, rand_arr, cap_kg, cap_m3)
+    swap_SA(spacecrafts1, rand_arr, cap_kg, cap_m3)
 
     #store new score after swapping items
     new_score = val_leftover(spacecrafts1[LEN-1])
@@ -70,7 +69,7 @@ while time.time() < t_end:
     # Boltzmann criterion
     if random_num > math.exp(-change / temperature):
         # swap items back if condition holds
-        swap_two(spacecrafts1, rand_arr, cap_kg, cap_m3)
+        swap_SA(spacecrafts1, rand_arr, cap_kg, cap_m3)
 
 
 print 'Values for SA 1:'

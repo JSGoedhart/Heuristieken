@@ -228,3 +228,40 @@ def swap_random(list1, array1, cap_kg, cap_m3):
         for i in range(len_ar):
             list1[len_lst -1].remove(random_arr[i])
     return numb_swaps
+
+def swap_SA(list1, rand_arr, cap_kg, cap_m3):
+    ''' swap items from list1 and check if this is possible with cap1 and cap2 '''
+    numb_swaps = 0
+    length = len(list1)
+    # calculate scorefunction before swapping
+    score_old = val_leftover(list1[length-1])
+    # swap
+    list1[rand_arr[0]][rand_arr[2]], list1[rand_arr[1]][rand_arr[3]] = swap(list1[rand_arr[0]][rand_arr[2]], list1[rand_arr[1]][rand_arr[3]])
+    # calculate new values of kg, m3 and valtot (score)
+    sum_kg1 = sum_kg(list1[0:length])
+    sum_m31 = sum_m3(list1[0:length])
+    score_new = val_leftover(list1[length-1])
+    # print rand_arr
+    # print 'scores oud en nieuw', score_old, score_new
+    # if (rand_arr[0] < 4):
+    #     print 'lijst1, capaciteit en som kg', cap_kg[rand_arr[0]], sum_kg1[rand_arr[0]]
+    #     print 'lijst1, capaciteit en som m3', cap_m3[rand_arr[0]], sum_m31[rand_arr[0]]
+    # if (rand_arr[1] < 4):
+    #     print 'lijst2, capaciteit en som kg', cap_kg[rand_arr[1]], sum_kg1[rand_arr[1]]
+    #     print 'lijst2, capaciteit en som m3', cap_m3[rand_arr[1]], sum_m31[rand_arr[1]]
+
+    # check for swaprestrictions for the two selected lists
+    check_swap = 0
+    for i in rand_arr[0:2]:
+        # check if list selected list is leftover list
+        if (i < (length-1) and (sum_kg1[i] > cap_kg[i] or sum_m31[i] > cap_m3[i])):
+            # print 'not ok'
+            check_swap = 1
+        # only swap when score gets better (smaller)
+        # if (score_new > score_old):
+        #     check_swap = 1
+    # swap back when restrictions aren't satisfied
+    if (check_swap == 1):
+        # print 'SWAPPING BACK'
+        list1[rand_arr[0]][rand_arr[2]], list1[rand_arr[1]][rand_arr[3]] = swap(list1[rand_arr[0]][rand_arr[2]], list1[rand_arr[1]][rand_arr[3]])
+    return check_swap
