@@ -6,7 +6,9 @@ import time
 import classes
 import math
 from helpers import *
-
+# from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
+# from plotly.graph_objs import Scatter, Figure, Layout, Bar
+import numpy
 
 # create list to put cargo1 classes in
 cargo1_list = open_cargo_csv('CargoList1.csv')
@@ -42,10 +44,13 @@ print 'total m3 in spacecrafts before:', sum_m3(spacecrafts1)
 print 'score before:', val_leftover(spacecrafts1[LEN-1])
 print ''
 
+# create array to plot score function
+score = []
 # run simulated annealing algorithm 1 for selected time
 iterations = 0
 program_starts = time.time()
-t_end = time.time() + 10
+t_run = 10
+t_end = time.time() + t_run
 while time.time() < t_end:
     #store the score before swapping items
     old_score = val_leftover(spacecrafts1[LEN-1])
@@ -69,11 +74,15 @@ while time.time() < t_end:
     sum_m31 = sum_m3(spacecrafts1[0:length])
     value = 0
     for i in rand_arr[0:2]:
-        # check if list selected list is leftover list
-        if (i < (length-1) and (sum_kg1[i] > cap_kg[i] or sum_m31[i] > cap_m3[i])):
-            # print 'not ok'
-			swap_two(spacecrafts1, rand_arr, cap_kg, cap_m3)
-			value = 1
+        # check if list selected list isn't leftover list
+        if i < (length-1):
+            # check for kg and m3 restriction
+            if sum_kg1[i] > cap_kg[i] or sum_m31[i] > cap_m3[i]:
+                value = 1
+
+    # swap back if necessary
+    if (value == 1):
+        swap_two(spacecrafts1, rand_arr, cap_kg, cap_m3)
 
     #store new score after swapping items
     new_score = val_leftover(spacecrafts1[LEN-1])
@@ -82,14 +91,27 @@ while time.time() < t_end:
     change = new_score - old_score
 
 
-    print 'old: ', old_score
-    print 'new: ', new_score
+    # print 'old: ', old_score
+    # print 'new: ', new_score
 
 	# rejection criteria
     if (old_score < new_score or random_num > math.exp(-change / temperature)) and value == 0:
-		# swap items back
-		swap_two(spacecrafts1, rand_arr, cap_kg, cap_m3)
+        # swap items back
+        swap_two(spacecrafts1, rand_arr, cap_kg, cap_m3)
 
+    # append new score to score function
+    score.append(val_leftover(spacecrafts1[LEN-1]))
+
+    # count number of downturns
+    check = 0
+    if (val_leftover(spacecrafts1[LEN-1]) > old_score):
+        check += 1
+
+# # plot score function against time
+# xtime = numpy.linspace(0, t_run, len(score))
+# scatter = plot([Scatter(x=xtime, y=score)])
+
+print 'number of downturns: ', check
 
 print 'Values for SA 1:'
 print 'spacecrafts:',  print_names(spacecraft_list)
