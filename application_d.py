@@ -47,23 +47,52 @@ score_m3 = 0
 
 # score function:
 for k in range(len(spacecrafts_fleet)):
-	for j in range(5):
+	for j in range(len(spacecrafts_fleet[k])-1):
 		kg = 0
 		m3 = 0
 		for i in range(len(spacecrafts_fleet[k][j])):
 			kg = kg + spacecrafts_fleet[k][j][i].kg
 			m3 = m3 + spacecrafts_fleet[k][j][i].m3
-		print kg
-		print spacecraft_list_sorted[j].kg
-		print m3
-		print spacecraft_list_sorted[j].m3	
-		weighted_kg = kg/spacecraft_list_sorted[j].kg
-		weighted_m3 = m3/spacecraft_list_sorted[j].m3
-		score_kg = score_kg + (1 - weighted_kg)
-		score_m3 = score_m3 + (1 - weighted_m3)
+		# print kg
+		# print spacecraft_list_sorted[j].kg
+		# print m3
+		# print spacecraft_list_sorted[j].m3	
+		if kg != 0 and m3 != 0:
+			weighted_kg = kg/spacecraft_list_sorted[j].kg
+			weighted_m3 = m3/spacecraft_list_sorted[j].m3
+			score_kg = score_kg + (1 - weighted_kg)
+			score_m3 = score_m3 + (1 - weighted_m3)
 
 print score_kg
 print score_m3
+
+
+total_kg_spacecrafts = 0
+total_m3_spacecrafts = 0
+
+total_kg_cargo = 0
+total_m3_cargo = 0
+
+# score function procent
+for k in range(len(spacecrafts_fleet)):
+	for j in range(len(spacecrafts_fleet[k])-1):
+		total_kg_spacecrafts = total_kg_spacecrafts + spacecraft_list_sorted[j].kg
+		total_m3_spacecrafts = total_m3_spacecrafts + spacecraft_list_sorted[j].m3
+		for i in range(len(spacecrafts_fleet[k][j])):
+			total_kg_cargo = total_kg_cargo + spacecrafts_fleet[k][j][i].kg
+			total_m3_cargo = total_m3_cargo + spacecrafts_fleet[k][j][i].m3
+
+print total_kg_cargo
+print total_kg_spacecrafts
+
+# procent filled
+procent_kg = float(total_kg_cargo)/float(total_kg_spacecrafts)
+procent_m3 = total_m3_cargo/total_m3_spacecrafts
+
+print procent_kg
+print procent_m3
+
+
 
 # prints leftover with all NaN
 # for i in range(count):
