@@ -66,6 +66,22 @@ def greedy_fill(list1, list2, list3, item, item2):
                 list3[len(list3)-1].append(list2[k])
         return list3
 
+def random_fill(list1, list2, list3):
+    ''' places elements of list2 randomly in array of lists list3 '''
+    for i in range(len(list2)):
+        # select random list to put item in
+        number_list = range(len(list3))
+        index = random.choice(number_list)
+        sum_kg = sum(c.kg for c in list3[index]); sum_m3 = sum(c.m3 for c in list3[index]);
+        kg_item = getattr(list2[i], "kg"); m3_item = getattr(list2[i], "m3");
+        # check for kg and m3 restriction
+        if (sum_kg + kg_item > getattr(list1[index], "kg") or sum_m3 + m3_item > getattr(list1[index], "m3")):
+            # put in leftover list if item doesn't fit in the selected list
+            list3[len(list3)-1].append(list2[i])
+        else:
+            list3[index].append(list2[i])
+
+
 def swap(a, b):
     ''' function that swaps to elements '''
     return b, a

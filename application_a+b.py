@@ -21,7 +21,9 @@ spacecrafts_kg = [[], [], [], [], []]
 LEN = len(spacecrafts_kg)
 
 # run greedy fill, to fill spacecrafts on basis of kg
+# greedy_fill(spacecraft_list, cargo1_sorted_kg, spacecrafts_kg, 'kg', 'm3')
 greedy_fill(spacecraft_list, cargo1_sorted_kg, spacecrafts_kg, 'kg', 'm3')
+
 
 # print output
 print 'Question a: output on basis of kg:'
