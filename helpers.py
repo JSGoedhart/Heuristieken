@@ -105,7 +105,9 @@ def swap_two(list1, rand_arr, cap_kg, cap_m3):
     if (check_swap == 1):
         # print 'SWAPPING BACK'
         list1[rand_arr[0]][rand_arr[2]], list1[rand_arr[1]][rand_arr[3]] = swap(list1[rand_arr[0]][rand_arr[2]], list1[rand_arr[1]][rand_arr[3]])
-    return check_swap
+    score_return = val_leftover(list1[length-1])
+    # return swap (yes/no) and score after running swap_two
+    return [check_swap, score_return]
 
 
 def print_names(lijst):
@@ -194,7 +196,7 @@ def swap_random(list1, array1, cap_kg, cap_m3):
     # calculate free m3 and kg per list of list1
     sum_kg1 = sum_kg(list1[0:len_lst])
     sum_m31 = sum_m3(list1[0:len_lst])
-    score_old = val_leftover(list1[len_lst-1])
+    score_old = val_leftover(random_arr)
 
     # overige capaciteit, kg en m3 per spacecraft:
     kg_over = []
@@ -220,6 +222,7 @@ def swap_random(list1, array1, cap_kg, cap_m3):
                         break
     # swap if possible
     if (get_item == True):
+
         numb_swaps += 1
         # add random elements to list and remove from leftover list
         list1[num].extend(random_arr)
@@ -227,4 +230,4 @@ def swap_random(list1, array1, cap_kg, cap_m3):
         list1[num].remove(list1[num][item])
         for i in range(len_ar):
             list1[len_lst -1].remove(random_arr[i])
-    return numb_swaps
+    return [numb_swaps, val_leftover(list1[len_lst-1])]
