@@ -7,6 +7,7 @@ import classes
 import math
 from helpers import *
 
+
 # create list to put cargo1 classes in
 cargo1_list = open_cargo_csv('CargoList1.csv')
 
@@ -23,7 +24,10 @@ spacecrafts1 = [[], [], [], [], []]
 LEN = len(spacecrafts1)
 
 # run greedy fill, to fill spacecrafts on basis of m3
-greedy_fill(spacecraft_list, cargo1_sorted, spacecrafts1, 'kg', 'm3')
+#greedy_fill(spacecraft_list, cargo1_sorted, spacecrafts1, 'kg', 'm3')
+
+# run random fill
+random_fill(spacecraft_list, cargo1_sorted, spacecrafts1)
 
 # create array with capacities of spacecrafts in kg and m3
 cap_kg = []
@@ -47,7 +51,7 @@ while time.time() < t_end:
     old_score = val_leftover(spacecrafts1[LEN-1])
 
     # increment iterations
-    iterations = iterations + 0.001
+    iterations = iterations + 0.1
 
     # temperature
     temperature = 1 / iterations
@@ -60,14 +64,29 @@ while time.time() < t_end:
 	# run hillclimbing algorithm with rand_arr
     swap_two(spacecrafts1, rand_arr, cap_kg, cap_m3)
 
+    length = len(spacecrafts1)
+    sum_kg1 = sum_kg(spacecrafts1[0:length])
+    sum_m31 = sum_m3(spacecrafts1[0:length])
+    value = 0
+    for i in rand_arr[0:2]:
+        # check if list selected list is leftover list
+        if (i < (length-1) and (sum_kg1[i] > cap_kg[i] or sum_m31[i] > cap_m3[i])):
+            # print 'not ok'
+			swap_two(spacecrafts1, rand_arr, cap_kg, cap_m3)
+			value = 1
+
     #store new score after swapping items
     new_score = val_leftover(spacecrafts1[LEN-1])
 
     # change in score
     change = new_score - old_score
 
+
+    print 'old: ', old_score
+    print 'new: ', new_score
+
 	# rejection criteria
-    if old_score < new_score or random_num > math.exp(-change / temperature):
+    if (old_score < new_score or random_num > math.exp(-change / temperature)) and value == 0:
 		# swap items back
 		swap_two(spacecrafts1, rand_arr, cap_kg, cap_m3)
 
