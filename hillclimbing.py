@@ -46,7 +46,7 @@ print ''
 
 # run hillclimbing 1 algorithm for selected time
 program_starts = time.time()
-t_run = 1
+t_run = 50
 t_end = time.time() + t_run
 # create variable to count number of swaps and array for scores
 numb_swaps = 0
@@ -106,14 +106,14 @@ spacecrafts2 = [[], [], [], [], []]
 random_fill(spacecraft_list, cargo1_sorted_2, spacecrafts2)
 
 program_starts = time.time()
-t_run2 = 0.2
+t_run2 = 50
 t_start = time.time()
 t_end = time.time() + t_run2
 numb_swaps2 = 0
 score2 = []
 swaps1 = 0; swaps2 = 0; swaps3 = 0;
 while time.time() < t_end:
-	rand_ar2 = random2(spacecrafts2, [1,2,3])
+	rand_ar2 = random2(spacecrafts2, [1,2])
 	values = swap_random(spacecrafts2, rand_ar2, cap_kg, cap_m3)
 	numb_swaps2 += values[0]
 	score2.append(values[1])
