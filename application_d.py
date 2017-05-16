@@ -35,14 +35,15 @@ while len(leftover_list) != 0:
 	spacecrafts_fleet.append(temp_spacecrafts)
 
 # # prints all cargo stored in spacecrafts
-# for k in range(len(spacecrafts_m3)):
+# for k in range(len(spacecrafts_fleet)):
 # 	print 'spacecrafts:', k
 # 	for j in range(5):
 # 		print spacecraft_list[j].name
-# 		for i in range(len(spacecrafts_m3[k][j])):
-# 			print spacecrafts_m3[k][j][i].m3
+# 		for i in range(len(spacecrafts_fleet[k][j])):
+# 			print spacecrafts_fleet[k][j][i].m3
 
-score = 0
+score_kg = 0
+score_m3 = 0
 
 # score function:
 for k in range(len(spacecrafts_fleet)):
@@ -52,11 +53,17 @@ for k in range(len(spacecrafts_fleet)):
 		for i in range(len(spacecrafts_fleet[k][j])):
 			kg = kg + spacecrafts_fleet[k][j][i].kg
 			m3 = m3 + spacecrafts_fleet[k][j][i].m3
+		print kg
+		print spacecraft_list_sorted[j].kg
+		print m3
+		print spacecraft_list_sorted[j].m3	
 		weighted_kg = kg/spacecraft_list_sorted[j].kg
 		weighted_m3 = m3/spacecraft_list_sorted[j].m3
-		score = score + weighted_m3 + weighted_kg
+		score_kg = score_kg + (1 - weighted_kg)
+		score_m3 = score_m3 + (1 - weighted_m3)
 
-print score
+print score_kg
+print score_m3
 
 # prints leftover with all NaN
 # for i in range(count):
@@ -64,37 +71,37 @@ print score
 # 	for j in range(len(spacecrafts_m3[i][6])):
 # 		print spacecrafts_m3[i][6][j].m3
 
-# random swappen
+# # random swappen
 
-number_fleet = range(len(spacecrafts_fleet))
+# number_fleet = range(len(spacecrafts_fleet))
 
-# select fleet
-rand_fleet = random.choice(number_fleet)
-number_spacecrafts = range(len(spacecrafts_fleet[rand_fleet]) - 1)
+# # select fleet
+# rand_fleet = random.choice(number_fleet)
+# number_spacecrafts = range(len(spacecrafts_fleet[rand_fleet]) - 1)
 
-# select spacecraft
-rand_spacecraft = random.choice(rand_fleet)
+# # select spacecraft
+# rand_spacecraft = random.choice(rand_fleet)
 
-# select item
-rand_item = random.choice(rand_spacecraft)
+# # select item
+# rand_item = random.choice(rand_spacecraft)
 
-# select fleet 2
-rand_fleet2 = random.choice(spacecrafts_fleet)
+# # select fleet 2
+# rand_fleet2 = random.choice(spacecrafts_fleet)
 
-# select spacecraft 2
-rand_spacecraft2 = random.choice(rand_fleet2)
+# # select spacecraft 2
+# rand_spacecraft2 = random.choice(rand_fleet2)
 
-# select item 2
-rand_item2 = random.choice(rand_spacecraft2)
+# # select item 2
+# rand_item2 = random.choice(rand_spacecraft2)
 
-spacecrafts_fleet[rand_fleet][rand_spacecraft][rand_item]
+# spacecrafts_fleet[rand_fleet][rand_spacecraft][rand_item]
 
-# swap itemns
-spacecrafts_fleet[rand_fleet][rand_spacecraft][rand_item], spacecrafts_fleet[rand_fleet2][rand_spacecraft2][rand_item2] = swap(spacecrafts_fleet[rand_fleet][rand_spacecraft][rand_item], spacecrafts_fleet[rand_fleet2][rand_spacecraft2][rand_item2])
+# # swap itemns
+# spacecrafts_fleet[rand_fleet][rand_spacecraft][rand_item], spacecrafts_fleet[rand_fleet2][rand_spacecraft2][rand_item2] = swap(spacecrafts_fleet[rand_fleet][rand_spacecraft][rand_item], spacecrafts_fleet[rand_fleet2][rand_spacecraft2][rand_item2])
 
-spacecrafts_fleet[rand_fleet][rand_spacecraft][rand_item]
+# spacecrafts_fleet[rand_fleet][rand_spacecraft][rand_item]
 
-# staat dit allemaal al in een functie?????????????
+# # staat dit allemaal al in een functie?????????????
 
 
 
