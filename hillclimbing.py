@@ -25,7 +25,8 @@ spacecrafts1 = [[], [], [], [], []]
 LEN = len(spacecrafts1)
 
 # run greedy fill, to fill spacecrafts on basis of m3
-greedy_fill(spacecraft_list, cargo1_sorted, spacecrafts1, 'kg', 'm3')
+# greedy_fill(spacecraft_list, cargo1_sorted, spacecrafts1, 'kg', 'm3')
+random_fill(spacecraft_list, cargo1_sorted, spacecrafts1)
 
 # create array with capacities of spacecrafts in kg and m3
 cap_kg = []
@@ -71,6 +72,9 @@ while time.time() < t_end:
 
 # plot score against running time
 xtime = numpy.linspace(0, t_run, len(score))
+print xtime
+print len(xtime)
+print len(score)
 scatter1 = plot([Scatter(x=xtime, y=score)])
 
 # bar1 = plot({
@@ -98,7 +102,8 @@ cargo1_sorted_2 = sorted(cargo1_list_2, key=operator.attrgetter('kg'), reverse=T
 spacecrafts2 = [[], [], [], [], []]
 
 # run greedy fill, to fill spacecrafts on basis of m3
-greedy_fill(spacecraft_list, cargo1_sorted_2, spacecrafts2, 'kg', 'm3')
+# greedy_fill(spacecraft_list, cargo1_sorted_2, spacecrafts2, 'kg', 'm3')
+random_fill(spacecraft_list, cargo1_sorted_2, spacecrafts2)
 
 program_starts = time.time()
 t_run2 = 0.2
@@ -119,8 +124,8 @@ while time.time() < t_end:
 	else:
 		swaps3 += values[0]
 
-xtime2 = numpy.linspace(0, t_run2, len(score2))
-scatter2 = plot([Scatter(x=xtime2, y=score2)])
+# xtime2 = numpy.linspace(0, t_run2, len(score2))
+# scatter2 = plot([Scatter(x=xtime2, y=score2)])
 
 # bar2 = plot({
 # "data": [
