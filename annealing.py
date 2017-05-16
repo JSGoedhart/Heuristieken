@@ -47,7 +47,7 @@ while time.time() < t_end:
     old_score = val_leftover(spacecrafts1[LEN-1])
 
     # increment iterations
-    iterations = iterations + 0.1
+    iterations = iterations + 0.001
 
     # temperature
     temperature = 1 / iterations
