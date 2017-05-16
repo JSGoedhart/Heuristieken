@@ -56,7 +56,8 @@ while time.time() < t_end:
 	# randomly select two indices of lists and two items to swap between, put in array
 	rand_arr = random1(spacecrafts1)
 	# run hillclimbing algorithm with rand_arr
-	values = swap_two(spacecrafts1, rand_arr, cap_kg, cap_m3)
+	check = swap_two(spacecrafts1, rand_arr, cap_kg, cap_m3)
+	values = check_swap(check[0], rand_arr, cap_kg, cap_m3, check[1])
 	# count number of swaps
 	numb_swaps += values[0]
 	# put score in array

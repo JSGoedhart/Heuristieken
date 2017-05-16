@@ -72,26 +72,19 @@ def swap(a, b):
 
 def swap_two(list1, rand_arr, cap_kg, cap_m3):
     ''' swap items from list1 and check if this is possible with cap1 and cap2 '''
-    numb_swaps = 0
     length = len(list1)
     # calculate scorefunction before swapping
     score_old = val_leftover(list1[length-1])
     # swap
     list1[rand_arr[0]][rand_arr[2]], list1[rand_arr[1]][rand_arr[3]] = swap(list1[rand_arr[0]][rand_arr[2]], list1[rand_arr[1]][rand_arr[3]]) 
-    # calculate new values of kg, m3 and valtot (score)
+    return list1, score_old
+
+def check_swap(list1, rand_arr, cap_kg, cap_m3, score_old):
+    ''' function that checks for all the swap restrictions ''' 
+    length = len(list1)
     sum_kg1 = sum_kg(list1[0:length])
     sum_m31 = sum_m3(list1[0:length])
     score_new = val_leftover(list1[length-1])
-    # print rand_arr
-    # print 'scores oud en nieuw', score_old, score_new
-    # if (rand_arr[0] < 4):
-    #     print 'lijst1, capaciteit en som kg', cap_kg[rand_arr[0]], sum_kg1[rand_arr[0]]
-    #     print 'lijst1, capaciteit en som m3', cap_m3[rand_arr[0]], sum_m31[rand_arr[0]]
-    # if (rand_arr[1] < 4):
-    #     print 'lijst2, capaciteit en som kg', cap_kg[rand_arr[1]], sum_kg1[rand_arr[1]]
-    #     print 'lijst2, capaciteit en som m3', cap_m3[rand_arr[1]], sum_m31[rand_arr[1]]
-
-    # check for swaprestrictions for the two selected lists
     check_swap = 0
     for i in rand_arr[0:2]:
         # check if list selected list is leftover list
@@ -108,7 +101,6 @@ def swap_two(list1, rand_arr, cap_kg, cap_m3):
     score_return = val_leftover(list1[length-1])
     # return swap (yes/no) and score after running swap_two
     return [check_swap, score_return]
-
 
 def print_names(lijst):
     name_arr = []
