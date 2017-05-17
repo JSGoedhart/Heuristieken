@@ -47,7 +47,13 @@ print ''
 # create array to plot score function
 score = []
 # run simulated annealing algorithm 1 for selected time
-iterations = 0
+iteration = 0
+
+# approximation of the amount of iterations per 10 seconds
+max_iterations = 86277
+temp_initial = 800
+temp_end = 0
+
 program_starts = time.time()
 t_run = 10
 t_end = time.time() + t_run
@@ -56,10 +62,12 @@ while time.time() < t_end:
     old_score = val_leftover(spacecrafts1[LEN-1])
 
     # increment iterations
-    iterations = iterations + 0.1
+    iteration = iteration + 1
 
-    # temperature
-    temperature = 1 / iterations
+    # linear cooling scheme
+    temp_linear = temp_initial - iteration * (temp_initial - temp_end) / max_iterations
+
+    print temp_linear
 
     # random number between 0 and 1 for Boltzmann criterion
     random_num = random.uniform(0,1)
@@ -95,9 +103,12 @@ while time.time() < t_end:
     # print 'new: ', new_score
 
 	# rejection criteria
-    if (old_score < new_score or random_num > math.exp(-change / temperature)) and value == 0:
-        # swap items back
-        swap_two(spacecrafts1, rand_arr, cap_kg, cap_m3)
+    if temp_linear > 0:
+	    if (old_score < new_score or random_num > math.exp(-change / temp_linear)) and value == 0:
+	        # swap items back
+	        swap_two(spacecrafts1, rand_arr, cap_kg, cap_m3)
+    else:
+        break
 
     # append new score to score function
     score.append(val_leftover(spacecrafts1[LEN-1]))
@@ -110,6 +121,9 @@ while time.time() < t_end:
 # # plot score function against time
 # xtime = numpy.linspace(0, t_run, len(score))
 # scatter = plot([Scatter(x=xtime, y=score)])
+
+
+print 'number of iterations', iteration
 
 print 'number of downturns: ', check
 
