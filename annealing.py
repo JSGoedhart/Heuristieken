@@ -67,8 +67,6 @@ while time.time() < t_end:
     # linear cooling scheme
     temp_linear = temp_initial - iteration * (temp_initial - temp_end) / max_iterations
 
-    print temp_linear
-
     # random number between 0 and 1 for Boltzmann criterion
     random_num = random.uniform(0,1)
 
@@ -104,7 +102,7 @@ while time.time() < t_end:
 
 	# rejection criteria
     if temp_linear > 0:
-	    if (old_score < new_score or random_num > math.exp(-change / temp_linear)) and value == 0:
+	    if (old_score < new_score and random_num > math.exp(-change / temp_linear)) and value == 0:
 	        # swap items back
 	        swap_two(spacecrafts1, rand_arr, cap_kg, cap_m3)
     else:
