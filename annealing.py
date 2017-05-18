@@ -49,13 +49,15 @@ score = []
 # run simulated annealing algorithm 1 for selected time
 iteration = 0
 
+accepted = 0
+
 # approximation of the amount of iterations per 10 seconds
-max_iterations = 86277
-temp_initial = 800
+max_iterations = 86277*10
+temp_initial = 10000
 temp_end = 0
 
 program_starts = time.time()
-t_run = 10
+t_run = 100
 t_end = time.time() + t_run
 while time.time() < t_end:
     #store the score before swapping items
@@ -102,11 +104,18 @@ while time.time() < t_end:
 
 	# rejection criteria
     if temp_linear > 0:
-	    if (old_score < new_score and random_num > math.exp(-change / temp_linear)) and value == 0:
-	        # swap items back
-	        swap_two(spacecrafts1, rand_arr, cap_kg, cap_m3)
-    else:
-        break
+		# check if new score is worse than old score
+	    if old_score < new_score and value == 0:
+			# check whether change fails to meet acceptance criteria
+			if random_num >= math.exp(-change / temp_linear):
+		        # swap items back
+				swap_two(spacecrafts1, rand_arr, cap_kg, cap_m3)
+			else:
+				# increment acceptances
+				accepted +=1
+    elif old_score < new_score and value == 0:
+		swap_two(spacecrafts1, rand_arr, cap_kg, cap_m3)
+
 
     # append new score to score function
     score.append(val_leftover(spacecrafts1[LEN-1]))
@@ -123,7 +132,7 @@ while time.time() < t_end:
 
 print 'number of iterations', iteration
 
-print 'number of downturns: ', check
+print 'number of downturns: ', accepted
 
 print 'Values for SA 1:'
 print 'spacecrafts:',  print_names(spacecraft_list)
