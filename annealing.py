@@ -52,12 +52,12 @@ iteration = 0
 accepted = 0
 
 # approximation of the amount of iterations per 10 seconds
-max_iterations = 86277*10
+max_iterations = 86277*100
 temp_initial = 10000
 temp_end = 0
 
 program_starts = time.time()
-t_run = 100
+t_run = 1000
 t_end = time.time() + t_run
 while time.time() < t_end:
     #store the score before swapping items
@@ -68,6 +68,9 @@ while time.time() < t_end:
 
     # linear cooling scheme
     temp_linear = temp_initial - iteration * (temp_initial - temp_end) / max_iterations
+
+	# exponential cooling scheme
+	
 
     # random number between 0 and 1 for Boltzmann criterion
     random_num = random.uniform(0,1)
