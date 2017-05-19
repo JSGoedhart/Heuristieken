@@ -52,12 +52,12 @@ iteration = 0
 accepted = 0
 
 # approximation of the amount of iterations per 10 seconds
-max_iterations = 86277*100
+max_iterations = 200000
 temp_initial = 10000
-temp_end = 0
+temp_end = 1
 
 program_starts = time.time()
-t_run = 1000
+t_run = 10
 t_end = time.time() + t_run
 while time.time() < t_end:
     #store the score before swapping items
@@ -67,10 +67,10 @@ while time.time() < t_end:
     iteration = iteration + 1
 
     # linear cooling scheme
-    temp_linear = temp_initial - iteration * (temp_initial - temp_end) / max_iterations
+    #temp_linear = temp_initial - iteration * (temp_initial - temp_end) / max_iterations
 
 	# exponential cooling scheme
-	
+    temp_exp = temp_initial * math.pow((temp_end / temp_initial),(iteration / max_iterations))
 
     # random number between 0 and 1 for Boltzmann criterion
     random_num = random.uniform(0,1)
@@ -101,16 +101,12 @@ while time.time() < t_end:
     # change in score
     change = new_score - old_score
 
-
-    # print 'old: ', old_score
-    # print 'new: ', new_score
-
 	# rejection criteria
-    if temp_linear > 0:
+    if temp_exp > 0:
 		# check if new score is worse than old score
 	    if old_score < new_score and value == 0:
 			# check whether change fails to meet acceptance criteria
-			if random_num >= math.exp(-change / temp_linear):
+			if random_num >= math.exp(-change / temp_exp):
 		        # swap items back
 				swap_two(spacecrafts1, rand_arr, cap_kg, cap_m3)
 			else:
