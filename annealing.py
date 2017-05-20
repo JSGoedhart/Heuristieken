@@ -53,11 +53,11 @@ accepted = 0
 
 # approximation of the amount of iterations per 10 seconds
 max_iterations = 200000
-temp_initial = 10000
-temp_end = 1
+temp_initial = 1
+temp_end = 0.0000000000000001
 
-program_starts = time.time()
-t_run = 10
+start_time = time.time()
+t_run = 21600 # zes uur
 t_end = time.time() + t_run
 while time.time() < t_end:
     #store the score before swapping items
@@ -67,10 +67,11 @@ while time.time() < t_end:
     iteration = iteration + 1
 
     # linear cooling scheme
-    #temp_linear = temp_initial - iteration * (temp_initial - temp_end) / max_iterations
+    #temp_linear = temp_initial - (time.time() - start_time) * (temp_initial - temp_end) / (t_run)
 
 	# exponential cooling scheme
-    temp_exp = temp_initial * math.pow((temp_end / temp_initial),(iteration / max_iterations))
+    temp_exp = temp_initial * math.pow((temp_end / temp_initial),((time.time() - start_time) / t_run))
+
 
     # random number between 0 and 1 for Boltzmann criterion
     random_num = random.uniform(0,1)
@@ -129,9 +130,11 @@ while time.time() < t_end:
 # scatter = plot([Scatter(x=xtime, y=score)])
 
 
-print 'number of iterations', iteration
+print 'number of iterations: ', iteration
 
-print 'number of downturns: ', accepted
+print 'iterations per second: ', iteration / t_run
+
+print 'number of non-improving swaps: ', accepted
 
 print 'Values for SA 1:'
 print 'spacecrafts:',  print_names(spacecraft_list)
