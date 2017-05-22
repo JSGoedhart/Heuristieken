@@ -4,10 +4,12 @@ import random
 import time
 import classes
 from helpers import *
-from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
-from plotly.graph_objs import Scatter, Figure, Layout, Bar
+# from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
+# from plotly.graph_objs import Scatter, Figure, Layout, Bar
+import plotly.plotly as py
+import plotly.graph_objs as go
 import numpy
-import matplotlib.pyplot as plt
+
 
 item = ['kg', 'm3', 'm3', 'kg']
 
@@ -21,7 +23,7 @@ for i in [0,1]:
 	item1 = item[2*i]
 	item2 = item[2*i+1]
 	# create list to put cargo1 classes in
-	cargo1_list = open_cargo_csv('CargoList1.csv')
+	cargo1_list = open_cargo_csv('CargoList2.csv')
 
 	# sort cargo1_list's kg from high to low and create new sorted list
 	cargo1_sorted = sorted(cargo1_list, key=operator.attrgetter(item1), reverse=True)
@@ -85,15 +87,43 @@ for i in [0,1]:
 # plot score against running time for hillclimbing 1 with greedy as starting point (kg and m3)
 xtime0 = numpy.linspace(0, t_run, len(score[0]))
 xtime1 = numpy.linspace(0, t_run, len(score[1]))
-scatter1 = plot([Scatter(x=xtime0, y=score[0]), Scatter(x=xtime1, y=score[1])])
+# scatter1 = plot([Scatter(x=xtime0, y=score[0], layout=Layout), Scatter(x=xtime1, y=score[1])])
 
-# plto results for greedy kg and m3 as starting point
-f = plt.figure()
-greedy_kg, = plt.plot(xtime0, score[0], 'b', label="Starting point: greedy kg")
-greedy_m3, = plt.plot(xtime1, score[1], 'r', label="Starting point: greedy m3")
-plt.ylabel('Score', {'size':'12'})
-plt.xlabel('Time (seconds)', {'size':'12'})
-plt.title('Hillclimber 1 with greedy as starting point', {'size':'14'})
-plt.legend(handles=[greedy_kg, greedy_m3], prop={'size':10})
-f.savefig("Hillclimbing1-greedy", bbox_inches='tight')
+# TEST
+trace1 = go.Scatter(
+	name = 'greedy kg',
+	x = xtime0,
+	y = score[0])
+
+trace2 = go.Scatter(
+	name = 'greedy m3', 
+	x=xtime0, 
+	y=score[1])
+
+layout = go.Layout(
+	title = 'Hillclimbing 1, greedy kg and m3',
+	width=500,
+	height= 400,
+	yaxis = dict(
+		autotick= False,
+		dtick = 0.5,
+		title = 'Time (seconds)',
+		titlefont = dict(
+			family = 'Arial, sans-serif',
+			size=12),
+		range = [75, 76]),
+	xaxis = dict(
+		title = 'Score',
+		titlefont = dict(
+			family = 'Arial, sans-serif',
+			size=12)),
+	showlegend=True, 
+	legend=dict(x=0.7, y=1.0)
+	)
+
+data = [trace1, trace2]
+
+fig = go.Figure(data=data, layout=layout)
+
+py.iplot(fig, filename='Greedy Hillclimbing 1, cargo 2')
 
