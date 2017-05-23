@@ -27,6 +27,8 @@ spacecrafts_fleet = greedy_fleet(spacecraft_list_sorted, cargo3_sorted_m3)
 # The scoren
 scorefunction(spacecrafts_fleet, spacecraft_list_sorted)
 
+# for i in range(len(spacecrafts_fleet)):
+# 	print i
 
 
 

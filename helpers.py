@@ -242,6 +242,24 @@ def swap_random(list1, array1, cap_kg, cap_m3):
 
 
 
+def greedy_fleet_with_america_check(spacecraft_list, cargolist):
+    ''' fills fleet with all the cargo (exercise d and e)'''
+
+    # create lists to put cargo-classes in
+    spacecrafts_fleet = []
+
+    leftover_list = cargolist
+    count = 0
+    while len(leftover_list) != 0:
+        count += 1 
+        temp_spacecrafts = [[], [], [], [], [], []]
+        temp_cargo = leftover_list
+        greedy_fill_fleet_with_america_check(spacecraft_list, temp_cargo, temp_spacecrafts, 'm3', 'kg')
+        leftover_list = temp_spacecrafts[len(temp_spacecrafts)-1]
+        spacecrafts_fleet.append(temp_spacecrafts)
+
+    return spacecrafts_fleet
+
 def greedy_fleet(spacecraft_list, cargolist):
     ''' fills fleet with all the cargo (exercise d and e)'''
 
@@ -255,7 +273,7 @@ def greedy_fleet(spacecraft_list, cargolist):
         temp_spacecrafts = [[], [], [], [], [], []]
         temp_cargo = leftover_list
         greedy_fill_fleet(spacecraft_list, temp_cargo, temp_spacecrafts, 'm3', 'kg')
-        leftover_list = temp_spacecrafts[5]
+        leftover_list = temp_spacecrafts[len(temp_spacecrafts)-1]
         spacecrafts_fleet.append(temp_spacecrafts)
 
     return spacecrafts_fleet
@@ -273,7 +291,7 @@ def scorefunction(spacecrafts_fleet, spacecraft_list):
             m3 = 0
             for i in range(len(spacecrafts_fleet[k][j])):
                 kg = kg + spacecrafts_fleet[k][j][i].kg
-                m3 = m3 + spacecrafts_fleet[k][j][i].m3   
+                m3 = m3 + spacecrafts_fleet[k][j][i].m3  
             if kg != 0 and m3 != 0:
                 weighted_kg = kg/spacecraft_list[j].kg
                 weighted_m3 = m3/spacecraft_list[j].m3
@@ -306,11 +324,104 @@ def scorefunction(spacecrafts_fleet, spacecraft_list):
     print "kg filled in procent:", procent_kg
     print "m3 filled in procent:", procent_m3 
 
-def greedy_fill_fleet(spacecraft_list, cargolist, list3, item, item2):
+def greedy_fill_fleet_with_america_check(spacecraft_list, cargolist, list3, item, item2):
+    ''' fills the 5 spacecrafts of the fleet and makes a choice between cygnus and dragon of america'''
     for j in range(len(list3)-1):
         # define availability in spacecraft
         mass_av = getattr(spacecraft_list[j], item)
         av_1 = getattr(spacecraft_list[j], item2)
+
+        mass_av_cygnus_real = getattr(spacecraft_list[5], item)
+        av_1_cygnus_real = getattr(spacecraft_list[5], item2)
+
+        # fill both dragon and cygnus, check which one is better and use the better one
+        if (spacecraft_list[j].name == 'Dragon'):
+            temp_Dragon = []
+            temp_Cygnus = []
+            print "dragon"
+        #     print temp_Dragon
+        #     print 'volgende:'
+            temp_cargolist_dragon = cargolist
+            temp_cargolist_cygnus = cargolist
+            mass_av_cygnus = getattr(spacecraft_list[5], item)
+            av_1_cygnus = getattr(spacecraft_list[5], item2)
+            mass_av_dragon = getattr(spacecraft_list[j], item)
+            av_1_dragon = getattr(spacecraft_list[j], item2)
+            for i in range(len(temp_cargolist_dragon)):
+                # check if cargo-item is already placed for dragon
+                if (getattr(temp_cargolist_dragon[i], item) != 'nan'):
+                    if(getattr(temp_cargolist_dragon[i], item) <= mass_av_dragon and getattr(temp_cargolist_dragon[i], item2) <= av_1_dragon):
+                        temp_Dragon.append(classes.cargo1(temp_cargolist_dragon[i].number, temp_cargolist_dragon[i].kg, temp_cargolist_dragon[i].m3))
+                        mass_av_dragon -= getattr(temp_cargolist_dragon[i], item)
+                        av_1_dragon -= getattr(temp_cargolist_dragon[i], item2)
+            for i in range(len(temp_cargolist_cygnus)):
+                if (getattr(temp_cargolist_cygnus[i], item) != 'nan'):
+                    if(getattr(temp_cargolist_cygnus[i], item) <= mass_av_cygnus and getattr(temp_cargolist_cygnus[i], item2) <= av_1_cygnus):
+                        temp_Cygnus.append(classes.cargo1(temp_cargolist_cygnus[i].number, temp_cargolist_cygnus[i].kg, temp_cargolist_cygnus[i].m3))
+                        mass_av_cygnus -= getattr(temp_cargolist_cygnus[i], item)
+                        av_1_cygnus -= getattr(temp_cargolist_cygnus[i], item2)
+            # score checken
+            kg_dragon = 0
+            kg_cygnus = 0
+            m3_dragon = 0
+            m3_cygnus = 0
+            for i in range(len(temp_Dragon)):
+                kg_dragon = kg_dragon + temp_Dragon[i].kg
+                m3_dragon = m3_dragon + temp_Dragon[i].m3
+            procent_kg_dragon = kg_dragon/spacecraft_list[j].kg
+            procent_m3_dragon = m3_dragon/spacecraft_list[j].m3
+            for i in range(len(temp_Cygnus)):
+                kg_cygnus = kg_cygnus + temp_Cygnus[i].kg
+                m3_cygnus = m3_cygnus + temp_Cygnus[i].m3
+            procent_kg_cygnus = kg_cygnus/spacecraft_list[5].kg
+            procent_m3_cygnus = m3_cygnus/spacecraft_list[5].m3
+            print procent_m3_dragon + procent_kg_dragon
+            print procent_m3_cygnus + procent_kg_cygnus
+            # vul de spacecraft die beter is (dus meer gevuld)
+            # vul dragon:
+            if ((procent_m3_dragon + procent_kg_dragon) >= (procent_m3_cygnus + procent_kg_cygnus)):
+                for i in range(len(cargolist)):
+                    # check if cargo-item is already placed
+                    if (getattr(cargolist[i], item) != 'nan'):
+                        if (getattr(cargolist[i], item) <= mass_av and getattr(cargolist[i], item2) <= av_1):
+                            list3[j].append(classes.cargo1(cargolist[i].number, cargolist[i].kg, cargolist[i].m3))
+                            mass_av -= getattr(cargolist[i], item)
+                            av_1 -= getattr(cargolist[i], item2)
+                            setattr(cargolist[i], item, 'nan')
+            # anders vul cygnus:
+            else:
+                for i in range(len(cargolist)):
+                    # check if cargo-item is already placed
+                    if (getattr(cargolist[i], item) != 'nan'):
+                        if (getattr(cargolist[i], item) <= mass_av_cygnus_real and getattr(cargolist[i], item2) <= av_1_cygnus_real):
+                            list3[j].append(classes.cargo1(cargolist[i].number, cargolist[i].kg, cargolist[i].m3))
+                            mass_av_cygnus_real -= getattr(cargolist[i], item)
+                            av_1_cygnus_real -= getattr(cargolist[i], item2)
+                            setattr(cargolist[i], item, 'nan')   
+
+        # # normal fill
+        else:
+            for i in range(len(cargolist)):
+                # check if cargo-item is already placed
+                if (getattr(cargolist[i], item) != 'nan'):
+                    if (getattr(cargolist[i], item) <= mass_av and getattr(cargolist[i], item2) <= av_1):
+                        list3[j].append(classes.cargo1(cargolist[i].number, cargolist[i].kg, cargolist[i].m3))
+                        mass_av -= getattr(cargolist[i], item)
+                        av_1 -= getattr(cargolist[i], item2)
+                        setattr(cargolist[i], item, 'nan')
+    # create leftover list and put in spacecraft list without nan
+    for k in range(len(cargolist)):
+        if (getattr(cargolist[k], item) != 'nan'):
+            list3[len(list3)-1].append(cargolist[k])
+    return list3
+
+def greedy_fill_fleet(spacecraft_list, cargolist, list3, item, item2):
+    ''' fills the 5 spacecrafts of the fleet and makes a choice between cygnus and dragon of america'''
+    for j in range(len(list3)-1):
+        # define availability in spacecraft
+        mass_av = getattr(spacecraft_list[j], item)
+        av_1 = getattr(spacecraft_list[j], item2)
+
         for i in range(len(cargolist)):
             # check if cargo-item is already placed
             if (getattr(cargolist[i], item) != 'nan'):
