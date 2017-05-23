@@ -4,8 +4,6 @@ import random
 import time
 import classes
 from helpers import *
-# from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
-# from plotly.graph_objs import Scatter, Figure, Layout, Bar
 import plotly.plotly as py
 import plotly.graph_objs as go
 import numpy
