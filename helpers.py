@@ -239,3 +239,89 @@ def swap_random(list1, array1, cap_kg, cap_m3):
         for i in range(len_ar):
             list1[len_lst -1].remove(random_arr[i])
     return [numb_swaps, val_leftover(list1[len_lst-1])]
+
+
+
+def greedy_fleet(spacecraft_list, cargolist):
+    ''' fills fleet with all the cargo (exercise d and e)'''
+
+    # create lists to put cargo-classes in
+    spacecrafts_fleet = []
+
+    leftover_list = cargolist
+    count = 0
+    while len(leftover_list) != 0:
+        count += 1 
+        temp_spacecrafts = [[], [], [], [], [], []]
+        temp_cargo = leftover_list
+        greedy_fill_fleet(spacecraft_list, temp_cargo, temp_spacecrafts, 'm3', 'kg')
+        leftover_list = temp_spacecrafts[5]
+        spacecrafts_fleet.append(temp_spacecrafts)
+
+    return spacecrafts_fleet
+
+def scorefunction(spacecrafts_fleet, spacecraft_list):
+    ''' calculates the total wasted space and gives a score '''
+
+    score_kg = 0
+    score_m3 = 0
+
+    # score function:
+    for k in range(len(spacecrafts_fleet)):
+        for j in range(len(spacecrafts_fleet[k])-1):
+            kg = 0
+            m3 = 0
+            for i in range(len(spacecrafts_fleet[k][j])):
+                kg = kg + spacecrafts_fleet[k][j][i].kg
+                m3 = m3 + spacecrafts_fleet[k][j][i].m3   
+            if kg != 0 and m3 != 0:
+                weighted_kg = kg/spacecraft_list[j].kg
+                weighted_m3 = m3/spacecraft_list[j].m3
+                score_kg = score_kg + (1 - weighted_kg)
+                score_m3 = score_m3 + (1 - weighted_m3)
+
+    print "kg score:", score_kg
+    print "m3 score:", score_m3
+
+
+    total_kg_spacecrafts = 0
+    total_m3_spacecrafts = 0
+
+    total_kg_cargo = 0
+    total_m3_cargo = 0
+
+    # score function procent
+    for k in range(len(spacecrafts_fleet)):
+        for j in range(len(spacecrafts_fleet[k])-1):
+            total_kg_spacecrafts = total_kg_spacecrafts + spacecraft_list[j].kg
+            total_m3_spacecrafts = total_m3_spacecrafts + spacecraft_list[j].m3
+            for i in range(len(spacecrafts_fleet[k][j])):
+                total_kg_cargo = total_kg_cargo + spacecrafts_fleet[k][j][i].kg
+                total_m3_cargo = total_m3_cargo + spacecrafts_fleet[k][j][i].m3
+
+    # procent filled
+    procent_kg = float(total_kg_cargo)/float(total_kg_spacecrafts)
+    procent_m3 = total_m3_cargo/total_m3_spacecrafts
+
+    print "kg filled in procent:", procent_kg
+    print "m3 filled in procent:", procent_m3 
+
+def greedy_fill_fleet(spacecraft_list, cargolist, list3, item, item2):
+    for j in range(len(list3)-1):
+        # define availability in spacecraft
+        mass_av = getattr(spacecraft_list[j], item)
+        av_1 = getattr(spacecraft_list[j], item2)
+        for i in range(len(cargolist)):
+            # check if cargo-item is already placed
+            if (getattr(cargolist[i], item) != 'nan'):
+                if (getattr(cargolist[i], item) <= mass_av and getattr(cargolist[i], item2) <= av_1):
+                    list3[j].append(classes.cargo1(cargolist[i].number, cargolist[i].kg, cargolist[i].m3))
+                    mass_av -= getattr(cargolist[i], item)
+                    av_1 -= getattr(cargolist[i], item2)
+                    setattr(cargolist[i], item, 'nan')
+    # create leftover list and put in spacecraft list without nan
+    for k in range(len(cargolist)):
+        if (getattr(cargolist[k], item) != 'nan'):
+            list3[len(list3)-1].append(cargolist[k])
+    return list3
+
