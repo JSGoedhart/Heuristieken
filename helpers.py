@@ -33,13 +33,13 @@ def open_spacecrafts_csv(file):
         open_list.append(classes.spacecraft(var0, var1, var2))
     return open_list
 
-def open_alles(cargolist):
-    ''' opens cargolist and spacecraft list '''
+def open_alles(cargolist, item):
+    ''' opens cargolist, sorts on item (kg or m3) and opens spacecraft list '''
     # create list to put cargo1 classes in
     cargo1_list = open_cargo_csv(cargolist)
 
     # sort cargo1_list's kg from high to low and create new sorted list
-    cargo_sorted = sorted(cargo1_list, key=operator.attrgetter('kg'), reverse=True)
+    cargo_sorted = sorted(cargo1_list, key=operator.attrgetter(item), reverse=True)
 
     # create a list with the four spacecrafts put into classes in it
     spacecraft_list = open_spacecrafts_csv('Spacecrafts.csv')
@@ -308,7 +308,7 @@ def main(cargolist, startpunt, algorithm, item, runtime):
     starting point is greedy item when item isn't false, when item is false: starting point is random '''
     
     # create necessary arrays by running open_alles on cargolist
-    necessary_arrays = open_alles(cargolist)
+    necessary_arrays = open_alles(cargolist, item)
     cargo_sorted = necessary_arrays[0]; spacecraft_list = necessary_arrays[1]; spacecrafts = necessary_arrays[2];
 
     # create arrays with capacities
@@ -316,12 +316,15 @@ def main(cargolist, startpunt, algorithm, item, runtime):
     cap_kg = cap[0]; cap_m3 = cap[1]
 
     # generete starting point, random, greedy on kg or greedy on m3
-    if item == False:
-        random_fill(spacecraft_list, cargo_sorted, spacecrafts)
-    elif item == 'kg':
-        greedy_fill(spacecraft_list, cargo_sorted, spacecrafts, 'kg', 'm3')
-    elif item == 'm3':
-        greedy_fill(spacecraft_list, cargo_sorted, spacecrafts, 'm3', 'kg')
+    if startpunt == greedy_fill:
+        if item == 'kg':
+            greedy_fill(spacecraft_list, cargo_sorted, spacecrafts, 'kg', 'm3')
+        # run greedy for m3
+        else:
+            greedy_fill(spacecraft_list, cargo_sorted, spacecrafts, 'm3', 'kg')  
+    # starting point must be random
+    else:
+        random_fill(spacecraft_list, cargo1_sorted, spacecrafts1)
 
     # run algorithm for selected time
     algorit = algorithm(runtime, spacecrafts, cap_kg, cap_m3)
