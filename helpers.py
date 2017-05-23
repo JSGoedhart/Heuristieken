@@ -1,5 +1,9 @@
-import classes
+import csv
+import operator
 import random
+import time
+import classes
+import numpy
 
 def open_cargo_csv(file):
     # create list to put cargo1 classes in
@@ -28,6 +32,22 @@ def open_spacecrafts_csv(file):
         var2 = float(split[2])
         open_list.append(classes.spacecraft(var0, var1, var2))
     return open_list
+
+def open_alles(cargolist):
+    ''' opens cargolist and spacecraft list '''
+    # create list to put cargo1 classes in
+    cargo1_list = open_cargo_csv(cargolist)
+
+    # sort cargo1_list's kg from high to low and create new sorted list
+    cargo_sorted = sorted(cargo1_list, key=operator.attrgetter('kg'), reverse=True)
+
+    # create a list with the four spacecrafts put into classes in it
+    spacecraft_list = open_spacecrafts_csv('Spacecrafts.csv')
+
+    # create lists of spacecrafts to put cargo-classes in
+    spacecrafts = [[], [], [], [], []]
+
+    return cargo_sorted, spacecraft_list, spacecrafts
 
 def greedy_fill(list1, list2, list3, item, item2):
     ''' fill list3 with items of list2, based on variable item. When full go to next. If item2!=false, also take the other variable in account'''
@@ -240,7 +260,61 @@ def swap_random(list1, array1, cap_kg, cap_m3):
             list1[len_lst -1].remove(random_arr[i])
     return [numb_swaps, val_leftover(list1[len_lst-1])]
 
+def capacities(spacecraft_list):
+    ''' creates two arrays with capacities of spacecrafts (kg and m3) '''
+    cap_kg = []
+    cap_m3 = []
+    for i in range(len(spacecraft_list)):
+        cap_kg.append(spacecraft_list[i].kg)
+        cap_m3.append(spacecraft_list[i].m3)
+    return cap_kg, cap_m3
 
+def hillclimbing1(runtime, spacecrafts, cap_kg, cap_m3):
+    score = []
+    program_starts = time.time()
+    t_run = runtime
+    t_end = time.time() + t_run
+    numb_swaps = 0
+    t_start = time.time()
+    while time.time() < t_end:
+        # randomly select two indices of lists and two items to swap between, put in array
+        rand_arr = random1(spacecrafts)
+        # run hillclimbing algorithm with rand_arr
+        check = swap_two(spacecrafts, rand_arr, cap_kg, cap_m3)
+        values = check_swap(check[0], rand_arr, cap_kg, cap_m3, check[1])
+        # count number of swaps
+        numb_swaps += values[0]
+        # put score in array
+        score.append(values[1])    
+    return score, numb_swaps
+
+def main(cargolist, startpunt, algorithm, item, runtime):
+    ''' function that generates a starting point for cargolist, runs an algorithm on it for selected time and returns the score
+    starting point is greedy item when item isn't false, when item is false: starting point is random '''
+    
+    # create necessary arrays by running open_alles on cargolist
+    necessary_arrays = open_alles(cargolist)
+    cargo_sorted = necessary_arrays[0]; spacecraft_list = necessary_arrays[1]; spacecrafts = necessary_arrays[2];
+
+    # create arrays with capacities
+    cap = capacities(spacecraft_list)
+    cap_kg = cap[0]; cap_m3 = cap[1]
+
+    # generete starting point, random, greedy on kg or greedy on m3
+    if item == False:
+        random_fill(spacecraft_list, cargo_sorted, spacecrafts)
+    elif item == 'kg':
+        greedy_fill(spacecraft_list, cargo_sorted, spacecrafts, 'kg', 'm3')
+    elif item == 'm3':
+        greedy_fill(spacecraft_list, cargo_sorted, spacecrafts, 'm3', 'kg')
+
+    # run algorithm for selected time
+    algorit = algorithm(runtime, spacecrafts, cap_kg, cap_m3)
+
+    # create names for array with score and running time
+    score = algorit[0]
+    xtime = numpy.linspace(0, runtime, len(score))
+    return score, xtime
 
 def greedy_fleet_with_america_check(spacecraft_list, cargolist):
     ''' fills fleet with all the cargo (exercise d and e)'''
