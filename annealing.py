@@ -57,7 +57,7 @@ temp_initial = 1
 temp_end = 0.0000000000000001
 
 start_time = time.time()
-t_run = 21600 # zes uur
+t_run = 3600
 t_end = time.time() + t_run
 while time.time() < t_end:
     #store the score before swapping items
@@ -66,12 +66,14 @@ while time.time() < t_end:
     # increment iterations
     iteration = iteration + 1
 
-    # linear cooling scheme
+    # linear cooling schedule
     #temp_linear = temp_initial - (time.time() - start_time) * (temp_initial - temp_end) / (t_run)
 
-	# exponential cooling scheme
-    temp_exp = temp_initial * math.pow((temp_end / temp_initial),((time.time() - start_time) / t_run))
+	# exponential cooling schedule
+    #temp_exp = temp_initial * math.pow((temp_end / temp_initial),((time.time() - start_time) / t_run))
 
+	# sigmoidal cooling schedule
+    temp_sig = temp_end+(temp_initial-temp_end)*(1/(1+math.exp(0.3*((time.time()-start_time)-(t_run / 2)))))
 
     # random number between 0 and 1 for Boltzmann criterion
     random_num = random.uniform(0,1)
@@ -103,11 +105,11 @@ while time.time() < t_end:
     change = new_score - old_score
 
 	# rejection criteria
-    if temp_exp > 0:
+    if temp_sig > 0:
 		# check if new score is worse than old score
 	    if old_score < new_score and value == 0:
 			# check whether change fails to meet acceptance criteria
-			if random_num >= math.exp(-change / temp_exp):
+			if random_num >= math.exp(-change / temp_sig):
 		        # swap items back
 				swap_two(spacecrafts1, rand_arr, cap_kg, cap_m3)
 			else:
