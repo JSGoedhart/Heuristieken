@@ -4,6 +4,7 @@ import random
 import time
 import classes
 import numpy
+import math
 
 def open_cargo_csv(file):
     # create list to put cargo1 classes in
@@ -112,11 +113,11 @@ def swap_two(list1, rand_arr, cap_kg, cap_m3):
     # calculate scorefunction before swapping
     score_old = val_leftover(list1[length-1])
     # swap
-    list1[rand_arr[0]][rand_arr[2]], list1[rand_arr[1]][rand_arr[3]] = swap(list1[rand_arr[0]][rand_arr[2]], list1[rand_arr[1]][rand_arr[3]]) 
+    list1[rand_arr[0]][rand_arr[2]], list1[rand_arr[1]][rand_arr[3]] = swap(list1[rand_arr[0]][rand_arr[2]], list1[rand_arr[1]][rand_arr[3]])
     return list1, score_old
 
 def check_swap(list1, rand_arr, cap_kg, cap_m3, score_old):
-    ''' function that checks for all the swap restrictions ''' 
+    ''' function that checks for all the swap restrictions '''
     length = len(list1)
     sum_kg1 = sum_kg(list1[0:length])
     sum_m31 = sum_m3(list1[0:length])
@@ -153,7 +154,7 @@ def sum_kg(lijst):
     return kg_sum
 
 def sum_m3(lijst):
-    ''' function to calculate total kg's per spacecrafts '''   
+    ''' function to calculate total kg's per spacecrafts '''
     m3_sum = []
     for i in range(len(lijst)):
         m3_sum.append(sum(c.m3 for c in lijst[i]))
@@ -285,28 +286,13 @@ def hillclimbing1(runtime, spacecrafts, cap_kg, cap_m3):
         # count number of swaps
         numb_swaps += values[0]
         # put score in array
-        score.append(values[1])    
-    x = numpy.linspace(0, t_run, len(score))
-    return score, x, numb_swaps
-
-def hillclimbing2(runtime, spacecrafts, cap_kg, cap_m3):
-    score=[]
-    program_starts = time.time()
-    t_run = runtime
-    t_end = time.time() + t_run
-    numb_swaps = 0
-    while time.time() < t_end:
-        rand_ar2 = random2(spacecrafts, [1,2])
-        values = swap_random(spacecrafts, rand_ar2, cap_kg, cap_m3)
-        numb_swaps += values[0]
         score.append(values[1])
-    x = numpy.linspace(0, t_run, len(score))
-    return score, x, numb_swaps
+    return score, numb_swaps
 
 def main(cargolist, startpunt, algorithm, item, runtime):
     ''' function that generates a starting point for cargolist, runs an algorithm on it for selected time and returns the score
     starting point is greedy item when item isn't false, when item is false: starting point is random '''
-    
+
     # create necessary arrays by running open_alles on cargolist
     necessary_arrays = open_alles(cargolist)
     cargo_sorted = necessary_arrays[0]; spacecraft_list = necessary_arrays[1]; spacecrafts = necessary_arrays[2];
@@ -340,7 +326,7 @@ def greedy_fleet_with_america_check(spacecraft_list, cargolist):
     leftover_list = cargolist
     count = 0
     while len(leftover_list) != 0:
-        count += 1 
+        count += 1
         temp_spacecrafts = [[], [], [], [], [], []]
         temp_cargo = leftover_list
         greedy_fill_fleet_with_america_check(spacecraft_list, temp_cargo, temp_spacecrafts, 'm3', 'kg')
@@ -358,7 +344,7 @@ def greedy_fleet(spacecraft_list, cargolist):
     leftover_list = cargolist
     count = 0
     while len(leftover_list) != 0:
-        count += 1 
+        count += 1
         temp_spacecrafts = [[], [], [], [], [], []]
         temp_cargo = leftover_list
         greedy_fill_fleet(spacecraft_list, temp_cargo, temp_spacecrafts, 'm3', 'kg')
@@ -380,7 +366,7 @@ def scorefunction(spacecrafts_fleet, spacecraft_list):
             m3 = 0
             for i in range(len(spacecrafts_fleet[k][j])):
                 kg = kg + spacecrafts_fleet[k][j][i].kg
-                m3 = m3 + spacecrafts_fleet[k][j][i].m3  
+                m3 = m3 + spacecrafts_fleet[k][j][i].m3
             if kg != 0 and m3 != 0:
                 weighted_kg = kg/spacecraft_list[j].kg
                 weighted_m3 = m3/spacecraft_list[j].m3
@@ -411,7 +397,7 @@ def scorefunction(spacecrafts_fleet, spacecraft_list):
     procent_m3 = total_m3_cargo/total_m3_spacecrafts
 
     print "kg filled in procent:", procent_kg
-    print "m3 filled in procent:", procent_m3 
+    print "m3 filled in procent:", procent_m3
 
 def greedy_fill_fleet_with_america_check(spacecraft_list, cargolist, list3, item, item2):
     ''' fills the 5 spacecrafts of the fleet and makes a choice between cygnus and dragon of america'''
@@ -486,7 +472,7 @@ def greedy_fill_fleet_with_america_check(spacecraft_list, cargolist, list3, item
                             list3[j].append(classes.cargo1(cargolist[i].number, cargolist[i].kg, cargolist[i].m3))
                             mass_av_cygnus_real -= getattr(cargolist[i], item)
                             av_1_cygnus_real -= getattr(cargolist[i], item2)
-                            setattr(cargolist[i], item, 'nan')   
+                            setattr(cargolist[i], item, 'nan')
 
         # # normal fill
         else:
@@ -525,3 +511,81 @@ def greedy_fill_fleet(spacecraft_list, cargolist, list3, item, item2):
             list3[len(list3)-1].append(cargolist[k])
     return list3
 
+def annealing1_exponential(runtime, spacecrafts, cap_kg, cap_m3):
+    ''' runs simulated annealing algorithm that swaps two items at a time during
+     the desegnated runtime (s) using an exponential cooling schedule '''
+    score = []
+
+     # initial and end temperatures for cooling schedule
+    temp_initial = 1
+    temp_end = 0.0000000000000001
+
+    LEN = len(spacecrafts)
+
+    # set counters for iterations and instances of accepted increases in the
+    # objective function
+    iteration = 0
+    accepted = 0
+
+    # start timer
+    start_time = time.time()
+    t_end = time.time() + runtime
+
+    while time.time() < t_end:
+        # store score before swapping items
+        old_score = val_leftover(spacecrafts[LEN - 1])
+
+        # exponential cooling schedule
+        temp_exp = temp_exp = temp_initial * math.pow((temp_end / temp_initial),
+        ((time.time() - start_time) / runtime))
+
+        # random number between 0 and 1 for rejection criterion
+        random_num = random.uniform(0,1)
+
+    	# randomly select two indices of lists and two items to swap between, put in array
+        rand_arr = random1(spacecrafts)
+
+    	# run hillclimbing algorithm with rand_arr
+        swap_two(spacecrafts, rand_arr, cap_kg, cap_m3)
+
+        length = len(spacecrafts)
+        sum_kg1 = sum_kg(spacecrafts[0:length])
+        sum_m31 = sum_m3(spacecrafts[0:length])
+        value = 0
+        for i in rand_arr[0:2]:
+            # check if list selected list isn't leftover list
+            if i < (length-1):
+                # check for kg and m3 restriction
+                if sum_kg1[i] > cap_kg[i] or sum_m31[i] > cap_m3[i]:
+                    value = 1
+
+        # swap back if necessary
+        if (value == 1):
+            swap_two(spacecrafts, rand_arr, cap_kg, cap_m3)
+
+        #store new score after swapping items
+        new_score = val_leftover(spacecrafts[LEN-1])
+
+        # change in score
+        change = new_score - old_score
+
+    	# rejection criteria
+        if temp_exp > 0:
+    		# check if new score is worse than old score
+    	    if old_score < new_score and value == 0:
+    			# check whether change fails to meet acceptance criteria
+    			if random_num >= math.exp(-change / temp_exp):
+    		        # swap items back
+    				swap_two(spacecrafts, rand_arr, cap_kg, cap_m3)
+    			else:
+    				# increment acceptances
+    				accepted +=1
+        elif old_score < new_score and value == 0:
+    		swap_two(spacecrafts, rand_arr, cap_kg, cap_m3)
+
+        # append new score to score function
+        score.append(val_leftover(spacecrafts[LEN-1]))
+        # increment iterations
+        iteration += 1
+
+    return iteration, accepted
