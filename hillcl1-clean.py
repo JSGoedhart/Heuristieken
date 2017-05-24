@@ -34,7 +34,7 @@ layout = go.Layout(
 		titlefont = dict(
 			family = 'Arial, sans-serif',
 			size=12),
-		range = [25, 40]),
+		range = [28, 31]),
 	xaxis = dict(
 		title = 'Score',
 		titlefont = dict(
@@ -48,4 +48,4 @@ data = [trace1, trace2]
 
 fig = go.Figure(data=data, layout=layout)
 
-py.iplot(fig, filename='Plot 2')
+py.iplot(fig, filename='Plot 3')

@@ -55,12 +55,29 @@ print 'iterations per second: ', SA1_exp[0] / runtime
 
 print 'number of non-improving swaps: ', SA1_exp[1]
 
-print 'Values for SA 1:'
+print 'Values for SA 1 using and exponential cooling schedule:'
 print 'spacecrafts:',  print_names(spacecraft_list)
 print 'total kg in spacecrafts before:', sum_kg(spacecrafts1)
 print 'total m3 in spacecrafts before:', sum_m3(spacecrafts1)
 print 'score after:', val_leftover(spacecrafts1[LEN-1])
 
+print '\n'
+print '\n'
+
+# run simulated annealing algorithm with sigmoidal cooling schedule
+SA1_sig = annealing1_exponential(runtime, spacecrafts1, cap_kg, cap_m3)
+
+print 'number of iterations: ', SA1_sig[0]
+
+print 'iterations per second: ', SA1_sig[0] / runtime
+
+print 'number of non-improving swaps: ', SA1_sig[1]
+
+print 'Values for SA 1 using and sigmoidal cooling schedule:'
+print 'spacecrafts:',  print_names(spacecraft_list)
+print 'total kg in spacecrafts before:', sum_kg(spacecrafts1)
+print 'total m3 in spacecrafts before:', sum_m3(spacecrafts1)
+print 'score after:', val_leftover(spacecrafts1[LEN-1])
 
 print '\n'
 print '\n'
