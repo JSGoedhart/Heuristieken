@@ -289,6 +289,20 @@ def hillclimbing1(runtime, spacecrafts, cap_kg, cap_m3):
         score.append(values[1])
     return score, numb_swaps
 
+def hillclimbing2(runtime, spacecrafts, cap_kg, cap_m3):
+    score=[]
+    program_starts = time.time()
+    t_run = runtime
+    t_end = time.time() + t_run
+    numb_swaps = 0
+    while time.time() < t_end:
+        rand_ar2 = random2(spacecrafts, [1,2])
+        values = swap_random(spacecrafts, rand_ar2, cap_kg, cap_m3)
+        numb_swaps += values[0]
+        score.append(values[1])
+    x = numpy.linspace(0, t_run, len(score))
+    return score, x, numb_swaps
+
 def main(cargolist, startpunt, algorithm, item, runtime):
     ''' function that generates a starting point for cargolist, runs an algorithm on it for selected time and returns the score
     starting point is greedy item when item isn't false, when item is false: starting point is random '''
