@@ -48,7 +48,7 @@ score2 = []
 swaps1 = 0; swaps2 = 0; swaps3 = 0;
 while time.time() < t_end:
 	rand_ar2 = random2(spacecrafts2, [1,2])
-	values = swap_random(spacecrafts2, rand_ar2, cap_kg, cap_m3)
+	values = swap_random2(spacecrafts2, rand_ar2, cap_kg, cap_m3)
 	numb_swaps2 += values[0]
 	score2.append(values[1])
 	if (time.time() - t_start <= 0.01):
@@ -59,7 +59,7 @@ while time.time() < t_end:
 		swaps3 += values[0]
 
 xtime2 = numpy.linspace(0, t_run2, len(score2))
-scatter2 = plot([Scatter(x=xtime2, y=score2)])
+# scatter2 = plot([Scatter(x=xtime2, y=score2)])
 
 # bar2 = plot({
 # "data": [

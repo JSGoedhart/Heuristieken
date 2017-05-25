@@ -5,6 +5,8 @@ import time
 import classes
 import numpy
 import math
+import plotly.plotly as py
+import plotly.graph_objs as go
 
 def open_cargo_csv(file):
     # create list to put cargo1 classes in
@@ -34,13 +36,13 @@ def open_spacecrafts_csv(file):
         open_list.append(classes.spacecraft(var0, var1, var2))
     return open_list
 
-def open_alles(cargolist):
+def open_alles(cargolist, item):
     ''' opens cargolist and spacecraft list '''
     # create list to put cargo1 classes in
     cargo1_list = open_cargo_csv(cargolist)
 
     # sort cargo1_list's kg from high to low and create new sorted list
-    cargo_sorted = sorted(cargo1_list, key=operator.attrgetter('kg'), reverse=True)
+    cargo_sorted = sorted(cargo1_list, key=operator.attrgetter(item), reverse=True)
 
     # create a list with the four spacecrafts put into classes in it
     spacecraft_list = open_spacecrafts_csv('Spacecrafts.csv')
@@ -206,60 +208,62 @@ def random2(array1, array2):
         rand_range.remove(rand_item)
     return retour
 
-def swap_random(list1, array1, cap_kg, cap_m3):
-    numb_swaps = 0
-    ''' swaps a randomly selected amount of items of a specified list, with an item of another list, if possible '''
-    len_ar = len(array1)
-    len_lst = len(list1)
-    # create array with randomly selected items from specified list
-    random_arr = []
-    for i in range(len_ar):
-        random_arr.append(list1[len_lst-1][array1[i]])
-    random_arr
+# swap_random kan in principe weg: vervangen door check_swap_random en swap_random2
+# def swap_random(list1, array1, cap_kg, cap_m3):
+#     numb_swaps = 0
+#     ''' swaps a randomly selected amount of items of a specified list, with an item of another list, if possible '''
+#     len_ar = len(array1)
+#     len_lst = len(list1)
+#     # create array with randomly selected items from specified list
+#     random_arr = []
+#     for i in range(len_ar):
+#         random_arr.append(list1[len_lst-1][array1[i]])
+#     random_arr
 
-    # calculate sums and score of items from specified list
-    sum_kg_rand = sum(c.kg for c in random_arr)
-    sum_m3_rand = sum(c.m3 for c in random_arr)
-    score_rand = sum(c.valtot for c in random_arr)
+#     # calculate sums and score of items from specified list
+#     sum_kg_rand = sum(c.kg for c in random_arr)
+#     sum_m3_rand = sum(c.m3 for c in random_arr)
+#     score_rand = sum(c.valtot for c in random_arr)
 
-    # calculate free m3 and kg per list of list1
-    sum_kg1 = sum_kg(list1[0:len_lst])
-    sum_m31 = sum_m3(list1[0:len_lst])
-    score_old = val_leftover(random_arr)
+#     # calculate free m3 and kg per list of list1
+#     sum_kg1 = sum_kg(list1[0:len_lst])
+#     sum_m31 = sum_m3(list1[0:len_lst])
+#     score_old = val_leftover(list1[len_lst-1])
 
-    # overige capaciteit, kg en m3 per spacecraft:
-    kg_over = []
-    m3_over = []
-    for i in range(len(cap_kg)):
-        kg_over.append(cap_kg[i]- sum_kg1[i])
-        m3_over.append(cap_m3[i]- sum_m31[i])
+#     # overige capaciteit, kg en m3 per spacecraft:
+#     kg_over = []
+#     m3_over = []
+#     for i in range(len(cap_kg)):
+#         kg_over.append(cap_kg[i]- sum_kg1[i])
+#         m3_over.append(cap_m3[i]- sum_m31[i])
 
-    # loop through lists to check if there exists an element the random elements can be swapped with
-    get_item = False
-    control = 0
-    for i in range(len_lst-1):
-        if control != 1:
-            for j in range(len(list1[i])):
-                # check if score random elements is better than selected
-                if (list1[i][j].valtot < score_old):
-                    # check if swapping would not break the restrictions, if not save values and break
-                    if (kg_over[i] + list1[i][j].kg >= sum_kg_rand and m3_over[i] + list1[i][j].m3 >= sum_m3_rand):
-                        get_item = True
-                        num = i
-                        item = j
-                        control = 1
-                        break
-    # swap if possible
-    if (get_item == True):
+#     # loop through lists to check if there exists an element the random elements can be swapped with
+#     get_item = False
+#     control = 0
+#     for i in range(len_lst-1):
+#         if control != 1:
+#             for j in range(len(list1[i])):
+#                 # check if swapping would not break the restrictions
+#                 if (kg_over[i] + list1[i][j].kg >= sum_kg_rand and m3_over[i] + list1[i][j].m3 >= sum_m3_rand):
+#                     # check for annealing (true) or hillclimber
+#                     # check if score random elements is better than selected
+#                     if (list1[i][j].valtot < score_rand):
+#                         get_item = True
+#                         num = i
+#                         item = j
+#                         control = 1
+#                         break;
+#     # swap if possible
+#     if (get_item == True):
 
-        numb_swaps += 1
-        # add random elements to list and remove from leftover list
-        list1[num].extend(random_arr)
-        list1[len_lst-1].append(list1[num][item])
-        list1[num].remove(list1[num][item])
-        for i in range(len_ar):
-            list1[len_lst -1].remove(random_arr[i])
-    return [numb_swaps, val_leftover(list1[len_lst-1])]
+#         numb_swaps += 1
+#         # add random elements to list and remove from leftover list
+#         list1[num].extend(random_arr)
+#         list1[len_lst-1].append(list1[num][item])
+#         list1[num].remove(list1[num][item])
+#         for i in range(len_ar):
+#             list1[len_lst -1].remove(random_arr[i])
+#     return [numb_swaps, val_leftover(list1[len_lst-1])]
 
 def capacities(spacecraft_list):
     ''' creates two arrays with capacities of spacecrafts (kg and m3) '''
@@ -287,7 +291,8 @@ def hillclimbing1(runtime, spacecrafts, cap_kg, cap_m3):
         numb_swaps += values[0]
         # put score in array
         score.append(values[1])
-    return score, numb_swaps
+    x = numpy.linspace(0, t_run, len(score))
+    return score, x, numb_swaps
 
 def hillclimbing2(runtime, spacecrafts, cap_kg, cap_m3):
     score=[]
@@ -297,18 +302,25 @@ def hillclimbing2(runtime, spacecrafts, cap_kg, cap_m3):
     numb_swaps = 0
     while time.time() < t_end:
         rand_ar2 = random2(spacecrafts, [1,2])
-        values = swap_random(spacecrafts, rand_ar2, cap_kg, cap_m3)
-        numb_swaps += values[0]
-        score.append(values[1])
+        check_swap = check_swap_random(spacecrafts, rand_ar2, cap_kg, cap_m3, False)
+        if check_swap != None:
+            num = check_swap[1]
+            item = check_swap[2]
+            random_arr = check_swap[3]
+            scorevalue = swap_random2(spacecrafts, random_arr, num, item)
+            numb_swaps += 1
+            score.append(scorevalue)
+        else:
+            score.append(val_leftover(spacecrafts[len(spacecrafts)-1]))
     x = numpy.linspace(0, t_run, len(score))
     return score, x, numb_swaps
 
-def main(cargolist, startpunt, algorithm, item, runtime):
+def main(cargolist, startpunt, algorithm, coolingscheme, item, runtime):
     ''' function that generates a starting point for cargolist, runs an algorithm on it for selected time and returns the score
     starting point is greedy item when item isn't false, when item is false: starting point is random '''
 
     # create necessary arrays by running open_alles on cargolist
-    necessary_arrays = open_alles(cargolist)
+    necessary_arrays = open_alles(cargolist, item)
     cargo_sorted = necessary_arrays[0]; spacecraft_list = necessary_arrays[1]; spacecrafts = necessary_arrays[2];
 
     # create arrays with capacities
@@ -324,12 +336,53 @@ def main(cargolist, startpunt, algorithm, item, runtime):
         greedy_fill(spacecraft_list, cargo_sorted, spacecrafts, 'm3', 'kg')
 
     # run algorithm for selected time
-    algorit = algorithm(runtime, spacecrafts, cap_kg, cap_m3)
+    if coolingscheme == False:
+        algorit = algorithm(runtime, spacecrafts, cap_kg, cap_m3)
+    else: 
+        algorit = algorithm(runtime, spacecrafts, cap_kg, cap_m3, coolingscheme)
 
     # create names for array with score and running time
     score = algorit[0]
     xtime = numpy.linspace(0, runtime, len(score))
     return score, xtime
+
+def createdata(datalist):
+    ''' function that places the input data in a suitable format for plotly '''
+    data = []
+    for i in range(len(datalist)):
+        data.append(go.Scattergl(
+            name = datalist[i][0],
+            x = datalist[i][1],
+            y = datalist[i][2],
+            line = dict(
+                width = 1.0)));
+    return data
+
+def plot(title, range, data, width, height, plotname):
+    ''' make a plot with the input data, the given title (string) in the given range (array[a,b]'''  
+    layout = go.Layout(
+        title = title,
+        width=width,
+        height= height,
+        yaxis = dict(
+            autotick= False,
+            dtick = 5,
+            title = 'Score',
+            titlefont = dict(
+                family = 'Arial, sans-serif',
+                size=14),
+            range = range),
+        xaxis = dict(
+            title = 'Time (seconds)',
+            titlefont = dict(
+                family = 'Arial, sans-serif',
+                size=14)),
+        showlegend=True, 
+        legend=dict(x=0.8, y=1.0)
+        )
+    fig = go.Figure(data=data, layout=layout)
+
+    py.iplot(fig, filename=plotname)
 
 def greedy_fleet_with_america_check(spacecraft_list, cargolist):
     ''' fills fleet with all the cargo (exercise d and e)'''
@@ -562,13 +615,12 @@ def annealing1_exponential(runtime, spacecrafts, cap_kg, cap_m3):
     	# run hillclimbing algorithm with rand_arr
         swap_two(spacecrafts, rand_arr, cap_kg, cap_m3)
 
-        length = len(spacecrafts)
         sum_kg1 = sum_kg(spacecrafts[0:length])
         sum_m31 = sum_m3(spacecrafts[0:length])
         value = 0
         for i in rand_arr[0:2]:
             # check if list selected list isn't leftover list
-            if i < (length-1):
+            if i < (LEN-1):
                 # check for kg and m3 restriction
                 if sum_kg1[i] > cap_kg[i] or sum_m31[i] > cap_m3[i]:
                     value = 1
@@ -599,10 +651,18 @@ def annealing1_exponential(runtime, spacecrafts, cap_kg, cap_m3):
 
         # append new score to score function
         score.append(val_leftover(spacecrafts[LEN-1]))
+
         # increment iterations
         iteration += 1
-
-    return iteration, accepted
+    
+    # create array with time-values (x-values)
+    x = numpy.linspace(0, t_run, len(score))
+      
+    return score, x, iteration
+    #     # increment iterations
+    #     iteration += 1
+    # print score
+    # # return iteration, accepted
 
 def annealing1_sigmoidal(runtime, spacecrafts, cap_kg, cap_m3):
     ''' runs simulated annealing algorithm that swaps two items at a time during
@@ -680,10 +740,165 @@ def annealing1_sigmoidal(runtime, spacecrafts, cap_kg, cap_m3):
         score.append(val_leftover(spacecrafts[LEN-1]))
         # increment iterations
         iteration += 1
-
-    return iteration, accepted
+    # create array with time-values (x-values)
+    x = numpy.linspace(0, t_run, len(score))
+    return score, x, iteration
+    #return iteration, accepted
 
 def annealing1(runtime, spacecrafts, cap_kg, cap_m3, schedule):
+    ''' runs simulated annealing algorithm that swaps two items at a time during
+     the desegnated runtime (s) using a sigmoidal cooling schedule '''
+    score = []
+
+     # initial and end temperatures for cooling schedule
+    temp_initial = 1
+    temp_end = 0.0000000000000001
+
+    LEN = len(spacecrafts)
+
+    # set counters for iterations and instances of accepted increases in the
+    # objective function
+    iteration = 0
+    accepted = 0
+
+    LEN = len(spacecrafts)
+
+    # start timer
+    start_time = time.time()
+    t_end = time.time() + runtime
+
+    while time.time() < t_end:
+        # store score before swapping items
+        old_score = val_leftover(spacecrafts[LEN - 1])
+
+        if schedule == 'exponential':
+            # exponential cooling schedule
+            temp_current = temp_initial * math.pow((temp_end / temp_initial),
+            ((time.time() - start_time) / runtime))
+        elif schedule == 'sigmoidal':
+            # sigmoidal cooling schedule
+            temp_current = temp_end + (temp_initial - temp_end) * (1 / (1 + math.exp(0.3
+            * (time.time() - start_time - (runtime / 2)))))
+
+        # random number between 0 and 1 for rejection criterion
+        random_num = random.uniform(0,1)
+
+    	# randomly select two indices of lists and two items to swap between, put in array
+        rand_arr = random1(spacecrafts)
+
+    	# run hillclimbing algorithm with rand_arr
+        swap_two(spacecrafts, rand_arr, cap_kg, cap_m3)
+
+        sum_kg1 = sum_kg(spacecrafts[0:LEN])
+        sum_m31 = sum_m3(spacecrafts[0:LEN])
+        value = 0
+        for i in rand_arr[0:2]:
+            # check if list selected list isn't leftover list
+            if i < (LEN-1):
+                # check for kg and m3 restriction
+                if sum_kg1[i] > cap_kg[i] or sum_m31[i] > cap_m3[i]:
+                    value = 1
+
+        # swap back if necessary
+        if (value == 1):
+            swap_two(spacecrafts, rand_arr, cap_kg, cap_m3)
+
+        #store new score after swapping items
+        new_score = val_leftover(spacecrafts[LEN-1])
+
+        # change in score
+        change = new_score - old_score
+
+    	# rejection criteria
+        if temp_current > 0:
+    		# check if new score is worse than old score
+    	    if old_score < new_score and value == 0:
+    			# check whether change fails to meet acceptance criteria
+    			if random_num >= math.exp(-change / temp_current):
+    		        # swap items back
+    				swap_two(spacecrafts, rand_arr, cap_kg, cap_m3)
+    			else:
+    				# increment acceptances
+    				accepted +=1
+        elif old_score < new_score and value == 0:
+    		swap_two(spacecrafts, rand_arr, cap_kg, cap_m3)
+
+        # append new score to score function
+        score.append(val_leftover(spacecrafts[LEN-1]))
+        # increment iterations
+        iteration += 1
+
+    x = numpy.linspace(0, runtime, len(score))
+    
+    return score, x, iteration
+    # return iteration, accepted
+
+# SA 2 - SHIT
+def check_swap_random(list1, array1, cap_kg, cap_m3, annealing):
+    numb_swaps = 0
+    ''' checks for restrictions to swaps a randomly selected amount of items of a specified list, with an item of another list, if possible '''
+    len_ar = len(array1)
+    len_lst = len(list1)
+    # create array with randomly selected items from specified list
+    random_arr = []
+    for i in range(len_ar):
+        random_arr.append(list1[len_lst-1][array1[i]])
+    random_arr
+
+    # calculate sums and score of items from specified list
+    sum_kg_rand = sum(c.kg for c in random_arr)
+    sum_m3_rand = sum(c.m3 for c in random_arr)
+    score_rand = sum(c.valtot for c in random_arr)
+
+    # calculate free m3 and kg per list of list1
+    sum_kg1 = sum_kg(list1[0:len_lst])
+    sum_m31 = sum_m3(list1[0:len_lst])
+    old_score = val_leftover(list1[len_lst-1])
+
+    # overige capaciteit, kg en m3 per spacecraft:
+    kg_over = []
+    m3_over = []
+    for i in range(len(cap_kg)):
+        kg_over.append(cap_kg[i]- sum_kg1[i])
+        m3_over.append(cap_m3[i]- sum_m31[i])
+
+    # loop through lists to check if there exists an element the random elements can be swapped with
+    get_item = False
+    change = True
+    control = 0
+    for i in range(len_lst-1):
+        if control != 1:
+            for j in range(len(list1[i])):
+                # check if swapping would not break the restrictions
+                if (kg_over[i] + list1[i][j].kg >= sum_kg_rand and m3_over[i] + list1[i][j].m3 >= sum_m3_rand):
+                    # check for annealing (true) or hillclimber
+                    # check if score random elements is better than selected
+                    if (list1[i][j].valtot < score_rand):
+                        get_item = True
+                        num = i
+                        item = j
+                        control = 1
+                        new_score = old_score - score_rand + list1[i][j].valtot
+                        change = new_score - old_score
+                        break;
+                    elif (annealing == True):
+                        get_item = 'annealing'
+                        num = i
+                        item = j
+                        control = 1
+                        new_score = old_score - score_rand + list1[i][j].valtot
+                        change = new_score - old_score
+
+
+    # return correct values for hillclimber or annealing
+    # annealing is true so return change
+    if get_item == 'annealing':
+        return change, num, item, random_arr
+    # swap that improves score has been found (get_item = true) 
+    elif get_item == True:
+        return False, num, item, random_arr
+    
+def annealing2(runtime, spacecrafts, cap_kg, cap_m3, schedule):
     ''' runs simulated annealing algorithm that swaps two items at a time during
      the desegnated runtime (s) using a sigmoidal cooling schedule '''
     score = []
@@ -719,50 +934,41 @@ def annealing1(runtime, spacecrafts, cap_kg, cap_m3, schedule):
         # random number between 0 and 1 for rejection criterion
         random_num = random.uniform(0,1)
 
-    	# randomly select two indices of lists and two items to swap between, put in array
-        rand_arr = random1(spacecrafts)
+        # create random array that selects 1 or 2 items from the leftover list
+        rand_ar2 = random2(spacecrafts, [1,2])
 
-    	# run hillclimbing algorithm with rand_arr
-        swap_two(spacecrafts, rand_arr, cap_kg, cap_m3)
+        check_swap = check_swap_random(spacecrafts, rand_ar2, cap_kg, cap_m3, True)
+        if check_swap != None:
+            change = check_swap[0]
+            num = check_swap[1]
+            item = check_swap[2]
+            random_arr = check_swap[3]
 
-        length = len(spacecrafts)
-        sum_kg1 = sum_kg(spacecrafts[0:length])
-        sum_m31 = sum_m3(spacecrafts[0:length])
-        value = 0
-        for i in rand_arr[0:2]:
-            # check if list selected list isn't leftover list
-            if i < (length-1):
-                # check for kg and m3 restriction
-                if sum_kg1[i] > cap_kg[i] or sum_m31[i] > cap_m3[i]:
-                    value = 1
+            # check if a swap with improved score function has been found
+            if (change == False):
+                # better score, so swap
+                swap_random2(spacecrafts, random_arr, num, item)
+            # check if annealing criteria allows for swap !!!!!!!!!!!!!!! criteria checken bij len!!!
+            elif (random_num < math.exp(-change / temp_current)): 
+                swap_random2(spacecrafts, random_arr, num, item)
 
-        # swap back if necessary
-        if (value == 1):
-            swap_two(spacecrafts, rand_arr, cap_kg, cap_m3)
+            # append new score to score function
+            score.append(val_leftover(spacecrafts[LEN-1]))
+            # increment iterations
+            iteration += 1
+    x = numpy.linspace(0, runtime, len(score))
+    
+    return score, x, iteration
 
-        #store new score after swapping items
-        new_score = val_leftover(spacecrafts[LEN-1])
+def swap_random2(list1, array1, num, item):
+    ''' swaps the randomly selected items of array1 with list1[num][item]'''
+    # add random elements to list and remove from leftover list
+    len_lst = len(list1)
+    len_ar = len(array1)
+    list1[num].extend(array1)
+    list1[len_lst-1].append(list1[num][item])
+    list1[num].remove(list1[num][item])
+    for i in range(len_ar):
+        list1[len_lst -1].remove(array1[i])
+    return val_leftover(list1[len_lst-1])
 
-        # change in score
-        change = new_score - old_score
-
-    	# rejection criteria
-        if temp_current > 0:
-    		# check if new score is worse than old score
-    	    if old_score < new_score and value == 0:
-    			# check whether change fails to meet acceptance criteria
-    			if random_num >= math.exp(-change / temp_current):
-    		        # swap items back
-    				swap_two(spacecrafts, rand_arr, cap_kg, cap_m3)
-    			else:
-    				# increment acceptances
-    				accepted +=1
-        elif old_score < new_score and value == 0:
-    		swap_two(spacecrafts, rand_arr, cap_kg, cap_m3)
-
-        # append new score to score function
-        score.append(val_leftover(spacecrafts[LEN-1]))
-        # increment iterations
-        iteration += 1
-
-    return iteration, accepted
