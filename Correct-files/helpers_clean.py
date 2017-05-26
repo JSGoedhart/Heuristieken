@@ -488,6 +488,7 @@ def check_swap_random(list1, array1, cap_kg, cap_m3, annealing):
                         control = 1
                         new_score = old_score - score_rand + list1[i][j].valtot
                         change = new_score - old_score
+                        break;
 
 
     # return correct values for hillclimber or annealing

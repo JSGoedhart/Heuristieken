@@ -3,7 +3,7 @@ import operator
 import random
 import time
 import classes
-from helpers import *
+from helpers_clean import *
 import plotly.plotly as py
 import plotly.graph_objs as go
 import numpy
@@ -28,4 +28,4 @@ for i in range(len(algorithms)):
 data = createdata(datalist)
 
 # plot the results of all the used algorithms, with selected range and size
-plot('Cargo 2 with starting point greedy m3', [25, 40], data, 1000, 600, 'Main plot')
+plot('Cargo 2 with starting point greedy m3', [25, 50], data, 1000, 600, 'Main plot')
