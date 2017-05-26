@@ -602,7 +602,17 @@ def greedy_fleet(spacecraft_list, cargolist):
         leftover_list = temp_spacecrafts[len(temp_spacecrafts)-1]
         spacecrafts_fleet.append(temp_spacecrafts)
 
+    # delete the leftoverlists
+    spacecrafts_fleet = delete_leftover(spacecrafts_fleet)
+
     return spacecrafts_fleet
+
+def delete_leftover(spacecrafts_fleet_old):
+    ''' deletes the leftoverlists in spacecrafts_fleet'''
+
+    # spacecrafts_fleet = []
+    # for i in range(len(spacecrafts_fleet)-4):
+    #     print i
 
 def scorefunction(spacecrafts_fleet, spacecraft_list):
     ''' calculates the total wasted space and gives a score '''
