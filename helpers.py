@@ -338,7 +338,7 @@ def main(cargolist, startpunt, algorithm, coolingscheme, item, runtime):
     # run algorithm for selected time
     if coolingscheme == False:
         algorit = algorithm(runtime, spacecrafts, cap_kg, cap_m3)
-    else: 
+    else:
         algorit = algorithm(runtime, spacecrafts, cap_kg, cap_m3, coolingscheme)
 
     # create names for array with score and running time
@@ -359,7 +359,7 @@ def createdata(datalist):
     return data
 
 def plot(title, range, data, width, height, plotname):
-    ''' make a plot with the input data, the given title (string) in the given range (array[a,b]'''  
+    ''' make a plot with the input data, the given title (string) in the given range (array[a,b]'''
     layout = go.Layout(
         title = title,
         width=width,
@@ -377,7 +377,7 @@ def plot(title, range, data, width, height, plotname):
             titlefont = dict(
                 family = 'Arial, sans-serif',
                 size=14)),
-        showlegend=True, 
+        showlegend=True,
         legend=dict(x=0.8, y=1.0)
         )
     fig = go.Figure(data=data, layout=layout)
@@ -654,10 +654,10 @@ def annealing1_exponential(runtime, spacecrafts, cap_kg, cap_m3):
 
         # increment iterations
         iteration += 1
-    
+
     # create array with time-values (x-values)
     x = numpy.linspace(0, t_run, len(score))
-      
+
     return score, x, iteration
     #     # increment iterations
     #     iteration += 1
@@ -751,8 +751,8 @@ def annealing1(runtime, spacecrafts, cap_kg, cap_m3, schedule):
     score = []
 
      # initial and end temperatures for cooling schedule
-    temp_initial = 1
-    temp_end = 0.0000000000000001
+    temp_initial = 800
+    temp_end = 1
 
     LEN = len(spacecrafts)
 
@@ -829,7 +829,7 @@ def annealing1(runtime, spacecrafts, cap_kg, cap_m3, schedule):
         iteration += 1
 
     x = numpy.linspace(0, runtime, len(score))
-    
+
     return score, x, iteration
     # return iteration, accepted
 
@@ -894,10 +894,10 @@ def check_swap_random(list1, array1, cap_kg, cap_m3, annealing):
     # annealing is true so return change
     if get_item == 'annealing':
         return change, num, item, random_arr
-    # swap that improves score has been found (get_item = true) 
+    # swap that improves score has been found (get_item = true)
     elif get_item == True:
         return False, num, item, random_arr
-    
+
 def annealing2(runtime, spacecrafts, cap_kg, cap_m3, schedule):
     ''' runs simulated annealing algorithm that swaps two items at a time during
      the desegnated runtime (s) using a sigmoidal cooling schedule '''
@@ -949,7 +949,7 @@ def annealing2(runtime, spacecrafts, cap_kg, cap_m3, schedule):
                 # better score, so swap
                 swap_random2(spacecrafts, random_arr, num, item)
             # check if annealing criteria allows for swap !!!!!!!!!!!!!!! criteria checken bij len!!!
-            elif (random_num < math.exp(-change / temp_current)): 
+            elif (random_num < math.exp(-change / temp_current)):
                 swap_random2(spacecrafts, random_arr, num, item)
 
             # append new score to score function
@@ -957,7 +957,7 @@ def annealing2(runtime, spacecrafts, cap_kg, cap_m3, schedule):
             # increment iterations
             iteration += 1
     x = numpy.linspace(0, runtime, len(score))
-    
+
     return score, x, iteration
 
 def swap_random2(list1, array1, num, item):
@@ -971,4 +971,3 @@ def swap_random2(list1, array1, num, item):
     for i in range(len_ar):
         list1[len_lst -1].remove(array1[i])
     return val_leftover(list1[len_lst-1])
-
