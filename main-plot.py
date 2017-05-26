@@ -28,4 +28,4 @@ for i in range(len(algorithms)):
 data = createdata(datalist)
 
 # plot the results of all the used algorithms, with selected range and size
-plot('Cargo 1 with starting point greedy m3', [26,60], data, 1000, 600, 'Main plot')
+plot('Cargo 2 with starting point greedy m3', [25, 40], data, 1000, 600, 'Main plot')
