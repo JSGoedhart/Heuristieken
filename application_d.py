@@ -18,7 +18,7 @@ spacecraft_list_sorted = sorted(spacecraft_list, key=operator.attrgetter('kg'), 
 # create lists to put cargo-classes in
 spacecrafts_kg = [[], [], [], [], [], []]
 
-# run greedy fill, to fill spacecrafts on basis of kg
+# run greedy fill, to fill spacecrafts on basis of kg and m3
 spacecrafts_fleet = greedy_fleet(spacecraft_list_sorted, cargo3_sorted_m3)
 
 # score
