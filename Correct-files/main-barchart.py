@@ -14,19 +14,24 @@ coolingscheme = [False, False, 'exponential', 'sigmoidal', 'exponential', 'sigmo
 # assign legendnames to each algorithm
 legend = ['Hillclimber 1', 'Hillclimber 2', 'Annealing 1 - Exp', 'Annealing 1 - Sigmd', 'Annealing 2 - Exp', 'Annealing 2 - Sigm']
 
-# create array to put x- and y-values of each algorithm in
-datalist = []
+# create array to place endscores of each algorithm in
+scores = []
 
-# run each algorithm and save results
+# loop through algorithms
 for i in range(len(algorithms)):
-	# Divide items of cargolist with startingpoint greedy, than run the selected algorithm for the selected time
-	output = main('CargoList1.csv', greedy_fill, algorithms[i], coolingscheme[i], 'm3', 2);
-	# append legendname and x,y-values to datalist
-	datalist.append([legend[i], output[1], output[0]])
+	score_arr = []
+   
+    # run each algorithm n times for selected time, fill randomly 
+	for j in range(100):
+		output = main('CargoList1.csv', random_fill, algorithms[i], coolingscheme[i], 'm3', 5);
+		score_arr.append(output[2])
+	scores.append(score_arr)
 
-# put datalist in plotable format
-data = createdata(datalist)
+# sort data into barchart categories
+data_sort = sortbardata(scores, 25, 35, 20)
 
-# plot the results of all the used algorithms, with selected range and size
-plot('Cargo 2 with starting point greedy m3', [25, 40], data, 1000, 600, 'Main plot')
+# put sorted data in barchart format
+data = createbardata(data_sort[0], data_sort[1], data_sort[2], data_sort[3], legend)
 
+# make a barchart
+makebarchart('Barchart 1', data, 'barchart 1')

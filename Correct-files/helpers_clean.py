@@ -68,12 +68,19 @@ def main(cargolist, startpunt, algorithm, coolingscheme, item, runtime):
     cap_kg = cap[0]; cap_m3 = cap[1]
 
     # generete starting point, random, greedy on kg or greedy on m3
-    if item == False:
+    if algorithm == random_fill:
         random_fill(spacecraft_list, cargo_sorted, spacecrafts)
-    elif item == 'kg':
-        greedy_fill(spacecraft_list, cargo_sorted, spacecrafts, 'kg', 'm3')
-    elif item == 'm3':
-        greedy_fill(spacecraft_list, cargo_sorted, spacecrafts, 'm3', 'kg')
+    else:
+        if item == 'kg':
+            greedy_fill(spacecraft_list, cargo_sorted, spacecrafts, 'kg', 'm3')
+        else:
+            greedy_fill(spacecraft_list, cargo_sorted, spacecrafts, 'm3', 'kg')
+    # if item == False:
+    #     random_fill(spacecraft_list, cargo_sorted, spacecrafts)
+    # elif item == 'kg':
+    #     greedy_fill(spacecraft_list, cargo_sorted, spacecrafts, 'kg', 'm3')
+    # elif item == 'm3':
+    #     greedy_fill(spacecraft_list, cargo_sorted, spacecrafts, 'm3', 'kg')
 
     # run algorithm for selected time
     if coolingscheme == False:
@@ -84,7 +91,8 @@ def main(cargolist, startpunt, algorithm, coolingscheme, item, runtime):
     # create names for array with score and running time
     score = algorit[0]
     xtime = numpy.linspace(0, runtime, len(score))
-    return score, xtime
+    score_end = algorit[3]
+    return score, xtime, score_end
 
 def print_names(lijst):
     name_arr = []
@@ -191,6 +199,7 @@ def random_fill(list1, list2, list3):
 
 ## 5: ITERATIVE ALGORITHMS
 def hillclimbing1(runtime, spacecrafts, cap_kg, cap_m3):
+    iteration = 0
     score = []
     program_starts = time.time()
     t_run = runtime
@@ -207,10 +216,13 @@ def hillclimbing1(runtime, spacecrafts, cap_kg, cap_m3):
         numb_swaps += values[0]
         # put score in array
         score.append(values[1])
+        iteration += 1
     x = numpy.linspace(0, t_run, len(score))
-    return score, x, numb_swaps
+    score_end = val_leftover(spacecrafts[len(spacecrafts)-1])
+    return score, x, iteration, score_end, numb_swaps
 
 def hillclimbing2(runtime, spacecrafts, cap_kg, cap_m3):
+    iteration = 0
     score=[]
     program_starts = time.time()
     t_run = runtime
@@ -228,8 +240,10 @@ def hillclimbing2(runtime, spacecrafts, cap_kg, cap_m3):
             score.append(scorevalue)
         else:
             score.append(val_leftover(spacecrafts[len(spacecrafts)-1]))
+        iteration += 1
     x = numpy.linspace(0, t_run, len(score))
-    return score, x, numb_swaps
+    score_end = val_leftover(spacecrafts[len(spacecrafts)-1])
+    return score, x, iteration, score_end, numb_swaps
 
 def annealing1(runtime, spacecrafts, cap_kg, cap_m3, schedule):
     ''' runs simulated annealing algorithm that swaps two items at a time during
@@ -315,8 +329,9 @@ def annealing1(runtime, spacecrafts, cap_kg, cap_m3, schedule):
         iteration += 1
 
     x = numpy.linspace(0, runtime, len(score))
+    score_end = val_leftover(spacecrafts[len(spacecrafts)-1])
 
-    return score, x, iteration
+    return score, x, score_end, iteration
     # return iteration, accepted
 
 def annealing2(runtime, spacecrafts, cap_kg, cap_m3, schedule):
@@ -377,9 +392,11 @@ def annealing2(runtime, spacecrafts, cap_kg, cap_m3, schedule):
             score.append(val_leftover(spacecrafts[LEN-1]))
             # increment iterations
             iteration += 1
+
+    score_end = val_leftover(spacecrafts[len(spacecrafts)-1])
     x = numpy.linspace(0, runtime, len(score))
 
-    return score, x, iteration
+    return score, x, iteration, score_end
 
 
 ## 6: SWAP FUNCTIONS
@@ -565,6 +582,55 @@ def plot(title, range, data, width, height, plotname):
     fig = go.Figure(data=data, layout=layout)
 
     py.iplot(fig, filename=plotname)
+
+def sortbardata(scores, minimum, maximum, steps):
+    ''' sorts an array of into an array with amount of numbers per category
+    each category is defined as: min+steps*stepsize - min + 1 + steps*stepsize
+    where stepsize is equal to (max-min)/steps'''
+    data = []
+    stepsize = (maximum - minimum)/steps
+    for i in range(len(scores)):
+        data.append([0]*(steps+1));
+        for j in range(len(scores[i])): 
+            for k in range(steps):
+                if scores[i][j] >= (minimum + k * stepsize) and scores[i][j] < (minimum + (k+1) * stepsize):
+                    data[i][k] += 1
+            if scores[i][j] >= (minimum + (steps+1) * stepsize):
+                data[i][steps] += 1
+    return data, minimum, maximum, steps
+
+def createbardata(data, minimum, maximum, steps, legend):
+    ''' places array called data in suitable barchart format for plotly '''
+    returndata = []
+    # calculate stepsize
+    stepsize = (maximum - minimum)/steps
+    
+    # create x-array with categorical names
+    x_arr = []
+    for k in range(steps):
+        s = "-";
+        seq = (str(minimum+k*stepsize), str(minimum+(k+1)*stepsize))
+        x_arr.append(s.join(seq))
+    z = "+"; seq=(str(maximum), str());
+    x_arr.append(z.join(seq));
+
+    # put data in suitable format
+    for i in range(len(data)):
+        returndata.append(go.Bar(
+            x = x_arr,
+            y = data[i],
+            name = legend[i]))
+
+    return returndata
+
+def makebarchart(title, data, filename):
+    ''' create barchart with title and input data '''
+    layout = go.Layout(
+        title = title,
+        barmode='group')
+
+    fig = go.Figure(data=data, layout=layout)
+    py.iplot(fig, filename=filename)
 
 
 ## 10: FUNCTIONS FOR PART D + E
