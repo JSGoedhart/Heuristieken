@@ -21,6 +21,7 @@ datalist = []
 for i in range(len(algorithms)):
 	# Divide items of cargolist with startingpoint greedy, than run the selected algorithm for the selected time
 	output = main('CargoList1.csv', greedy_fill, algorithms[i], coolingscheme[i], 'm3', 2);
+	print output[0]
 	# append legendname and x,y-values to datalist
 	datalist.append([legend[i], output[1], output[0]])
 

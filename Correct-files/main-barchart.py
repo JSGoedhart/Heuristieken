@@ -22,8 +22,8 @@ for i in range(len(algorithms)):
 	score_arr = []
    
     # run each algorithm n times for selected time, fill randomly 
-	for j in range(100):
-		output = main('CargoList1.csv', random_fill, algorithms[i], coolingscheme[i], 'm3', 5);
+	for j in range(300):
+		output = main('CargoList1.csv', random_fill, algorithms[i], coolingscheme[i], 'm3', 10);
 		score_arr.append(output[2])
 	scores.append(score_arr)
 

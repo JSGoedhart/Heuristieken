@@ -588,7 +588,8 @@ def sortbardata(scores, minimum, maximum, steps):
     each category is defined as: min+steps*stepsize - min + 1 + steps*stepsize
     where stepsize is equal to (max-min)/steps'''
     data = []
-    stepsize = (maximum - minimum)/steps
+    stepsize = float(maximum - minimum)/float(steps)
+    print 'stepsize is', stepsize
     for i in range(len(scores)):
         data.append([0]*(steps+1));
         for j in range(len(scores[i])): 
