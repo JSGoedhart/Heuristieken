@@ -594,7 +594,10 @@ def sortbardata(scores, minimum, maximum, steps):
         data.append([0]*(steps+1));
         for j in range(len(scores[i])): 
             for k in range(steps):
+                print k
                 if scores[i][j] >= (minimum + k * stepsize) and scores[i][j] < (minimum + (k+1) * stepsize):
+                    print 'smallest value: ', minimum + k * stepsize
+                    print 'biggest value: ', minimum + (k+1) * stepsize
                     data[i][k] += 1
             if scores[i][j] >= (minimum + (steps+1) * stepsize):
                 data[i][steps] += 1
@@ -622,7 +625,7 @@ def createbardata(data, minimum, maximum, steps, legend):
             y = data[i],
             name = legend[i]))
 
-    return returndata
+    return returndata, x_arr
 
 def makebarchart(title, data, filename):
     ''' create barchart with title and input data '''
