@@ -11,10 +11,11 @@ import plotly.graph_objs as go
 
 ## 1 FUNCTIONS TO OPEN CSV FILES
 def open_cargo_csv(file):
-    # create list to put cargo1 classes in
+    ''' Return split_list '''
+    # Create list to put cargo1 classes in
     split_list = []
 
-    # put cargo-elements of list 1 in class cargo1
+    # Put cargo-elements of list 1 in class cargo1
     csvfile = open(file, 'r')
     for line in csvfile:
     	split = line.split(';')
@@ -54,7 +55,7 @@ def open_alles(cargolist, item):
 
     return cargo_sorted, spacecraft_list, spacecrafts
 
-## MAIN FUNCTION 
+## MAIN FUNCTION
 def main(cargolist, startpunt, algorithm, coolingscheme, item, runtime):
     ''' function that generates a starting point for cargolist, runs an algorithm on it for selected time and returns the score
     starting point is greedy item when item isn't false, when item is false: starting point is random '''
@@ -592,7 +593,7 @@ def sortbardata(scores, minimum, maximum, steps):
     print 'stepsize is', stepsize
     for i in range(len(scores)):
         data.append([0]*(steps+1));
-        for j in range(len(scores[i])): 
+        for j in range(len(scores[i])):
             for k in range(steps):
                 print k
                 if scores[i][j] >= (minimum + k * stepsize) and scores[i][j] < (minimum + (k+1) * stepsize):
@@ -608,7 +609,7 @@ def createbardata(data, minimum, maximum, steps, legend):
     returndata = []
     # calculate stepsize
     stepsize = (maximum - minimum)/steps
-    
+
     # create x-array with categorical names
     x_arr = []
     for k in range(steps):
@@ -635,5 +636,3 @@ def makebarchart(title, data, filename):
 
     fig = go.Figure(data=data, layout=layout)
     py.iplot(fig, filename=filename)
-
-
