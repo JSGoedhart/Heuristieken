@@ -60,13 +60,10 @@ def scorefunction(spacecrafts_fleet, spacecraft_list):
 
     # score function:
     for k in range(len(spacecrafts_fleet)):
-        # print "fleet", k
         for j in range(len(spacecrafts_fleet[k])):
             kg = 0
             m3 = 0
-            # print "spacecraft", j
             for i in range(len(spacecrafts_fleet[k][j])):
-                # print "cargo", i
                 kg = kg + spacecrafts_fleet[k][j][i].kg
                 m3 = m3 + spacecrafts_fleet[k][j][i].m3
             if kg != 0 and m3 != 0:
@@ -91,9 +88,9 @@ def scorefunction(spacecrafts_fleet, spacecraft_list):
             if spacecrafts_fleet[k][j]:
                 total_kg_spacecrafts = total_kg_spacecrafts + spacecraft_list[j].kg
                 total_m3_spacecrafts = total_m3_spacecrafts + spacecraft_list[j].m3
-            for i in range(len(spacecrafts_fleet[k][j])):
-                total_kg_cargo = total_kg_cargo + spacecrafts_fleet[k][j][i].kg
-                total_m3_cargo = total_m3_cargo + spacecrafts_fleet[k][j][i].m3
+                for i in range(len(spacecrafts_fleet[k][j])):
+                    total_kg_cargo = total_kg_cargo + spacecrafts_fleet[k][j][i].kg
+                    total_m3_cargo = total_m3_cargo + spacecrafts_fleet[k][j][i].m3
 
     # procent filled
     procent_kg = float(total_kg_cargo)/float(total_kg_spacecrafts)
@@ -370,50 +367,54 @@ def swap_random_D_E(spacecrafts, leftover_spacecraft, array1, num, item):
 
 def merge_used_spacecrafts(spacecrafts_fleet, num, spacecraft_list):
     ''' merge used spacecrafts, num is amount of spacecraft fleets used'''
-    for k in range(num):
-        # put all cargo in first spacecraft
-        for i in range(len(spacecrafts_fleet[len(spacecrafts_fleet)-1-k])):
-            if i != 0:
-                leftover_spacecraft = spacecrafts_fleet[len(spacecrafts_fleet)-1-k][i]
-                if leftover_spacecraft:
-                    for j in range(len(spacecrafts_fleet[len(spacecrafts_fleet)-1-k][i])):
-                        spacecrafts_fleet[len(spacecrafts_fleet)-1-k][0].append(classes.cargo1(spacecrafts_fleet[len(spacecrafts_fleet)-k-1][i][j].number, spacecrafts_fleet[len(spacecrafts_fleet)-k-1][i][j].kg, spacecrafts_fleet[len(spacecrafts_fleet)-k-1][i][j].m3))
-                    spacecrafts_fleet[len(spacecrafts_fleet)-1-k][i].remove(leftover_spacecraft[0])
-
-    # put all cargo off first spacecraft in first spacecraft of earlier fleet, if possible
-    for k in range(num):        
-        if not spacecrafts_fleet[len(spacecrafts_fleet)-2-k][4]: 
-            for i in range(len(spacecrafts_fleet[len(spacecrafts_fleet)-1-k][0])):
-                spacecrafts_fleet[len(spacecrafts_fleet)-2-k][0].append(classes.cargo1(spacecrafts_fleet[len(spacecrafts_fleet)-k-1][0][i].number, spacecrafts_fleet[len(spacecrafts_fleet)-k-1][0][i].kg, spacecrafts_fleet[len(spacecrafts_fleet)-k-1][0][i].m3))
-                spacecrafts_fleet[len(spacecrafts_fleet)-1-k][0].remove(spacecrafts_fleet[len(spacecrafts_fleet)-1-k][0][i])
-
-    # lose all empty groups of spacecrafts
-    for i in range(len(spacecrafts_fleet)):
-        if not spacecrafts_fleet[i][0] and not spacecrafts_fleet[i][1] and not spacecrafts_fleet[i][2] and not spacecrafts_fleet[i][3] and not spacecrafts_fleet[i][4]:
-            spacecrafts_fleet.remove(spacecrafts_fleet[i])
-
-    for i in range(len(spacecrafts_fleet)):
-        print "vloot", i
-        print sum_kg(spacecrafts_fleet[i])
-        print sum_m3(spacecrafts_fleet[i])
-
-    # # new leftover list
-    # new_leftovers = []
-
+    #### merge used spacecrafts ######
     # for k in range(num):
-    #     for i in range(len(spacecrafts_fleet[len(spacecrafts_fleet)-1])):
-    #         for j in range(len(spacecrafts_fleet[len(spacecrafts_fleet)-1][i])):
-    #             new_leftovers.append(classes.cargo1(spacecrafts_fleet[len(spacecrafts_fleet)-1][i][j].number, spacecrafts_fleet[len(spacecrafts_fleet)-1][i][j].kg, spacecrafts_fleet[len(spacecrafts_fleet)-1][i][j].m3)) 
-                
-    #     # remove spacecrafts filled with leftovers
-    #     spacecrafts_fleet.remove(spacecrafts_fleet[len(spacecrafts_fleet)-1])
+    #     # put all cargo in first spacecraft
+    #     for i in range(len(spacecrafts_fleet[len(spacecrafts_fleet)-1-k])):
+    #         if i != 0:
+    #             leftover_spacecraft = spacecrafts_fleet[len(spacecrafts_fleet)-1-k][i]
+    #             if leftover_spacecraft:
+    #                 for j in range(len(spacecrafts_fleet[len(spacecrafts_fleet)-1-k][i])):
+    #                     spacecrafts_fleet[len(spacecrafts_fleet)-1-k][0].append(classes.cargo1(spacecrafts_fleet[len(spacecrafts_fleet)-k-1][i][j].number, spacecrafts_fleet[len(spacecrafts_fleet)-k-1][i][j].kg, spacecrafts_fleet[len(spacecrafts_fleet)-k-1][i][j].m3))
+    #                 spacecrafts_fleet[len(spacecrafts_fleet)-1-k][i].remove(leftover_spacecraft[0])
 
-    # # do greedy again with the used leftovers
-    # extra_spacecraft_fleet = greedy_fleet(spacecraft_list, new_leftovers)
+    # # put all cargo off first spacecraft in first spacecraft of earlier fleet, if possible
+    # for k in range(num):        
+    #     if not spacecrafts_fleet[len(spacecrafts_fleet)-2-k][4]: 
+    #         for i in range(len(spacecrafts_fleet[len(spacecrafts_fleet)-1-k][0])):
+    #             spacecrafts_fleet[len(spacecrafts_fleet)-2-k][0].append(classes.cargo1(spacecrafts_fleet[len(spacecrafts_fleet)-k-1][0][i].number, spacecrafts_fleet[len(spacecrafts_fleet)-k-1][0][i].kg, spacecrafts_fleet[len(spacecrafts_fleet)-k-1][0][i].m3))
+    #             spacecrafts_fleet[len(spacecrafts_fleet)-1-k][0].remove(spacecrafts_fleet[len(spacecrafts_fleet)-1-k][0][i])
 
-    # spacecrafts_fleet.append(extra_spacecraft_fleet)
+    # # lose all empty groups of spacecrafts
+    # for i in range(len(spacecrafts_fleet)):
+    #     if not spacecrafts_fleet[i][0] and not spacecrafts_fleet[i][1] and not spacecrafts_fleet[i][2] and not spacecrafts_fleet[i][3] and not spacecrafts_fleet[i][4]:
+    #         spacecrafts_fleet.remove(spacecrafts_fleet[i])
 
-    # add extra empty spacecrafts to fill the fleet
+    # for i in range(len(spacecrafts_fleet)):
+    #     print "vloot", i
+    #     print sum_kg(spacecrafts_fleet[i])
+    #     print sum_m3(spacecrafts_fleet[i])
+
+
+
+    ######## make new leftover and fill greedy again
+
+    # new leftover list
+    new_leftovers = []
+
+    for k in range(num):
+        for i in range(len(spacecrafts_fleet[len(spacecrafts_fleet)-1])):
+            for j in range(len(spacecrafts_fleet[len(spacecrafts_fleet)-1][i])):
+                new_leftovers.append(spacecrafts_fleet[len(spacecrafts_fleet)-1][i][j])
+        # remove spacecrafts filled with leftovers
+        spacecrafts_fleet.remove(spacecrafts_fleet[len(spacecrafts_fleet)-1])
+
+    # do greedy again with the used leftovers
+    extra_spacecraft_fleet = greedy_fleet(spacecraft_list, new_leftovers)
+
+    spacecrafts_fleet.extend(extra_spacecraft_fleet)
+
+    ## add extra empty spacecrafts to fill the fleet
     # for i in range(5-len(spacecrafts_fleet[len(spacecrafts_fleet)-1])):
     #     # print i
     #     spacecrafts_fleet[len(spacecrafts_fleet)-1].append([])
@@ -492,7 +493,7 @@ def annealing_fleet(spacecrafts_fleet, spacecraft_list):
     ''' runs annealing_D_E for every array of the five ships '''
     cap = capacities(spacecraft_list)
     cap_kg = cap[0]; cap_m3 = cap[1]
-    num_fleet_used = 2
+    num_fleet_used = 8
 
     global new_spacecrafts
 

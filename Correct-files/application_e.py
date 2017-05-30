@@ -15,7 +15,7 @@ cargo3_sorted_m3 = sorted(cargo3_list_m3, key=operator.attrgetter('m3'), reverse
 # create a list with the six spacecrafts put into classes in it
 spacecraft_list = open_spacecrafts_csv('Spacecrafts_e.csv')
 
-spacecraft_list_sorted = sorted(spacecraft_list, key=operator.attrgetter('kg'), reverse=True)
+spacecraft_list_sorted = sorted(spacecraft_list, key=operator.attrgetter('m3'), reverse=True)
 
 
 ######## fill just one spacecraft ########
@@ -48,6 +48,16 @@ spacecraft_list_sorted = sorted(spacecraft_list, key=operator.attrgetter('kg'), 
 
 # chose the best and run greedy
 spacecrafts_fleet = greedy_fleet_with_check(spacecraft_list_sorted, cargo3_sorted_m3)
+
+for i in range(len(spacecrafts_fleet)):
+	print "vloot", i
+	for j in range(len(spacecrafts_fleet[i])):
+		print "spacecraft", j
+		for k in range(len(spacecrafts_fleet[i][j])):
+			print spacecrafts_fleet[i][j][k]
+
+# annealing
+spacecrafts_fleet = annealing_fleet(spacecrafts_fleet, spacecraft_list_sorted)
 
 # score
 scorefunction(spacecrafts_fleet, spacecraft_list_sorted)
