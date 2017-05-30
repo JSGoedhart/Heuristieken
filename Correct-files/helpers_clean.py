@@ -11,7 +11,10 @@ import plotly.graph_objs as go
 
 ## 1 FUNCTIONS TO OPEN CSV FILES
 def open_cargo_csv(file):
-    ''' Return split_list '''
+    ''' Receive csv file
+    Split elements per line
+    Return split_list.
+    '''
     # Create list to put cargo1 classes in
     split_list = []
 
@@ -26,6 +29,7 @@ def open_cargo_csv(file):
     return split_list
 
 def open_spacecrafts_csv(file):
+
     # create empty list for spacecrafts
     open_list = []
 
@@ -253,7 +257,7 @@ def annealing1(runtime, spacecrafts, cap_kg, cap_m3, schedule):
 
      # initial and end temperatures for cooling schedule
     temp_initial = 800
-    temp_end = 1
+    temp_end = 0.0000000001
 
     LEN = len(spacecrafts)
 
@@ -341,8 +345,8 @@ def annealing2(runtime, spacecrafts, cap_kg, cap_m3, schedule):
     score = []
 
      # initial and end temperatures for cooling schedule
-    temp_initial = 1
-    temp_end = 0.0000000000000001
+    temp_initial = 800
+    temp_end = 0.0000000001
 
     LEN = len(spacecrafts)
 
@@ -593,7 +597,7 @@ def sortbardata(scores, minimum, maximum):
     stepsize = float(maximum - minimum)/float(steps)
     for i in range(len(scores)):
         data.append([0]*(steps+1));
-        for j in range(len(scores[i])): 
+        for j in range(len(scores[i])):
             for k in range(steps):
                 if scores[i][j] >= (minimum + k * stepsize) and scores[i][j] < (minimum + (k+1) * stepsize):
                     data[i][k] += 1
