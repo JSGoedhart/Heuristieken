@@ -2,7 +2,7 @@ import csv
 import operator
 from classes import *
 from helpers_clean import *
-from helper_d import *
+from helpers_d import *
 
 # create list to put cargo1 classes in
 cargo3_list_kg = open_cargo_csv('CargoList3.csv')
@@ -26,7 +26,8 @@ spacecrafts_fleet = greedy_fleet(spacecraft_list_sorted, cargo3_sorted_m3)
 # spacecrafts_fleet = hillclimbing_fleet(spacecrafts_fleet, spacecraft_list)
 
 # run simulated annealing to reduce wasted space
-# spacecrafts_fleet = annealing_fleet(spacecrafts_fleet, spacecraft_list)
+spacecrafts_fleet = annealing_fleet(spacecrafts_fleet, spacecraft_list)
+
 # for i in range(len(spacecrafts_fleet)):
 #     print "vloot", i
 #     for j in range(len(spacecrafts_fleet[i])):
