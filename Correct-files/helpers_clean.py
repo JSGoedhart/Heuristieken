@@ -555,7 +555,7 @@ def createdata(datalist):
             x = datalist[i][1],
             y = datalist[i][2],
             line = dict(
-                width = 1.0)));
+                width = 1.5)));
     return data
 
 def plot(title, range, data, width, height, plotname):
@@ -584,21 +584,18 @@ def plot(title, range, data, width, height, plotname):
 
     py.iplot(fig, filename=plotname)
 
-def sortbardata(scores, minimum, maximum, steps):
+def sortbardata(scores, minimum, maximum):
     ''' sorts an array of into an array with amount of numbers per category
     each category is defined as: min+steps*stepsize - min + 1 + steps*stepsize
     where stepsize is equal to (max-min)/steps'''
+    steps = (maximum - minimum)*2
     data = []
     stepsize = float(maximum - minimum)/float(steps)
-    print 'stepsize is', stepsize
     for i in range(len(scores)):
         data.append([0]*(steps+1));
-        for j in range(len(scores[i])):
+        for j in range(len(scores[i])): 
             for k in range(steps):
-                print k
                 if scores[i][j] >= (minimum + k * stepsize) and scores[i][j] < (minimum + (k+1) * stepsize):
-                    print 'smallest value: ', minimum + k * stepsize
-                    print 'biggest value: ', minimum + (k+1) * stepsize
                     data[i][k] += 1
             if scores[i][j] >= (minimum + (steps+1) * stepsize):
                 data[i][steps] += 1
@@ -608,8 +605,7 @@ def createbardata(data, minimum, maximum, steps, legend):
     ''' places array called data in suitable barchart format for plotly '''
     returndata = []
     # calculate stepsize
-    stepsize = (maximum - minimum)/steps
-
+    stepsize = float(maximum - minimum)/float(steps)
     # create x-array with categorical names
     x_arr = []
     for k in range(steps):
