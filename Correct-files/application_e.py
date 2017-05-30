@@ -2,7 +2,6 @@ import csv
 import operator
 from classes import *
 from helpers_clean import *
-from helper_d import *
 
 # create list to put cargo1 classes in
 cargo3_list_kg = open_cargo_csv('CargoList3.csv')
@@ -16,8 +15,9 @@ cargo3_sorted_m3 = sorted(cargo3_list_m3, key=operator.attrgetter('m3'), reverse
 spacecraft_list = open_spacecrafts_csv('Spacecrafts2.csv')
 
 spacecraft_list_sorted = sorted(spacecraft_list, key=operator.attrgetter('kg'), reverse=True)
+
 # create lists to put cargo-classes in
-spacecrafts_kg = [[], [], [], [], [], []]
+spacecrafts_kg = [[],[]]
 
 # run greedy fill, to fill spacecrafts on basis of kg and m3
 spacecrafts_fleet = greedy_fleet(spacecraft_list_sorted, cargo3_sorted_m3)
@@ -40,25 +40,3 @@ spacecrafts_fleet = greedy_fleet(spacecraft_list_sorted, cargo3_sorted_m3)
 # print sum_m3(spacecrafts_fleet[len(spacecrafts_fleet)-2])
 # score
 scorefunction(spacecrafts_fleet, spacecraft_list_sorted)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
