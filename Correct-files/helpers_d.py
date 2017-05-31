@@ -17,6 +17,8 @@ def greedy_fleet_with_america_check(spacecraft_list, cargolist):
         leftover_list = temp_spacecrafts[len(temp_spacecrafts)-1]
         spacecrafts_fleet.append(temp_spacecrafts)
 
+    spacecrafts_fleet = delete_leftover(spacecrafts_fleet)
+
     return spacecrafts_fleet
 
 def greedy_fleet(spacecraft_list, cargolist):
@@ -254,7 +256,7 @@ def hillclimbing_fleet(spacecrafts_fleet, spacecraft_list):
     ''' runs hillclimbing_D_E for every array of the five ships '''
     cap = capacities(spacecraft_list)
     cap_kg = cap[0]; cap_m3 = cap[1]
-    num_fleet_used = 5
+    num_fleet_used = 4
 
     # loop over last two groups of spacecrafts
     for k in range(num_fleet_used):
@@ -493,7 +495,7 @@ def annealing_fleet(spacecrafts_fleet, spacecraft_list):
     ''' runs annealing_D_E for every array of the five ships '''
     cap = capacities(spacecraft_list)
     cap_kg = cap[0]; cap_m3 = cap[1]
-    num_fleet_used = 3
+    num_fleet_used = 4
 
     global new_spacecrafts
 

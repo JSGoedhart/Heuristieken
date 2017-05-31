@@ -6,21 +6,24 @@ def greedy_fleet_with_check(spacecraft_list, cargolist):
 
     # create lists to put cargo-classes in
     spacecrafts_fleet = []
+    numbers_fleet = []
 
     leftover_list = cargolist
     count = 0
     while len(leftover_list) != 0:
         count += 1
         temp_spacecrafts = [[], []]
+        temp_number = []
         temp_cargo = leftover_list
-        greedy_fill_fleet_with_check(spacecraft_list, temp_cargo, temp_spacecrafts, 'm3', 'kg')
+        greedy = greedy_fill_fleet_with_check(spacecraft_list, temp_cargo, temp_spacecrafts, temp_number, 'm3', 'kg')
         leftover_list = temp_spacecrafts[len(temp_spacecrafts)-1]
         spacecrafts_fleet.append(temp_spacecrafts)
+        numbers_fleet.append(greedy[1])
 
     # delete the leftoverlists
     spacecrafts_fleet = delete_leftover(spacecrafts_fleet)
 
-    return spacecrafts_fleet
+    return spacecrafts_fleet, numbers_fleet
 
 def greedy_fleet(spacecraft_list, cargolist):
     ''' fills fleet with all the cargo (exercise d and e)'''
@@ -105,7 +108,7 @@ def scorefunction(spacecrafts_fleet, spacecraft_list):
     print "kg filled in procent:", procent_kg
     print "m3 filled in procent:", procent_m3
 
-def greedy_fill_fleet_with_check(spacecraft_list, cargolist, list3, item, item2):
+def greedy_fill_fleet_with_check(spacecraft_list, cargolist, list3, number, item, item2):
     ''' fills the 5 spacecrafts of the fleet and makes a choice between cygnus and dragon of america'''
     for j in range(len(list3)-1):
 
@@ -242,6 +245,7 @@ def greedy_fill_fleet_with_check(spacecraft_list, cargolist, list3, item, item2)
         # vul de spacecraft die beter is (dus meer gevuld)
         # vul dragon:
         if  dragon >= cygnus and dragon >= tianzhou and dragon >= verne and dragon >= progress and dragon >= kounotori:
+            number = 2
             for i in range(len(cargolist)):
                 # check if cargo-item is already placed
                 if (getattr(cargolist[i], item) != 'nan'):
@@ -252,6 +256,7 @@ def greedy_fill_fleet_with_check(spacecraft_list, cargolist, list3, item, item2)
                         setattr(cargolist[i], item, 'nan')
         # anders vul cygnus:
         elif  cygnus > dragon and cygnus >= tianzhou and cygnus >= verne and cygnus >= progress and cygnus >= kounotori:
+            number = 5
             for i in range(len(cargolist)):
                 # check if cargo-item is already placed
                 if (getattr(cargolist[i], item) != 'nan'):
@@ -261,6 +266,7 @@ def greedy_fill_fleet_with_check(spacecraft_list, cargolist, list3, item, item2)
                         av_1_cygnus1 -= getattr(cargolist[i], item2)
                         setattr(cargolist[i], item, 'nan')
         elif  verne > dragon and verne  >= tianzhou and verne  > cygnus and verne  >= progress and verne  >= kounotori:
+            number = 4
             for i in range(len(cargolist)):
                 # check if cargo-item is already placed
                 if (getattr(cargolist[i], item) != 'nan'):
@@ -270,6 +276,7 @@ def greedy_fill_fleet_with_check(spacecraft_list, cargolist, list3, item, item2)
                         av_1_Verne1 -= getattr(cargolist[i], item2)
                         setattr(cargolist[i], item, 'nan')
         elif  tianzhou > dragon and tianzhou > verne and tianzhou  > cygnus and tianzhou  >= progress and tianzhou  >= kounotori:
+            number = 0
             for i in range(len(cargolist)):
                 # check if cargo-item is already placed
                 if (getattr(cargolist[i], item) != 'nan'):
@@ -279,6 +286,7 @@ def greedy_fill_fleet_with_check(spacecraft_list, cargolist, list3, item, item2)
                         av_1_TianZhou1 -= getattr(cargolist[i], item2)
                         setattr(cargolist[i], item, 'nan')
         elif  progress > dragon and progress > verne and progress  > cygnus and progress  > tianzhou and progress  >= kounotori:
+            number = 3
             for i in range(len(cargolist)):
                 # check if cargo-item is already placed
                 if (getattr(cargolist[i], item) != 'nan'):
@@ -288,6 +296,7 @@ def greedy_fill_fleet_with_check(spacecraft_list, cargolist, list3, item, item2)
                         av_1_Progress1 -= getattr(cargolist[i], item2)
                         setattr(cargolist[i], item, 'nan')
         else:
+            number = 1
             for i in range(len(cargolist)):
                 # check if cargo-item is already placed
                 if (getattr(cargolist[i], item) != 'nan'):
@@ -302,7 +311,7 @@ def greedy_fill_fleet_with_check(spacecraft_list, cargolist, list3, item, item2)
     for k in range(len(cargolist)):
         if (getattr(cargolist[k], item) != 'nan'):
             list3[len(list3)-1].append(cargolist[k])
-    return list3
+    return list3, number
 
 def greedy_fill_fleet(spacecraft_list, cargolist, list3, item, item2):
     ''' fills the 5 spacecrafts of the fleet and makes a choice between cygnus and dragon of america'''
@@ -339,7 +348,7 @@ def random_D_E(leftover_spacecraft, array2):
         rand_range.remove(rand_item)
     return retour
 
-def hillclimbing_D_E(runtime, spacecrafts, leftover_spacecraft, cap_kg, cap_m3):
+def hillclimbing_D_E(runtime, spacecrafts, leftover_spacecraft, number, cap_kg, cap_m3):
     ''' swaps elements from the given spacecraft with a random spacecraft, within the given time'''
     score=[]
     program_starts = time.time()
@@ -352,7 +361,7 @@ def hillclimbing_D_E(runtime, spacecrafts, leftover_spacecraft, cap_kg, cap_m3):
             new_spacecrafts = [spacecrafts, leftover_spacecraft]
         else:
             rand_ar2 = random_D_E(leftover_spacecraft, [1,2])
-            check_swap = check_swap_random_D_E(spacecrafts, leftover_spacecraft, rand_ar2, cap_kg, cap_m3, False)
+            check_swap = check_swap_random_D_E(spacecrafts, leftover_spacecraft, rand_ar2, number, cap_kg, cap_m3, False)
             if check_swap != None:
                 num = check_swap[1]
                 item = check_swap[2]
@@ -364,7 +373,7 @@ def hillclimbing_D_E(runtime, spacecrafts, leftover_spacecraft, cap_kg, cap_m3):
     x = numpy.linspace(0, t_run, len(score))
     return new_spacecrafts, x, numb_swaps
 
-def hillclimbing_fleet(spacecrafts_fleet, spacecraft_list):
+def hillclimbing_fleet(spacecrafts_fleet, spacecraft_list, numbers):
     ''' runs hillclimbing_D_E for every array of the five ships '''
     cap = capacities(spacecraft_list)
     cap_kg = cap[0]; cap_m3 = cap[1]
@@ -378,30 +387,22 @@ def hillclimbing_fleet(spacecrafts_fleet, spacecraft_list):
 
             leftover_spacecraft = spacecrafts_fleet[len(spacecrafts_fleet) - k-1][j]
 
+            number = numbers[len(numbers)-1-k]
             # check if leftover_spacecraft is nonzero
             if leftover_spacecraft:
                 # loop over fleet and swap with leftoverspacecraft
                 for i in range(len(spacecrafts_fleet)-k-1):
-                    # print i, leftover_spacecraft
-                    # print sum_kg(spacecrafts_fleet[i])
-                    new_spacecrafts = hillclimbing_D_E(0.1, spacecrafts_fleet[i], leftover_spacecraft, cap_kg, cap_m3)
+                    new_spacecrafts = hillclimbing_D_E(0.1, spacecrafts_fleet[i], leftover_spacecraft, number, cap_kg, cap_m3)
                     spacecrafts_fleet[i] = new_spacecrafts[0][0]
                     leftover_spacecraft = new_spacecrafts[0][1]
-                    # print sum_kg(spacecrafts_fleet[i])
-                    # print sum_m3(spacecrafts_fleet[i])
-                    # print cap_kg
-                    # print cap_m3
+
     # merge used spacecrafts
-    # spacecrafts_fleet = merge_used_spacecrafts(spacecrafts_fleet, num_fleet_used, spacecraft_list)
-    for i in range(len(spacecrafts_fleet)):
-        print "vloot", i
-        print sum_kg(spacecrafts_fleet[i])
-        print sum_m3(spacecrafts_fleet[i])
+    spacecrafts_fleet = merge_used_spacecrafts(spacecrafts_fleet, num_fleet_used, spacecraft_list)
 
     return spacecrafts_fleet
 
 
-def check_swap_random_D_E(spacecrafts, leftover_spacecraft, array1, cap_kg, cap_m3, annealing):
+def check_swap_random_D_E(spacecrafts, leftover_spacecraft, array1, number, cap_kg, cap_m3, annealing):
     ''' function that checks for a possible swap between a random array (array1) of a list and an item of list1 '''
     numb_swaps = 0
     ''' checks for restrictions to swaps a randomly selected amount of items of a specified list, with an item of another list, if possible '''
@@ -426,9 +427,9 @@ def check_swap_random_D_E(spacecrafts, leftover_spacecraft, array1, cap_kg, cap_
     # overige capaciteit, kg en m3 per spacecraft:
     kg_over = []
     m3_over = []
-    for i in range(len(cap_kg)):
-        kg_over.append(cap_kg[i]- sum_kg1[i])
-        m3_over.append(cap_m3[i]- sum_m31[i])
+
+    kg_over.append(cap_kg[number]- sum_kg1[0])
+    m3_over.append(cap_m3[number]- sum_m31[0])
 
     # loop through lists to check if there exists an element the random elements can be swapped with
     get_item = False
@@ -481,58 +482,26 @@ def swap_random_D_E(spacecrafts, leftover_spacecraft, array1, num, item):
 
 def merge_used_spacecrafts(spacecrafts_fleet, num, spacecraft_list):
     ''' merge used spacecrafts, num is amount of spacecraft fleets used'''
+
+    # new leftover list
+    new_leftovers = []
+
     for k in range(num):
-        # put all cargo in first spacecraft
-        for i in range(len(spacecrafts_fleet[len(spacecrafts_fleet)-1-k])):
-            if i != 0:
-                leftover_spacecraft = spacecrafts_fleet[len(spacecrafts_fleet)-1-k][i]
-                if leftover_spacecraft:
-                    for j in range(len(spacecrafts_fleet[len(spacecrafts_fleet)-1-k][i])):
-                        spacecrafts_fleet[len(spacecrafts_fleet)-1-k][0].append(classes.cargo1(spacecrafts_fleet[len(spacecrafts_fleet)-k-1][i][j].number, spacecrafts_fleet[len(spacecrafts_fleet)-k-1][i][j].kg, spacecrafts_fleet[len(spacecrafts_fleet)-k-1][i][j].m3))
-                    spacecrafts_fleet[len(spacecrafts_fleet)-1-k][i].remove(leftover_spacecraft[0])
-
-    # put all cargo off first spacecraft in first spacecraft of earlier fleet, if possible
-    for k in range(num):        
-        if not spacecrafts_fleet[len(spacecrafts_fleet)-2-k][4]: 
-            for i in range(len(spacecrafts_fleet[len(spacecrafts_fleet)-1-k][0])):
-                spacecrafts_fleet[len(spacecrafts_fleet)-2-k][0].append(classes.cargo1(spacecrafts_fleet[len(spacecrafts_fleet)-k-1][0][i].number, spacecrafts_fleet[len(spacecrafts_fleet)-k-1][0][i].kg, spacecrafts_fleet[len(spacecrafts_fleet)-k-1][0][i].m3))
-                spacecrafts_fleet[len(spacecrafts_fleet)-1-k][0].remove(spacecrafts_fleet[len(spacecrafts_fleet)-1-k][0][i])
-
-    # lose all empty groups of spacecrafts
-    for i in range(len(spacecrafts_fleet)):
-        if not spacecrafts_fleet[i][0] and not spacecrafts_fleet[i][1] and not spacecrafts_fleet[i][2] and not spacecrafts_fleet[i][3] and not spacecrafts_fleet[i][4]:
-            spacecrafts_fleet.remove(spacecrafts_fleet[i])
-
-    for i in range(len(spacecrafts_fleet)):
-        print "vloot", i
-        print sum_kg(spacecrafts_fleet[i])
-        print sum_m3(spacecrafts_fleet[i])
-
-    # # new leftover list
-    # new_leftovers = []
-
-    # for k in range(num):
-    #     for i in range(len(spacecrafts_fleet[len(spacecrafts_fleet)-1])):
-    #         for j in range(len(spacecrafts_fleet[len(spacecrafts_fleet)-1][i])):
-    #             new_leftovers.append(classes.cargo1(spacecrafts_fleet[len(spacecrafts_fleet)-1][i][j].number, spacecrafts_fleet[len(spacecrafts_fleet)-1][i][j].kg, spacecrafts_fleet[len(spacecrafts_fleet)-1][i][j].m3)) 
+        for i in range(len(spacecrafts_fleet[len(spacecrafts_fleet)-1])):
+            for j in range(len(spacecrafts_fleet[len(spacecrafts_fleet)-1][i])):
+                new_leftovers.append(classes.cargo1(spacecrafts_fleet[len(spacecrafts_fleet)-1][i][j].number, spacecrafts_fleet[len(spacecrafts_fleet)-1][i][j].kg, spacecrafts_fleet[len(spacecrafts_fleet)-1][i][j].m3)) 
                 
-    #     # remove spacecrafts filled with leftovers
-    #     spacecrafts_fleet.remove(spacecrafts_fleet[len(spacecrafts_fleet)-1])
+        # remove spacecrafts filled with leftovers
+        spacecrafts_fleet.remove(spacecrafts_fleet[len(spacecrafts_fleet)-1])
 
-    # # do greedy again with the used leftovers
-    # extra_spacecraft_fleet = greedy_fleet(spacecraft_list, new_leftovers)
+    # do greedy again with the used leftovers
+    extra_spacecraft_fleet = greedy_fleet(spacecraft_list, new_leftovers)
 
-    # spacecrafts_fleet.append(extra_spacecraft_fleet)
-
-    # add extra empty spacecrafts to fill the fleet
-    # for i in range(5-len(spacecrafts_fleet[len(spacecrafts_fleet)-1])):
-    #     # print i
-    #     spacecrafts_fleet[len(spacecrafts_fleet)-1].append([])
-
+    spacecrafts_fleet.extend(extra_spacecraft_fleet)
 
     return spacecrafts_fleet
 
-def annealing_D_E(runtime, spacecrafts, leftover_spacecraft, cap_kg, cap_m3, schedule):
+def annealing_D_E(runtime, spacecrafts, leftover_spacecraft, number, cap_kg, cap_m3, schedule):
     ''' runs simulated annealing algorithm that swaps two items at a time during
      the desegnated runtime (s) using a sigmoidal cooling schedule '''
     score = []
@@ -569,15 +538,12 @@ def annealing_D_E(runtime, spacecrafts, leftover_spacecraft, cap_kg, cap_m3, sch
         random_num = random.uniform(0,1)
 
         if len(leftover_spacecraft)==1:
-            print "one"
             new_spacecrafts = [spacecrafts, leftover_spacecraft]
         else:
-            print "two"
-            print len(leftover_spacecraft)
             # create random array that selects 1 or 2 items from the leftover list
             rand_ar2 = random_D_E(leftover_spacecraft, [1,2])
 
-            check_swap = check_swap_random_D_E(spacecrafts, leftover_spacecraft, rand_ar2, cap_kg, cap_m3, True)
+            check_swap = check_swap_random_D_E(spacecrafts, leftover_spacecraft, rand_ar2, number, cap_kg, cap_m3, True)
             if check_swap != None:
                 change = check_swap[0]
                 num = check_swap[1]
@@ -599,11 +565,11 @@ def annealing_D_E(runtime, spacecrafts, leftover_spacecraft, cap_kg, cap_m3, sch
 
     return new_spacecrafts, x, iteration
 
-def annealing_fleet(spacecrafts_fleet, spacecraft_list):
+def annealing_fleet(spacecrafts_fleet, spacecraft_list, numbers):
     ''' runs annealing_D_E for every array of the five ships '''
     cap = capacities(spacecraft_list)
     cap_kg = cap[0]; cap_m3 = cap[1]
-    num_fleet_used = 4
+    num_fleet_used = 2
 
     global new_spacecrafts
 
@@ -615,13 +581,14 @@ def annealing_fleet(spacecrafts_fleet, spacecraft_list):
 
             leftover_spacecraft = spacecrafts_fleet[len(spacecrafts_fleet) - k-1][j]
 
+            number = numbers[len(numbers)-1-k]
             # check if leftover_spacecraft is nonzero
             if leftover_spacecraft:
                 # loop over fleet and swap with leftoverspacecraft
                 for i in range(len(spacecrafts_fleet)-k-1):
                     # print i, leftover_spacecraft
                     # print sum_kg(spacecrafts_fleet[i])
-                    new_spacecrafts = annealing_D_E(0.1, spacecrafts_fleet[i], leftover_spacecraft, cap_kg, cap_m3, 'sigmoidal')
+                    new_spacecrafts = annealing_D_E(0.1, spacecrafts_fleet[i], leftover_spacecraft, number, cap_kg, cap_m3, 'sigmoidal')
                     spacecrafts_fleet[i] = new_spacecrafts[0][0]
                     leftover_spacecraft = new_spacecrafts[0][1]
                     # print sum_kg(spacecrafts_fleet[i])
@@ -630,6 +597,6 @@ def annealing_fleet(spacecrafts_fleet, spacecraft_list):
                     # print cap_m3
 
     # merge used spacecrafts
-    # spacecrafts_fleet = merge_used_spacecrafts(spacecrafts_fleet, num_fleet_used, spacecraft_list)
+    spacecrafts_fleet = merge_used_spacecrafts(spacecrafts_fleet, num_fleet_used, spacecraft_list)
 
     return spacecrafts_fleet
