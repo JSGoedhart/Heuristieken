@@ -11,7 +11,7 @@ import plotly.graph_objs as go
 
 ## 1 FUNCTIONS TO OPEN CSV FILES
 def open_cargo_csv(file):
-    ''' Receive csv file
+    ''' Argument: csv file.
     Split elements per line
     Return split_list.
     '''
@@ -20,59 +20,75 @@ def open_cargo_csv(file):
 
     # Put cargo-elements of list 1 in class cargo1
     csvfile = open(file, 'r')
+
     for line in csvfile:
     	split = line.split(';')
     	var0 = split[0]
     	var1 = int(split[1])
     	var2 = float(split[2][:-1])
     	split_list.append(classes.cargo1(var0, var1, var2))
+
     return split_list
 
 def open_spacecrafts_csv(file):
-
-    # create empty list for spacecrafts
+    ''' Argument: csv file.
+    Split elements per line.
+    Return open_list.
+    '''
+    # Create empty list for spacecrafts
     open_list = []
 
-    # put spacecrafts in empty list
+    # Put spacecrafts in empty list
     csvfile = open(file, 'r')
+
     for line in csvfile:
         split = line.split(';')
         var0 = split[0]
         var1 = int(split[1])
         var2 = float(split[2])
         open_list.append(classes.spacecraft(var0, var1, var2))
+
     return open_list
 
 def open_alles(cargolist, item):
-    ''' opens cargolist and spacecraft list '''
-    # create list to put cargo1 classes in
+    ''' Arguments: cargolist and item.
+    Run open_cargo_csv on cargolist.
+    Sort list on basis of item.
+    Return cargo_sorted, spacecraft_list and spacecrafts.
+    '''
+    # Create list to put cargo1 classes in
     cargo1_list = open_cargo_csv(cargolist)
 
-    # sort cargo1_list's kg from high to low and create new sorted list
+    # Sort cargo1_list's kg from high to low and create new sorted list
     cargo_sorted = sorted(cargo1_list, key=operator.attrgetter(item), reverse=True)
 
-    # create a list with the four spacecrafts put into classes in it
+    # Create a list with the four spacecrafts put into classes in it
     spacecraft_list = open_spacecrafts_csv('Spacecrafts.csv')
 
-    # create lists of spacecrafts to put cargo-classes in
+    # Create lists of spacecrafts to put cargo-classes in
     spacecrafts = [[], [], [], [], []]
 
     return cargo_sorted, spacecraft_list, spacecrafts
 
 ## MAIN FUNCTION
 def main(cargolist, startpunt, algorithm, coolingscheme, item, runtime):
-    ''' function that generates a starting point for cargolist, runs an algorithm on it for selected time and returns the score
-    starting point is greedy item when item isn't false, when item is false: starting point is random '''
+    '''Arguments: cargolist, startpunt, algorithm, coolingscheme, item, runtime.
+    Generate starting point for cargolist and run algorithm for selected time.
+    If startpunt is false, then starting point is random.
+    Starting point is greedy when item is not false.
+    Return score, xtime and score_end.
+    '''
 
-    # create necessary arrays by running open_alles on cargolist
+    # Create necessary arrays by running open_alles on cargolist.
     necessary_arrays = open_alles(cargolist, item)
-    cargo_sorted = necessary_arrays[0]; spacecraft_list = necessary_arrays[1]; spacecrafts = necessary_arrays[2];
+    cargo_sorted = necessary_arrays[0]; spacecraft_list = necessary_arrays[1];
+    spacecrafts = necessary_arrays[2];
 
-    # create arrays with capacities
+    # Create arrays with capacities
     cap = capacities(spacecraft_list)
     cap_kg = cap[0]; cap_m3 = cap[1]
 
-    # generete starting point, random, greedy on kg or greedy on m3
+    # Generete starting point, random, greedy on kg or greedy on m3.
     if algorithm == random_fill:
         random_fill(spacecraft_list, cargo_sorted, spacecrafts)
     else:
@@ -87,63 +103,99 @@ def main(cargolist, startpunt, algorithm, coolingscheme, item, runtime):
     # elif item == 'm3':
     #     greedy_fill(spacecraft_list, cargo_sorted, spacecrafts, 'm3', 'kg')
 
-    # run algorithm for selected time
+    # Run algorithm for selected time
     if coolingscheme == False:
         algorit = algorithm(runtime, spacecrafts, cap_kg, cap_m3)
     else:
         algorit = algorithm(runtime, spacecrafts, cap_kg, cap_m3, coolingscheme)
 
-    # create names for array with score and running time
+    # Create names for array with score and running time
     score = algorit[0]
     xtime = numpy.linspace(0, runtime, len(score))
     score_end = algorit[3]
     return score, xtime, score_end
 
 def print_names(lijst):
+    '''Argument: lijst.
+    Return name_arr.
+    '''
+
+    # Create empty list for array of names.
     name_arr = []
+
+    # Append names of list to empty array.
     for i in range(len(lijst)):
         name_arr.append(lijst[i].name)
     name_arr.append('leftover')
+
     return name_arr
 
 ## 3 FUNCTIONS TO CALCULATE AND PRINT SUMS/SCORES
 def sum_kg(lijst):
-    ''' function to calculate total kg's per spacecrafts '''
+    '''Argument: lijst.
+    Calculate total kg per spacecraft.
+    Return kg_sum.
+    '''
+    # Create empty list for sum of kg's.
     kg_sum = []
+
     for i in range(len(lijst)):
         kg_sum.append(sum(c.kg for c in lijst[i]))
     return kg_sum
 
 def sum_m3(lijst):
-    ''' function to calculate total kg's per spacecrafts '''
+    '''Argument: lijst.
+    Calculate total m3 per spacecraft.
+    Return m3_sum.
+    '''
+    # Create empty list for sum of m3's.
     m3_sum = []
+
     for i in range(len(lijst)):
         m3_sum.append(sum(c.m3 for c in lijst[i]))
     return m3_sum
 
 def val_leftover(lijst):
-    ''' score functie'''
+    '''Argument: lijst.
+    Take sum of value function.
+    Return sum_valtot.
+    '''
     sum_valtot = sum(c.valtot for c in lijst)
     return sum_valtot
 
 def print_kg(list1, list2):
-    ''' print kg's per spacecraft '''
+    '''Arguments: list1 and list2.
+    Print kg per spacecraft.
+    '''
+
+    # Print names and kg per list items for both lists.
     for j in range(4):
         print list1[j].name
         for i in range(len(list2[j])):
             print list2[j][i].kg
 
 def print_m3(list1, list2):
-    ''' print kg's per spacecraft '''
+    '''Arguments: list1 and list2.
+    Print m3 per spacecraft.
+    '''
+
+    # Print names and m3 per list items for both lists.
     for j in range(4):
         print spacecraft_list[j].name
         for i in range(len(spacecrafts[j])):
             print spacecrafts[j][i].m3
 
 def capacities(spacecraft_list):
-    ''' creates two arrays with capacities of spacecrafts (kg and m3) '''
+    '''Argument: spacecraft_list.
+    Create two arrays with capacities of spacecrafts for kg and m3.
+    Return cap_kg and cap_m3.
+    '''
+
+    # Create empty lists of capacities of kg and m3.
     cap_kg = []
     cap_m3 = []
+
+    # Append capacities to empty lists.
     for i in range(len(spacecraft_list)):
         cap_kg.append(spacecraft_list[i].kg)
         cap_m3.append(spacecraft_list[i].m3)
@@ -151,18 +203,27 @@ def capacities(spacecraft_list):
 
 ## 4 FUNCTIONS FOR STARTING POINT: greedy/ random
 def greedy_fill(list1, list2, list3, item, item2):
-    ''' fill list3 with items of list2, based on variable item. When full go to next. If item2!=false, also take the other variable in account'''
+    '''Arguments: list1, list3, list3, item and item2.
+    Fill list3 with items of list2, based on variable item.
+    When full go to next. If item2!=false, take other variable into account.
+    Return list3.
+    '''
+
     if (item2 == False):
         for j in range(len(list3)-1):
+
             # define availability in spacecraft
             mass_av = getattr(list1[j], item)
             for i in range(len(list2)):
+
                 # check if cargo-item is already placed
                 if (getattr(list2[i], item) != 'nan'):
                     if (getattr(list2[i], item) <= mass_av):
-                        list3[j].append(classes.cargo1(list2[i].number, list2[i].kg, list2[i].m3))
+                        list3[j].append(classes.cargo1(list2[i].number,
+                         list2[i].kg, list2[i].m3))
                         mass_av -= getattr(list2[i], item)
                         setattr(list2[i], item, 'nan')
+
         # create leftover list and put in spacecraft list without nan
         for k in range(len(list2)):
             if (getattr(list2[k], item) != 'nan'):
@@ -170,17 +231,22 @@ def greedy_fill(list1, list2, list3, item, item2):
         return list3
     else:
         for j in range(len(list3)-1):
+
             # define availability in spacecraft
             mass_av = getattr(list1[j], item)
             av_1 = getattr(list1[j], item2)
             for i in range(len(list2)):
+
                 # check if cargo-item is already placed
                 if (getattr(list2[i], item) != 'nan'):
-                    if (getattr(list2[i], item) <= mass_av and getattr(list2[i], item2) <= av_1):
-                        list3[j].append(classes.cargo1(list2[i].number, list2[i].kg, list2[i].m3))
+                    if (getattr(list2[i], item) <= mass_av and getattr(list2[i],
+                     item2) <= av_1):
+                        list3[j].append(classes.cargo1(list2[i].number,
+                         list2[i].kg, list2[i].m3))
                         mass_av -= getattr(list2[i], item)
                         av_1 -= getattr(list2[i], item2)
                         setattr(list2[i], item, 'nan')
+
         # create leftover list and put in spacecraft list without nan
         for k in range(len(list2)):
             if (getattr(list2[k], item) != 'nan'):
@@ -188,15 +254,20 @@ def greedy_fill(list1, list2, list3, item, item2):
         return list3
 
 def random_fill(list1, list2, list3):
-    ''' places elements of list2 randomly in array of lists list3 '''
+    '''Arguments: list1, list2 and list3.
+    Place elements of list2 randomly in array of lists list3.
+    '''
+
     for i in range(len(list2)):
         # select random list to put item in
         number_list = range(len(list3))
         index = random.choice(number_list)
-        sum_kg = sum(c.kg for c in list3[index]); sum_m3 = sum(c.m3 for c in list3[index]);
+        sum_kg = sum(c.kg for c in list3[index]); sum_m3 = sum(c.m3 for c in
+         list3[index]);
         kg_item = getattr(list2[i], "kg"); m3_item = getattr(list2[i], "m3");
         # check for kg and m3 restriction
-        if (sum_kg + kg_item > getattr(list1[index], "kg") or sum_m3 + m3_item > getattr(list1[index], "m3")):
+        if (sum_kg + kg_item > getattr(list1[index], "kg")
+        or sum_m3 + m3_item > getattr(list1[index], "m3")):
             # put in leftover list if item doesn't fit in the selected list
             list3[len(list3)-1].append(list2[i])
         else:
@@ -204,15 +275,29 @@ def random_fill(list1, list2, list3):
 
 ## 5: ITERATIVE ALGORITHMS
 def hillclimbing1(runtime, spacecrafts, cap_kg, cap_m3):
+    '''Arguments: runtime, spacecrafts, cap_kg and cap_m3.
+    Run for desegnated runtime.
+    Swap two random items from spacecrafts.
+    Check whether capacitie restrictions are met, swap back if not.
+    If score improves, accept swap. If not, swap back.
+    Return score, x, iteration, score_end, numb_swaps.
+    '''
+    # Counter
     iteration = 0
+
+    # Create empty list for score.
     score = []
+
+    # Start program.
     program_starts = time.time()
     t_run = runtime
     t_end = time.time() + t_run
     numb_swaps = 0
     t_start = time.time()
+
     while time.time() < t_end:
-        # randomly select two indices of lists and two items to swap between, put in array
+        # randomly select two indices of lists and two items to swap between,
+        # put in array.
         rand_arr = random1(spacecrafts)
         # run hillclimbing algorithm with rand_arr
         check = swap_two(spacecrafts, rand_arr, cap_kg, cap_m3)
@@ -227,15 +312,31 @@ def hillclimbing1(runtime, spacecrafts, cap_kg, cap_m3):
     return score, x, iteration, score_end, numb_swaps
 
 def hillclimbing2(runtime, spacecrafts, cap_kg, cap_m3):
+    '''Arguments: runtime, spacecrafts, cap_kg and cap_m3.
+    Run for desegnated runtime.
+    Swap random amounts of random items from spacecrafts.
+    Check whether capacitie restrictions are met, swap back if not.
+    If score improves, accept swap. If not, swap back.
+    Return score, x, iteration, score_end, numb_swaps.
+    '''
+
+    # Counter
     iteration = 0
+
+    # Create empty list for score.
     score=[]
+
+    # Start program.
     program_starts = time.time()
     t_run = runtime
     t_end = time.time() + t_run
     numb_swaps = 0
+
     while time.time() < t_end:
         rand_ar2 = random2(spacecrafts, [1,2])
-        check_swap = check_swap_random(spacecrafts, rand_ar2, cap_kg, cap_m3, False)
+        check_swap = check_swap_random(spacecrafts, rand_ar2, cap_kg, cap_m3,
+         False)
+
         if check_swap != None:
             num = check_swap[1]
             item = check_swap[2]
@@ -251,97 +352,108 @@ def hillclimbing2(runtime, spacecrafts, cap_kg, cap_m3):
     return score, x, iteration, score_end, numb_swaps
 
 def annealing1(runtime, spacecrafts, cap_kg, cap_m3, schedule):
-    ''' runs simulated annealing algorithm that swaps two items at a time during
-     the desegnated runtime (s) using a sigmoidal cooling schedule '''
+    '''Arguments: runtime, spacecrafts, cap_kg, cap_m3 and schedule.
+    Run simulated annealing algorithm.
+    Swap two items at a time during the desegnated runtime.
+    Use exponential or sigmoidal cooling schedule.
+    Return score, x, score_end and iteration.
+    '''
+
+    # Create empty list for score.
     score = []
 
-     # initial and end temperatures for cooling schedule
+     # Initial and end temperatures for cooling schedule.
     temp_initial = 800
     temp_end = 0.0000000001
 
     LEN = len(spacecrafts)
 
-    # set counters for iterations and instances of accepted increases in the
-    # objective function
+    # Set counters for iterations and instances of accepted increases in the
+    # objective function.
     iteration = 0
     accepted = 0
 
     LEN = len(spacecrafts)
 
-    # start timer
+    # Start timer
     start_time = time.time()
     t_end = time.time() + runtime
 
     while time.time() < t_end:
-        # store score before swapping items
+        # Store score before swapping items.
         old_score = val_leftover(spacecrafts[LEN - 1])
 
         if schedule == 'exponential':
-            # exponential cooling schedule
+            # Exponential cooling schedule
             temp_current = temp_initial * math.pow((temp_end / temp_initial),
             ((time.time() - start_time) / runtime))
         elif schedule == 'sigmoidal':
-            # sigmoidal cooling schedule
+            # Sigmoidal cooling schedule
             temp_current = temp_end + (temp_initial - temp_end) * (1 / (1 + math.exp(0.3
             * (time.time() - start_time - (runtime / 2)))))
 
-        # random number between 0 and 1 for rejection criterion
+        # Random number between 0 and 1 for rejection criterion.
         random_num = random.uniform(0,1)
 
-        # randomly select two indices of lists and two items to swap between, put in array
+        # Randomly select two indices of lists and two items to swap between,
+        # put in array.
         rand_arr = random1(spacecrafts)
 
-        # run hillclimbing algorithm with rand_arr
+        # Run hillclimbing algorithm with rand_arr.
         swap_two(spacecrafts, rand_arr, cap_kg, cap_m3)
 
         sum_kg1 = sum_kg(spacecrafts[0:LEN])
         sum_m31 = sum_m3(spacecrafts[0:LEN])
         value = 0
+
         for i in rand_arr[0:2]:
-            # check if list selected list isn't leftover list
+            # Check if list selected list isn't leftover list.
             if i < (LEN-1):
-                # check for kg and m3 restriction
+                # Check for kg and m3 restriction.
                 if sum_kg1[i] > cap_kg[i] or sum_m31[i] > cap_m3[i]:
                     value = 1
 
-        # swap back if necessary
+        # Swap back if necessary
         if (value == 1):
             swap_two(spacecrafts, rand_arr, cap_kg, cap_m3)
 
-        #store new score after swapping items
+        # Store new score after swapping items.
         new_score = val_leftover(spacecrafts[LEN-1])
 
-        # change in score
+        # Change in score
         change = new_score - old_score
 
-        # rejection criteria
+        # Rejection criteria
         if temp_current > 0:
-            # check if new score is worse than old score
+            # Check if new score is worse than old score.
             if old_score < new_score and value == 0:
-                # check whether change fails to meet acceptance criteria
+                # Check whether change fails to meet acceptance criteria.
                 if random_num >= math.exp(-change / temp_current):
-                    # swap items back
+                    # Swap items back
                     swap_two(spacecrafts, rand_arr, cap_kg, cap_m3)
                 else:
-                    # increment acceptances
+                    # Increment acceptances
                     accepted +=1
         elif old_score < new_score and value == 0:
             swap_two(spacecrafts, rand_arr, cap_kg, cap_m3)
 
-        # append new score to score function
+        # Append new score to score function.
         score.append(val_leftover(spacecrafts[LEN-1]))
-        # increment iterations
+        # Increment iterations
         iteration += 1
 
     x = numpy.linspace(0, runtime, len(score))
     score_end = val_leftover(spacecrafts[len(spacecrafts)-1])
 
     return score, x, score_end, iteration
-    # return iteration, accepted
 
 def annealing2(runtime, spacecrafts, cap_kg, cap_m3, schedule):
-    ''' runs simulated annealing algorithm that swaps two items at a time during
-     the desegnated runtime (s) using a sigmoidal cooling schedule '''
+    '''Arguments: runtime, spacecrafts, cap_kg, cap_m3 and schedule.
+    Run simulated annealing algorithm.
+    Swap random amount of items per iteration during the desegnated runtime.
+    Use exponential or sigmoidal cooling schedule.
+    Return score, x, score_end and iteration.
+    '''
     score = []
 
      # initial and end temperatures for cooling schedule
