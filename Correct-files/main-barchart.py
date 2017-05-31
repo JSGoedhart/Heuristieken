@@ -22,16 +22,16 @@ for i in range(len(algorithms)):
     score_arr = []
    
     # run each algorithm n times for selected time, fill randomly 
-    for j in range(10):
-        output = main('CargoList1.csv', random_fill, algorithms[i], coolingscheme[i], 'm3', 2);
+    for j in range(500):
+        output = main('CargoList1.csv', random_fill, algorithms[i], coolingscheme[i], 'm3', 10);
         score_arr.append(output[2])
     scores.append(score_arr)
 
 # sort data into barchart categories
-data_sort = sortbardata(scores, 26, 35)
+data_sort = sortbardata(scores, 27, 40)
 
 # put sorted data in barchart format
 data = createbardata(data_sort[0], data_sort[1], data_sort[2], data_sort[3], legend)
 
 # make a barchart
-makebarchart('Barchart with scores for n=1000 simulations', data[0], 'barchart 1')
+makebarchart('Scores for n=500 simulations', data[0], 'barchart 1')
