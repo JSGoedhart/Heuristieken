@@ -254,7 +254,7 @@ def hillclimbing_fleet(spacecrafts_fleet, spacecraft_list):
     ''' runs hillclimbing_D_E for every array of the five ships '''
     cap = capacities(spacecraft_list)
     cap_kg = cap[0]; cap_m3 = cap[1]
-    num_fleet_used = 2
+    num_fleet_used = 5
 
     # loop over last two groups of spacecrafts
     for k in range(num_fleet_used):
@@ -493,7 +493,7 @@ def annealing_fleet(spacecrafts_fleet, spacecraft_list):
     ''' runs annealing_D_E for every array of the five ships '''
     cap = capacities(spacecraft_list)
     cap_kg = cap[0]; cap_m3 = cap[1]
-    num_fleet_used = 8
+    num_fleet_used = 3
 
     global new_spacecrafts
 

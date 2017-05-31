@@ -4,6 +4,7 @@ import random
 import time
 import classes
 from helpers_clean import *
+from helpers_d import *
 import plotly.plotly as py
 import plotly.graph_objs as go
 import numpy
