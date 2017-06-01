@@ -96,12 +96,6 @@ def main(cargolist, startpunt, algorithm, coolingscheme, item, runtime):
             greedy_fill(spacecraft_list, cargo_sorted, spacecrafts, 'kg', 'm3')
         else:
             greedy_fill(spacecraft_list, cargo_sorted, spacecrafts, 'm3', 'kg')
-    # if item == False:
-    #     random_fill(spacecraft_list, cargo_sorted, spacecrafts)
-    # elif item == 'kg':
-    #     greedy_fill(spacecraft_list, cargo_sorted, spacecrafts, 'kg', 'm3')
-    # elif item == 'm3':
-    #     greedy_fill(spacecraft_list, cargo_sorted, spacecrafts, 'm3', 'kg')
 
     # Run algorithm for selected time
     if coolingscheme == False:

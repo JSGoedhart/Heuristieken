@@ -19,41 +19,34 @@ spacecraft_list_sorted = sorted(spacecraft_list, key=operator.attrgetter('kg'), 
 
 
 ######## fill just one spacecraft ########
-
 # # run greedy fill, to fill spacecrafts on basis of kg and m3
 # spacecrafts_fleet = greedy_fleet(spacecraft_list_sorted, cargo3_sorted_m3)
 
+##### choice between hillclimbing and simulated annealing
 # # run hillclimbing to reduce wasted space
 # spacecrafts_fleet = hillclimbing_fleet(spacecrafts_fleet, spacecraft_list_sorted)
 
 # # run simulated annealing to reduce wasted space
 # spacecrafts_fleet = annealing_fleet(spacecrafts_fleet, spacecraft_list_sorted)
-
+#####
 ###########
 
 
 ########### chose the best spacecraft every time ########
-
 # chose the best and run greedy
 greedy = greedy_fleet_with_check(spacecraft_list_sorted, cargo3_sorted_kg)
 
 numbers_fleet = greedy[1]
 spacecrafts_fleet = greedy[0]
 
-# for i in range(len(spacecrafts_fleet)):
-# 	print "vloot", i
-# 	for j in range(len(spacecrafts_fleet[i])):
-# 		print "spacecraft", j
-# 		for k in range(len(spacecrafts_fleet[i][j])):
-# 			print spacecrafts_fleet[i][j][k]
-
+##### choice between hillclimbing and simulated annealing
 # annealing
 spacecrafts_fleet = annealing_fleet(spacecrafts_fleet, spacecraft_list_sorted, numbers_fleet)
 
 # # run hillclimbing to reduce wasted space
 # spacecrafts_fleet = hillclimbing_fleet(spacecrafts_fleet, spacecraft_list_sorted, numbers_fleet)
-
-
+#####
+############
 
 # score
 scorefunction(spacecrafts_fleet, spacecraft_list_sorted)

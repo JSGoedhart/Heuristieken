@@ -15,32 +15,25 @@ cargo3_sorted_m3 = sorted(cargo3_list_m3, key=operator.attrgetter('m3'), reverse
 # create a list with the six spacecrafts put into classes in it
 spacecraft_list = open_spacecrafts_csv('Spacecrafts2.csv')
 
+# sort spacecrafts
 spacecraft_list_sorted = sorted(spacecraft_list, key=operator.attrgetter('kg'), reverse=True)
-# create lists to put cargo-classes in
-spacecrafts_kg = [[], []]
 
-# run greedy fill, to fill spacecrafts on basis of kg and m3
+##### choice between greedy with and greedy without the choice between america spacecraft
+# # run greedy fill, to fill spacecrafts on basis of kg and m3
 spacecrafts_fleet = greedy_fleet(spacecraft_list_sorted, cargo3_sorted_m3)
 
-# greedy with choice america
+# # greedy with choice america
 # spacecrafts_fleet = greedy_fleet_with_america_check(spacecraft_list, cargo3_sorted_kg)
+#####
 
-# run hillclimbing to reduce wasted space
+
+##### choice between hillclimbing and simulated annealing
+# # run hillclimbing to reduce wasted space
 # spacecrafts_fleet = hillclimbing_fleet(spacecrafts_fleet, spacecraft_list_sorted)
 
-# run simulated annealing to reduce wasted space
+# # run simulated annealing to reduce wasted space
 spacecrafts_fleet = annealing_fleet(spacecrafts_fleet, spacecraft_list_sorted)
-
-# for i in range(len(spacecrafts_fleet)):
-#     print "vloot", i
-#     for j in range(len(spacecrafts_fleet[i])):
-#         print len(spacecrafts_fleet[i][j])
-
-# # print spacecrafts_fleet[len(spacecrafts_fleet)-2][0][0].m3
-
-# for i in range(len(spacecrafts_fleet)):
-#     print sum_kg(spacecrafts_fleet[len(spacecrafts_fleet)-i-1])
-# print capacities(spacecraft_list_sorted)
+#####
 
 # score
 scorefunction(spacecrafts_fleet, spacecraft_list_sorted)

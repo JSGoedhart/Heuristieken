@@ -3,6 +3,10 @@ import operator
 import classes
 from helpers import *
 
+# Excercise A: Run the first greedy with the last input element False
+# Excercise B: Run the second greedy
+# Excercise C: Change Cargolist1.csv to Cargolist2.csv and rund both greedy
+
 # create list to put cargo1 classes in
 cargo1_list_kg = open_cargo_csv('CargoList1.csv')
 cargo1_list_m3 = open_cargo_csv('CargoList1.csv')
@@ -22,7 +26,7 @@ LEN = len(spacecrafts_kg)
 
 # run greedy fill, to fill spacecrafts on basis of kg
 # greedy_fill(spacecraft_list, cargo1_sorted_kg, spacecrafts_kg, 'kg', 'm3')
-greedy_fill(spacecraft_list, cargo1_sorted_kg, spacecrafts_kg, 'kg', 'm3')
+greedy_fill(spacecraft_list, cargo1_sorted_kg, spacecrafts_kg, 'kg', False)
 
 
 # print output
